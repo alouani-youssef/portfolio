@@ -1,0 +1,8 @@
+---
+import { getEntries } from 'astro:content';
+interface Props { skills: Array<{ collection: 'skills'; id: string }> }
+const entries = await getEntries(Astro.props.skills);
+---
+<ul class="flex flex-wrap gap-2" aria-label="Stack">
+  {entries.map((s) => (<li><a class="chip" href={`/about#skill-${s.id}`}>{s.data.name}</a></li>))}
+</ul>

@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import { groupClients } from '../lib/clients';
+interface Props { experienceId?: string; heading?: string; headingLevel?: 'h2' | 'h3' }
+const { experienceId, heading = 'Clients I have worked for', headingLevel = 'h2' } = Astro.props;
+const all = await getCollection('clients');
+const filtered = all.filter((c) => !experienceId || c.data.experience.id === experienceId).map((c) => c.data);
+const groups = groupClients(filtered);
+const H = headingLevel;
+const Sub = headingLevel === 'h2' ? 'h3' : 'h4';
+---
+{groups.length > 0 && (
+  <section aria-label={heading} class="client-groups">
+    <H class="text-lg font-semibold">{heading}</H>
+    <div class="mt-4 grid gap-6 sm:grid-cols-2">
+      {groups.map((g) => (
+        <div>
+          <Sub class="eyebrow">{g.label}</Sub>
+          <ul class="mt-2 space-y-1">{g.clients.map((c) => <li>{c.name}</li>)}</ul>
+        </div>
+      ))}
+    </div>
+  </section>
+)}

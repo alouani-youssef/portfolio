@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { entrySlug } from '../lib/i18n';
+interface Props { roles: CollectionEntry<'experience'>[] }
+const { roles } = Astro.props;
+---
+<ol class="relative space-y-10 border-l border-border pl-6">
+  {roles.map((r) => (
+    <li class="relative">
+      <span class="absolute -left-[29px] top-2 h-2.5 w-2.5 rounded-full border border-border bg-bg" aria-hidden="true"></span>
+      <p class="eyebrow">{r.data.period}</p>
+      <h2 class="mt-1 text-xl font-semibold">
+        <a href={`/experience/${entrySlug(r.id)}`} class="text-fg no-underline hover:text-accent">{r.data.company}</a>
+      </h2>
+      <p class="text-muted">{r.data.role}{r.data.alias ? ` · ${r.data.alias}` : ''}</p>
+      <p class="mt-2 max-w-[70ch]">{r.data.summary}</p>
+      <a href={`/experience/${entrySlug(r.id)}`} class="mt-2 inline-block text-sm">Read the role →</a>
+    </li>
+  ))}
+</ol>

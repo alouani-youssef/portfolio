@@ -1,0 +1,48 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Figure from '../../components/Figure.astro';
+import StackChips from '../../components/StackChips.astro';
+import ClientGroups from '../../components/ClientGroups.astro';
+import { getRoles } from '../../lib/experience';
+import { entrySlug } from '../../lib/i18n';
+
+export async function getStaticPaths() {
+  const roles = await getRoles();
+  return roles.map((role) => ({ params: { slug: entrySlug(role.id) }, props: { role } }));
+}
+const { role } = Astro.props;
+const { Content } = await render(role);
+const d = role.data;
+const path = `/experience/${entrySlug(role.id)}`;
+---
+<BaseLayout title={`${d.role}, ${d.company}`} description={d.summary} path={path}>
+  <article class="container-page py-12 sm:py-16">
+    <a href="/experience" class="text-sm">← Experience</a>
+    <header class="mt-6">
+      <p class="eyebrow">{d.period} · {d.location}</p>
+      <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{d.company}</h1>
+      <p class="mt-2 text-lg text-muted">
+        {d.role}{d.founding ? ', founding engineer' : ''}{d.teamSize ? ` · team of ${d.teamSize}` : ''}{d.alias ? ` · ${d.alias}` : ''}
+      </p>
+      {d.url && <p class="mt-1"><a href={d.url}>{d.url.replace(/^https?:\/\//, '')}</a></p>}
+    </header>
+    <div class="role-body mt-10 max-w-[70ch] space-y-4 [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-5">
+      <Content />
+      <h2>Stack</h2>
+      <StackChips skills={d.skills} />
+      <h2>Outcome</h2>
+      <p>{d.outcome}</p>
+      <h2>What I'd do differently</h2>
+      <p>{d.differently}</p>
+    </div>
+    {d.media.length > 0 && (
+      <section class="mt-12" aria-label="Screenshots">
+        <div class:list={['grid gap-6', d.media.every((m) => m.device === 'phone') ? 'sm:grid-cols-2 lg:grid-cols-3' : '']}>
+          {d.media.map((m) => <Figure src={m.src} alt={m.alt} caption={m.caption} device={m.device} />)}
+        </div>
+      </section>
+    )}
+    <div class="mt-12 max-w-[70ch]"><ClientGroups experienceId={role.id} heading="Clients" headingLevel="h3" /></div>
+  </article>
+</BaseLayout>

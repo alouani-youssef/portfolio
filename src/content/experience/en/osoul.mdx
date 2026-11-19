@@ -1,0 +1,40 @@
+---
+company: Osoul
+role: Technical Founder
+start: 2026-06-01
+end: null
+period: Jun 2026 – now
+location: Casablanca, Morocco
+url: https://osoul.io
+summary: Revenue-as-a-Service for fine dining. A multi-tenant SaaS built around specific revenue KPIs, turning the data restaurants usually lose into KPI gains.
+highlights:
+  - NFC/QR table ordering and secure table sessions
+  - Reservations with deposits, reminders and bots
+  - Recommendation systems and meal-completion promos
+  - Ad signal infrastructure with server-side CAPI events
+  - AI assistant with PII redaction and user auth propagation
+  - POS/PMS integrations and event-based dynamic pricing
+outcome: Live with venues of Barceló Group and Atlas Group. Revenue metrics per KPI are on the Osoul case study.
+# CHECK: proposed line, Youssef to confirm
+differently: I would have shipped the diner-identity merge before the recommendation engine, because every recommendation is only as good as the guest record behind it.
+skills: [nestjs, typeorm, postgresql, redis, keycloak, langchain, nextjs, react-native, pii-redaction]
+updatedAt: 2026-11-19
+---
+
+## Context
+
+Fine-dining restaurants lose most of the data that would tell them who their guests are and what they come back for. Osoul is Revenue as a Service (RaaS): a SaaS growth engine built around specific revenue KPIs, with management tools built in, that captures that data with mature technologies and turns it into better KPIs.
+
+## My part
+
+I am the technical founder and own the platform end to end: the multi-tenant backend on NestJS, PostgreSQL, Redis and Keycloak, and the three front ends.
+
+- **Ordering and sessions**: NFC/QR table ordering with token-based table sessions for anonymous diners.
+- **Reservations**: deposits, queues, multi-channel reminders and bots, with loyalty used to smooth peak hours.
+- **Recommendations**: dish and beverage recommendations and meal-completion promos.
+- **Ad signals**: a tracking event schema and server-side CAPI events for ad-audience optimisation.
+- **AI assistant**: LangChain, PII redaction, and the user's auth propagated to every tool call.
+- **Identity and operations**: diner identity merging, POS/PMS integrations, occupancy and SLA tracking, event-based dynamic menu pricing.
+- **Front ends**: Osoul Portal (web), Osoul Guest App and Osoul Waiter App (React Native).
+
+See the [Osoul case study](/projects/osoul) for the architecture.
