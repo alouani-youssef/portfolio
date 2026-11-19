@@ -1,15 +1,18 @@
 import { defineCollection, reference } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob, file } from 'astro/loaders';
+import { resolveIcon, SKILL_CATEGORIES, type Category } from './lib/skill-icons';
 
 const skills = defineCollection({
   loader: file('src/data/skills.yaml'),
   schema: z.object({
     id: z.string(),
     name: z.string(),
-    category: z.enum(['language', 'backend', 'data', 'ai', 'security', 'infra', 'frontend', 'realtime']),
+    category: z.enum(SKILL_CATEGORIES.map((c) => c.id) as [Category, ...Category[]]),
     level: z.enum(['daily', 'production', 'familiar']),
     evidence: z.array(z.string()).default([]),
+    icon: z.string().refine((ref) => { try { resolveIcon(ref); return true; } catch { return false; } }, { message: 'Unknown skill icon (use si:<slug> or lucide:<name>)' }),
+    core: z.boolean().default(false),
   }),
 });
 
