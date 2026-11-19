@@ -2,17 +2,26 @@ import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 import * as simpleIcons from 'simple-icons';
 
-export type Category = 'language' | 'backend' | 'data' | 'ai' | 'security' | 'infra' | 'frontend' | 'realtime';
+export type Category =
+  | 'language' | 'backend' | 'databases' | 'messaging' | 'llm' | 'ml' | 'etl' | 'security'
+  | 'infra' | 'ops' | 'cloud' | 'testing' | 'patterns' | 'lowcode' | 'frontend';
 
 export const SKILL_CATEGORIES: ReadonlyArray<{ id: Category; label: string; icon: string }> = [
   { id: 'language', label: 'Languages', icon: 'lucide:code-xml' },
   { id: 'backend', label: 'Backend', icon: 'lucide:server' },
-  { id: 'data', label: 'Data', icon: 'lucide:database' },
-  { id: 'ai', label: 'AI / LLM', icon: 'lucide:sparkles' },
+  { id: 'databases', label: 'Databases', icon: 'lucide:database' },
+  { id: 'messaging', label: 'Brokers and protocols', icon: 'lucide:arrow-left-right' },
+  { id: 'llm', label: 'LLMs and agents', icon: 'lucide:sparkles' },
+  { id: 'ml', label: 'ML / DL / NLP / NLU', icon: 'lucide:brain' },
+  { id: 'etl', label: 'Data and ETL', icon: 'lucide:database-zap' },
   { id: 'security', label: 'Identity and security', icon: 'lucide:shield-check' },
-  { id: 'infra', label: 'Infra', icon: 'lucide:cloud' },
+  { id: 'infra', label: 'Infra', icon: 'lucide:server-cog' },
+  { id: 'ops', label: 'Ops', icon: 'lucide:infinity' },
+  { id: 'cloud', label: 'Cloud providers', icon: 'lucide:cloud' },
+  { id: 'testing', label: 'Testing', icon: 'lucide:test-tube-diagonal' },
+  { id: 'patterns', label: 'Design patterns', icon: 'lucide:shapes' },
+  { id: 'lowcode', label: 'Low-code', icon: 'lucide:blocks' },
   { id: 'frontend', label: 'Front end', icon: 'lucide:layout-template' },
-  { id: 'realtime', label: 'Real-time', icon: 'lucide:radio' },
 ];
 
 export const LEVEL_LABELS = { daily: 'daily', production: 'shipped in production', familiar: 'familiar' } as const;

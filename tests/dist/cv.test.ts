@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { SKILL_CATEGORIES } from '../../src/lib/skill-icons';
 import { readHtml, readText } from './helpers';
 
 describe('/cv', () => {
@@ -17,7 +18,7 @@ describe('/cv', () => {
   });
   it('has education, grouped skills and contact details', () => {
     expect(text).toContain("Diplôme d'Ingénieur d'État in Computer Science");
-    expect(doc.querySelectorAll('.cv-skills dt').length).toBe(8);
+    expect(doc.querySelectorAll('.cv-skills dt').map((d) => d.text.trim())).toEqual(SKILL_CATEGORIES.map((c) => c.label));
     expect(text).toContain('hello@youssefalouani.com');
     expect(text).toContain('youssefalouani.com');
   });

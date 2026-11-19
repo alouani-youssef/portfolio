@@ -4,12 +4,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile } from '../data/profile';
 import { getRoles } from '../lib/experience';
 import { getOss } from '../lib/oss';
+import { SKILL_CATEGORIES } from '../lib/skill-icons';
 const roles = await getRoles();
 const skills = await getCollection('skills');
-const CATS = [
-  ['language', 'Languages'], ['backend', 'Backend'], ['data', 'Data'], ['ai', 'AI / LLM'],
-  ['security', 'Identity and security'], ['infra', 'Infra'], ['frontend', 'Front end'], ['realtime', 'Real-time'],
-] as const;
+
 const e = profile.education;
 const oss = await getOss();
 ---
@@ -56,10 +54,10 @@ const oss = await getOss();
       <section class="mt-6 break-inside-avoid">
         <h2 class="eyebrow">Skills</h2>
         <dl class="cv-skills mt-2 grid grid-cols-[10rem_1fr] gap-x-4 gap-y-1 text-sm">
-          {CATS.map(([cat, label]) => (
+          {SKILL_CATEGORIES.map((c) => (
             <>
-              <dt class="font-medium">{label}</dt>
-              <dd>{skills.filter((s) => s.data.category === cat).map((s) => s.data.name).join(', ')}</dd>
+              <dt class="font-medium">{c.label}</dt>
+              <dd>{skills.filter((s) => s.data.category === c.id).map((s) => s.data.name).join(', ')}</dd>
             </>
           ))}
         </dl>
