@@ -13,7 +13,8 @@
     "check": "astro check",
     "test:unit": "vitest run --project unit",
     "test:dist": "vitest run --project dist",
-    "astro": "astro"
+    "astro": "astro",
+    "media": "node scripts/redact-media.mjs"
   },
   "dependencies": {
     "astro": "^7.4.13"
