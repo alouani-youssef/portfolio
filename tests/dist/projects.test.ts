@@ -21,32 +21,56 @@ describe('finamaze migration', () => {
   });
 });
 
+const AREAS = [
+  ['agentic', ['customer-voice', 'osoul-ai-assistant', 'ai-stones']],
+  ['nlp', ['qalqul-nlu']],
+  ['ml', ['saudi-stt']],
+  ['recsys', ['osoul-recommendations']],
+  ['etl', ['osoul-server-side-tracking', '10xjobs-ingestion']],
+  ['backend', ['osoul', 'sowtek-omnichannel-chat', 'finamaze-migration']],
+] as const;
+const CHILDREN: Record<string, string> = {
+  'qalqul-botpress': 'qalqul-nlu', 'qalqul-realtime': 'qalqul-nlu', 'sowtek-voip': 'saudi-stt', '10xjobs-search': '10xjobs-ingestion',
+  'osoul-multi-tenancy': 'osoul', 'osoul-table-sessions': 'osoul', 'sowtek-flowbuilder': 'sowtek-omnichannel-chat',
+  'finamaze-kyc': 'finamaze-migration', 'finamaze-keycloak': 'finamaze-migration',
+};
+
 describe('projects index', () => {
-  it('links every case study with Osoul first as flagship', () => {
-    const doc = readHtml('/projects');
-    const hrefs = [...new Set(doc.querySelectorAll('main a[href^="/projects/"]').map((a) => a.getAttribute('href')))];
-    expect(hrefs[0]).toBe('/projects/osoul');
-    for (const slug of [...CASES, ...COMPANY_PROJECTS.flatMap(([, s]) => s)]) expect(hrefs, slug).toContain(`/projects/${slug}`);
+  const doc = readHtml('/projects');
+  it('has one section per focus area, in order', () => {
+    expect(doc.querySelectorAll('main section[data-focus]').map((s) => s.getAttribute('data-focus'))).toEqual(AREAS.map(([id]) => id));
+  });
+  it('shows the 11 top-level case studies as cards, in their area, Osoul marked flagship', () => {
+    for (const [area, slugs] of AREAS) {
+      const cards = doc.querySelectorAll(`section[data-focus="${area}"] .project-card`);
+      expect(cards.map((c) => (c.tagName === 'A' ? c : c.querySelector('a'))!.getAttribute('href')), area).toEqual(slugs.map((s) => `/projects/${s}`));
+    }
+    expect(doc.querySelectorAll('main .project-card')).toHaveLength(11);
     expect(doc.querySelector('main a[href="/projects/osoul"]')!.text).toContain('Flagship');
   });
+  it('lists every deep dive under its parent card', () => {
+    for (const [child, parent] of Object.entries(CHILDREN)) {
+      expect(doc.querySelector(`[data-parent="${parent}"] a[href="/projects/${child}"]`), `${parent} > ${child}`).not.toBeNull();
+    }
+  });
   it('gives every project card its own cover with alt text', () => {
-    const imgs = readHtml('/projects').querySelectorAll('main .project-card img');
-    expect(imgs.length).toBe(21);
+    const imgs = doc.querySelectorAll('main .project-card img');
+    expect(imgs.length).toBe(11);
     const names = imgs.map((i) => i.getAttribute('src')!.split('/').pop()!.split('.')[0]);
     expect(new Set(names).size, names.join(', ')).toBe(imgs.length);
     for (const img of imgs) expect(img.getAttribute('alt')?.trim()).toBeTruthy();
   });
-  it('groups projects by company', () => {
-    const doc = readHtml('/projects');
-    for (const [company, slugs] of COMPANY_PROJECTS) {
-      for (const slug of slugs) expect(doc.querySelector(`#${company} a[href="/projects/${slug}"]`), `${company}/${slug}`).not.toBeNull();
+  it('keeps every deep-dive URL alive, linking back to its parent (Review Focus 1)', () => {
+    for (const [child, parent] of Object.entries(CHILDREN)) {
+      expect(readHtml(`/projects/${child}`).querySelector(`main a[href="/projects/${parent}"]`), child).not.toBeNull();
     }
+    expect(readHtml('/projects/archio').querySelector('h1')).not.toBeNull();
   });
-  it('home features the three case studies and links every company group', () => {
+  it('home features the three case studies with no more than two links to /projects', () => {
     const home = readHtml('/');
     expect(home.querySelectorAll('.featured-project')).toHaveLength(3);
-    for (const [company] of COMPANY_PROJECTS) expect(home.querySelector(`main a[href="/projects#${company}"]`), company).not.toBeNull();
-    expect(home.querySelectorAll('main a[href="/projects"]').length).toBeGreaterThan(0);
+    expect(home.querySelectorAll('main a[href="/projects"]').length).toBeLessThanOrEqual(2);
+    expect(home.querySelectorAll('main a[href^="/projects#"]')).toHaveLength(0);
   });
 });
 

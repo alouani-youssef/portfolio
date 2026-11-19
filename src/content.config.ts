@@ -3,6 +3,7 @@ import { z } from 'astro/zod';
 import { glob, file } from 'astro/loaders';
 import { resolveIcon, SKILL_CATEGORIES, type Category } from './lib/skill-icons';
 import { TAG_IDS } from './lib/tags';
+import { FOCUS_IDS } from './lib/focus';
 
 const skills = defineCollection({
   loader: file('src/data/skills.yaml'),
@@ -91,6 +92,8 @@ const projects = defineCollection({
       area: z.enum(['backend', 'ai', 'platform', 'frontend']),
       kind: z.enum(['founder', 'employer', 'open-source', 'side']),
       company: reference('experience').optional(),
+      /** Focus area for top-level case studies; deep dives set `parent` instead. */
+      focus: z.enum(FOCUS_IDS).optional(),
       parent: reference('projects').optional(),
       status: z.enum(['live', 'shipped', 'in-progress', 'archived']),
       featured: z.boolean().default(false),

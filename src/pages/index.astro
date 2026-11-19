@@ -13,7 +13,7 @@ import { splitHeadline } from '../lib/markdown';
 import { getPosts } from '../lib/post-queries';
 import { profilePageJsonLd } from '../lib/jsonld';
 import { getOss } from '../lib/oss';
-import { getProjectGroups } from '../lib/projects';
+import { getProjectAreas } from '../lib/projects';
 import ProjectCard from '../components/ProjectCard.astro';
 import headshot from '../assets/media/headshot.png';
 
@@ -23,8 +23,7 @@ const pull = recs.find((r) => r.id === 'mohammad-al-ahmad')!;
 const others = recs.filter((r) => r !== pull).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 const featured = (await getCollection('projects', (p) => p.data.featured && p.id.startsWith('en/'))).sort((a, b) => a.data.order - b.data.order);
 const oss = await getOss();
-const groups = await getProjectGroups();
-const projectCount = groups.reduce((n, g) => n + g.projects.length, 0);
+const projectCount = (await getProjectAreas()).reduce((n, a) => n + a.projects.length, 0);
 const posts = (await getPosts(false))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
@@ -50,7 +49,6 @@ const posts = (await getPosts(false))
       <a href="/projects" class="text-sm">See all projects →</a>
     </div>
     <div class="mt-6"><ExpertiseCards /></div>
-    <a href="/projects" class="mt-6 inline-block rounded-md border border-border px-4 py-2 text-sm font-medium text-fg no-underline hover:border-accent">See all {projectCount} projects</a>
   </section>
 
   <CoreStack />
@@ -64,24 +62,6 @@ const posts = (await getPosts(false))
       <ul class="mt-6 grid gap-4 md:grid-cols-3">
         {featured.map((p) => <li class="featured-project"><ProjectCard project={p} /></li>)}
       </ul>
-      <div class="mt-8">
-        <h3 class="text-sm font-semibold">All {projectCount} projects, by company</h3>
-        <ul class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {groups.map((g) => (
-            <li>
-              <a href={`/projects#${g.anchor}`} class="card flex items-center gap-3 !py-3 no-underline hover:border-accent">
-                {g.role ? <Image src={g.role.data.logo} alt="" width={64} height={64} class="h-8 w-8 flex-none rounded-lg border border-border bg-white object-contain" /> : <span class="flex h-8 w-8 flex-none items-center justify-center rounded-lg border border-border text-xs text-muted" aria-hidden="true">OSS</span>}
-                <span class="min-w-0 flex-1">
-                  <span class="block font-medium text-fg">{g.role ? (g.role.data.alias?.replace(/\s*AXS$/, '') ?? g.role.data.company) : 'Open source and independent'}</span>
-                  <span class="block truncate text-xs text-muted">{g.projects.map((p) => p.data.title.replace(/^.*?:\s*/, '')).slice(0, 3).join(' · ')}</span>
-                </span>
-                <span class="text-sm text-muted">{g.projects.length}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-        <a href="/projects" class="mt-4 inline-block text-sm">Browse all projects →</a>
-      </div>
     </section>
   )}
 
