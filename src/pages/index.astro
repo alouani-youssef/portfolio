@@ -8,6 +8,7 @@ import Recommendation from '../components/Recommendation.astro';
 import { profile } from '../data/profile';
 import { entrySlug } from '../lib/i18n';
 import { getPosts } from '../lib/post-queries';
+import { profilePageJsonLd } from '../lib/jsonld';
 import headshot from '../assets/media/headshot.png';
 
 const [lead, rest] = profile.headline.split(/(?<=Osoul\.)\s/);
@@ -18,7 +19,7 @@ const posts = (await getPosts(false))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
 ---
-<BaseLayout title="Youssef Alouani · Lead Backend & AI Engineer" description={profile.oneLiner} path="/">
+<BaseLayout title="Youssef Alouani · Lead Backend & AI Engineer" description={profile.oneLiner} path="/" jsonLd={[profilePageJsonLd(profile, Astro.site!.origin)]}>
   <section class="container-page grid items-center gap-10 py-16 sm:py-24 md:grid-cols-[1fr_auto]">
     <div>
       <p class="eyebrow">Casablanca · Backend &amp; AI</p>

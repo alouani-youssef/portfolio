@@ -6,6 +6,7 @@ import StackChips from '../../components/StackChips.astro';
 import { getProjects } from '../../lib/projects';
 import { entrySlug } from '../../lib/i18n';
 import { isPreview, placeholderViolations } from '../../lib/metrics';
+import { projectJsonLd } from '../../lib/jsonld';
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -22,7 +23,7 @@ const path = `/projects/${entrySlug(project.id)}`;
 const company = d.company ? await getEntry(d.company) : undefined;
 const preview = isPreview();
 ---
-<BaseLayout title={d.title} description={d.summary} path={path}>
+<BaseLayout title={d.title} description={d.summary} path={path} jsonLd={[projectJsonLd(d, `${Astro.site!.origin}${path}`)]}>
   <article class="container-page py-12 sm:py-16">
     <a href="/projects" class="text-sm">← Projects</a>
     <header class="mt-6 max-w-[70ch]">

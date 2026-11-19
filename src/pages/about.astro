@@ -5,11 +5,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SkillsMatrix from '../components/SkillsMatrix.astro';
 import Recommendation from '../components/Recommendation.astro';
 import { profile } from '../data/profile';
+import { profilePageJsonLd, faqPageJsonLd } from '../lib/jsonld';
 import headshot from '../assets/media/headshot.png';
 const recs = (await getCollection('recommendations')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 const e = profile.education;
 ---
-<BaseLayout title="About" description={profile.shortBio.slice(0, 158) + '…'} path="/about">
+<BaseLayout title="About" description={profile.shortBio.slice(0, 158) + '…'} path="/about" jsonLd={[profilePageJsonLd(profile, Astro.site!.origin), faqPageJsonLd(profile.faq)]}>
   <div class="container-page py-12 sm:py-16">
     <div class="flex flex-col gap-8 sm:flex-row sm:items-start">
       <Picture src={headshot} alt="Portrait of Youssef Alouani" widths={[128, 256]} sizes="128px" formats={['avif', 'webp']} class="h-32 w-32 rounded-full border border-border object-cover" />
