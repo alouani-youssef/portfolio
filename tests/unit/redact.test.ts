@@ -7,6 +7,8 @@ import { redact, MANIFEST } from '../../scripts/redact-media.mjs';
 
 const SRC = 'docs/osoul/portal_dashboard.png';
 const PAYLOAD = { left: 2660, top: 1400, width: 780, height: 115 };
+/** Venue switcher in the sidebar: the site never names venues, in text or in images. */
+const VENUE = { left: 25, top: 1655, width: 470, height: 115 };
 
 /** Mean absolute difference between horizontally adjacent grey pixels: high for legible text, low once blurred. */
 async function edgeEnergy(file: string, box: typeof PAYLOAD) {
@@ -31,11 +33,17 @@ describe('redact', () => {
     expect(b.equals(a)).toBe(true);
   });
 
-  it('redacts the staff name and the assistant payload on the dashboard', () => {
+  it('redacts the venue, the staff name and the assistant payload on the dashboard', () => {
     const entry = MANIFEST.find((m: { output: string }) => m.output.endsWith('osoul/portal-dashboard.png'));
     expect(entry!.boxes).toEqual([
+      VENUE,
       { left: 20, top: 1780, width: 490, height: 120 },
       { left: 2660, top: 1400, width: 780, height: 115 },
     ]);
+  });
+
+  it('ships the dashboard with the venue name blurred', async () => {
+    const published = 'src/assets/projects/osoul/portal-dashboard.png';
+    expect(await edgeEnergy(published, VENUE)).toBeLessThan((await edgeEnergy(SRC, VENUE)) * 0.25);
   });
 });

@@ -13,6 +13,7 @@ export const MANIFEST = [
     input: 'docs/osoul/portal_dashboard.png',
     output: 'src/assets/projects/osoul/portal-dashboard.png',
     boxes: [
+      { left: 25, top: 1655, width: 470, height: 115 }, // venue switcher: venue name, city and logo
       { left: 20, top: 1780, width: 490, height: 120 }, // staff member's name and role
       { left: 2660, top: 1400, width: 780, height: 115 }, // assistant payload with guest phone number
     ],
