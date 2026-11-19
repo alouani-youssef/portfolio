@@ -76,9 +76,10 @@ const posts = (await getPosts(false))
     </ul>
   </section>
 
-  <section class="container-page grid gap-12 py-10 md:grid-cols-2">
-    <ClientGroups />
-    <div><Recommendation rec={pull} size="lg" /></div>
+  <div class="container-page py-10"><ClientGroups /></div>
+
+  <section class="container-page py-10" aria-label="Recommendation">
+    <div class="max-w-[70ch]"><Recommendation rec={pull} size="lg" /></div>
   </section>
 
   {posts.length > 0 && (

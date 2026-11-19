@@ -21,6 +21,20 @@ describe('home', () => {
     const labels = doc.querySelectorAll('.client-groups h3').map((h) => h.text.trim());
     expect(labels).toEqual(GROUP_ORDER.map((g) => GROUP_LABELS[g]));
   });
+  it('shows every client as a logo tile, linking out where a site is known', () => {
+    const tiles = doc.querySelectorAll('.client-groups .client-tile');
+    expect(tiles).toHaveLength(12);
+    const byName = (n: string) => tiles.find((t) => t.text.includes(n))!;
+    const hertz = byName('Hertz');
+    expect(hertz.tagName).toBe('A');
+    expect(hertz.getAttribute('href')).toBe('https://www.hertz.com');
+    expect(hertz.getAttribute('target')).toBe('_blank');
+    expect(hertz.getAttribute('rel')).toContain('noopener');
+    expect(hertz.querySelector('img[alt="Hertz logo"]')).not.toBeNull();
+    expect(byName('CityClub').tagName).not.toBe('A');
+    expect(byName('Saudi National Bank').querySelector('img')).toBeNull();
+    expect(byName('Atlas Group').classList.contains('client-tile--dark')).toBe(true);
+  });
   it('shows exactly one recommendation pull quote', () => {
     expect(doc.querySelectorAll('main blockquote')).toHaveLength(1);
   });

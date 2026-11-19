@@ -18,13 +18,18 @@ const skills = defineCollection({
 
 const clients = defineCollection({
   loader: file('src/data/clients.yaml'),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     id: z.string(),
     name: z.string(),
     group: z.enum(['government', 'banks-insurers', 'groups', 'growth']),
     order: z.number(),
     experience: reference('experience'),
     market: z.string(),
+    /** Official website, confirmed by hand. Omitted when there is no trustworthy site. */
+    url: z.url().optional(),
+    logo: image().optional(),
+    /** Tile behind the logo: `dark` for logos that are published only in white. */
+    logoBg: z.enum(['light', 'dark']).default('light'),
   }),
 });
 

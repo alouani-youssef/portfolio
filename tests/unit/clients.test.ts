@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { parse } from 'yaml';
 import { describe, it, expect } from 'vitest';
 import { groupClients, type ClientGroup } from '../../src/lib/clients';
@@ -15,7 +15,7 @@ describe('groupClients', () => {
 });
 
 describe('clients.yaml', () => {
-  const clients = parse(readFileSync('src/data/clients.yaml', 'utf8')) as Array<{ id: string; name: string; group: ClientGroup }>;
+  const clients = parse(readFileSync('src/data/clients.yaml', 'utf8')) as Array<{ id: string; name: string; group: ClientGroup; url?: string; logo?: string; logoBg?: string }>;
   const names = (group: ClientGroup) => clients.filter((x) => x.group === group).map((x) => x.name);
 
   it('lists twelve clients with parent group names, never venues', () => {
@@ -28,8 +28,39 @@ describe('clients.yaml', () => {
 
   it('matches the content spec grouping', () => {
     expect(names('government')).toEqual(['HRSD (Ministry of Human Resources and Social Development)', 'King Saud Medical City']);
-    expect(names('banks-insurers')).toEqual(['Saudi National Bank (SNB)', 'Crédit du Maroc (CDM)', 'SANLAM', 'AtlantaSanad']);
+    expect(names('banks-insurers')).toEqual(['Saudi National Bank (SNB)', 'Crédit du Maroc (CDM)', 'SanlamAllianz', 'AtlantaSanad']);
     expect(names('groups')).toEqual(['Hertz', 'Barceló Group', 'Atlas Group']);
     expect(names('growth')).toEqual(['YouCan', 'CityClub', 'Tahreez']);
+  });
+
+  const URLS: Record<string, string | undefined> = {
+    hrsd: 'https://www.hrsd.gov.sa',
+    'king-saud-medical-city': 'https://www.ksmc.med.sa',
+    snb: 'https://www.alahli.com',
+    cdm: 'https://www.creditdumaroc.ma',
+    sanlam: 'https://sanlamallianz.ma',
+    atlantasanad: 'https://www.atlantasanad.ma',
+    hertz: 'https://www.hertz.com',
+    'barcelo-group': 'https://www.barcelo.com',
+    'atlas-group': 'https://atlashospitality.com',
+    youcan: 'https://youcan.shop',
+    cityclub: undefined,
+    tahreez: 'https://tahreez.com',
+  };
+
+  it('links each client to its confirmed official website (CityClub has none)', () => {
+    for (const x of clients) expect(x.url, x.id).toBe(URLS[x.id]);
+  });
+
+  it('has a logo file for every client except SNB', () => {
+    for (const x of clients) {
+      if (x.id === 'snb') { expect(x.logo, x.id).toBeUndefined(); continue; }
+      expect(x.logo, x.id).toMatch(/^\.\.\/assets\/clients\//);
+      expect(existsSync(`src/data/${x.logo}`), x.id).toBe(true);
+    }
+  });
+
+  it('puts the white Atlas logo on a dark tile', () => {
+    expect(clients.find((x) => x.id === 'atlas-group')!.logoBg).toBe('dark');
   });
 });
