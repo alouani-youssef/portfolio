@@ -33,7 +33,7 @@ describe('about', () => {
     expect(quotes).toHaveLength(3);
     for (const q of quotes) {
       const fig = q.parentNode;
-      expect(fig.querySelector('a[href*="linkedin.com"]')).not.toBeNull();
+      expect(fig!.querySelector('a[href*="linkedin.com"]')).not.toBeNull();
     }
   });
   it('has a 6–8 item FAQ', () => {
@@ -59,7 +59,7 @@ describe('site-wide', () => {
   it('wraps every table for phone widths (Review Focus 1)', () => {
     for (const route of listHtmlPages()) {
       for (const table of readHtml(route).querySelectorAll('table')) {
-        expect(table.parentNode.classList.contains('table-scroll'), route).toBe(true);
+        expect(table.parentNode!.classList.contains('table-scroll'), route).toBe(true);
       }
     }
   });
