@@ -1,6 +1,6 @@
 ---
-title: "Finamaze: architectural migration"
-summary: "Reshaping Finamaze's backend into clearly bounded services for onboarding, identity, portfolios and reconciliation, without stopping a live platform."
+title: "Finamaze: from B2C to multi-tenant B2B"
+summary: "Migrating Finamaze from a B2C robo-advisor app to a multi-tenant B2B platform for financial institutions, with the infrastructure adapted to match."
 area: backend
 kind: employer
 company: en/finamaze
@@ -8,38 +8,39 @@ status: shipped
 featured: false
 confidentiality: architecture-only
 order: 32
-skills: [nodejs, typescript, postgresql, microservices, clean-architecture, event-driven]
+skills: [nodejs, typescript, postgresql, keycloak, microservices, clean-architecture]
 cover: ../../../assets/projects/covers/finamaze-migration.jpg
-coverAlt: "Event-driven financial platform: ledger and position sources stream through Kafka and Spark into a reporting data mart"
+coverAlt: "Finamaze platform moving from one consumer app to isolated tenants for each financial institution"
 updatedAt: 2026-11-19
 ---
 import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
 
 ## Problem
 
-Finamaze grew fast: onboarding, KYC, portfolios, payments and reconciliation lived close together in the backend, so a change in one area risked the others, and onboarding a bank partner meant touching everything. {/* CHECK: confirm the starting architecture */}
+Finamaze started as a B2C robo-advisor: one app, one set of investors, one configuration. The business moved to B2B, selling the platform to financial institutions such as Saudi National Bank, and every institution needed its own investors, data, branding and rules on the same product. That is a multi-tenant B2B platform, and the B2C backend and infrastructure were not built for it.
 
 ## Constraints
 
-- **Live money**: investors keep trading and money keeps moving during the migration.
-- **No big bang**: the migration happens in steps, each one shippable on its own.
-- **Ledger correctness**: reconciliation must agree with the bank before and after every step.
+- **Live investors**: the B2C product kept running while the platform changed underneath it.
+- **Isolation between institutions**: one institution's investors and data must never be visible to another. {/* CHECK: isolation level (schema, database or row) */}
+- **Regulated clients**: each institution brings its own security and deployment requirements, so infrastructure had to adapt per tenant. {/* CHECK: what changed per tenant in the infrastructure */}
 
 ## Architecture
 
 <LayerDiagram
-  title="Finamaze migration"
-  desc="Before: one backend holds onboarding, identity, portfolios and reconciliation. Step by step, each domain moves behind its own boundary: identity to Keycloak, onboarding and KYC, portfolios, and reconciliation, communicating through explicit APIs and events."
+  title="Finamaze B2C to B2B migration"
+  desc="Before: a single B2C app and backend serving one investor base. After: a multi-tenant B2B platform where each financial institution is a tenant with its own identity realm, data and configuration, on infrastructure adapted for tenant isolation."
   layers={[
-    { caption: 'Before', nodes: [{ label: 'Coupled backend', sub: 'onboarding · portfolios · ledger' }] },
-    { caption: 'Step by step', nodes: [{ label: 'Extract identity', sub: 'Keycloak' }, { label: 'Bound domains', sub: 'APIs · events', accent: true }, { label: 'Verify ledger', sub: 'every step' }] },
-    { caption: 'After', nodes: [{ label: 'Onboarding & KYC' }, { label: 'Portfolios' }, { label: 'Reconciliation' }] },
+    { caption: 'Before · B2C', nodes: [{ label: 'One consumer app', sub: 'one investor base' }] },
+    { caption: 'Migration', nodes: [{ label: 'Tenant model', sub: 'institution = tenant', accent: true }, { label: 'Identity per tenant', sub: 'Keycloak' }, { label: 'Infrastructure', sub: 'adapted for isolation' }] },
+    { caption: 'After · multi-tenant B2B', nodes: [{ label: 'Institution A' }, { label: 'Institution B' }, { label: 'Shared platform' }] },
   ]}
 />
-{/* CHECK: domain split and target style are inferred */}
 
 ## Key decisions
 
-1. **Identity first.** Moving authentication to [Keycloak](/projects/finamaze-keycloak) removed the most shared concern before splitting anything else.
-2. **Strangle, don't rewrite.** Each domain moved behind its boundary while the old paths kept serving traffic.
-3. **Reconciliation as the safety net.** The ledger check proved after each step that no money moved differently.
+1. **The institution is the tenant.** Every investor, portfolio and configuration belongs to one institution, so isolation is a property of the data model, not a filter added in each query. {/* CHECK: confirm */}
+2. **Identity per institution.** Authentication moved to [Keycloak](/projects/finamaze-keycloak), so each institution gets its own users and roles. {/* CHECK: realm per tenant or shared realm */}
+3. **Infrastructure follows the tenant model.** Deployments, configuration and secrets were adapted so a new institution is onboarded by configuration rather than code. {/* CHECK: what was adapted */}
+
+Investor onboarding and KYC moved with the platform: see [investor onboarding, KYC and reconciliation](/projects/finamaze-kyc).

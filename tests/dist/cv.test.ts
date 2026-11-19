@@ -12,7 +12,7 @@ describe('/cv', () => {
     expect(text).not.toContain('Lead Backend & AI Engineer');
   });
   it('lists the five roles with their periods', () => {
-    for (const s of ['10xJobs', 'Oct 2026 – now', 'Osoul', 'Jun 2026 – now', 'Axelerated Solutions', 'Feb 2024 – May 2026', 'Finamaze', 'Jul 2023 – Jan 2024', 'Qalqul Engine', '2021 – 2023']) {
+    for (const s of ['10xJobs', 'Oct 2026 – now', 'Osoul', 'Jun 2026 – now', 'Axelerated Solutions', 'Feb 2024 – May 2026', 'Finamaze', 'Jul 2023 – Jan 2024', 'Qalqul Engine', 'Dec 2021 – Jul 2023']) {
       expect(text).toContain(s);
     }
     expect(doc.querySelectorAll('.cv-role')).toHaveLength(5);

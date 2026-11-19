@@ -12,6 +12,15 @@ const COMPANY_PROJECTS = [
 ] as const;
 const H2 = ['Problem', 'Constraints', 'Architecture', 'Key decisions', 'Results', 'Stack and links'];
 
+describe('finamaze migration', () => {
+  it('tells the B2C to multi-tenant B2B story', () => {
+    const t = readHtml('/projects/finamaze-migration').querySelector('main')!.text;
+    expect(t).toContain('B2C');
+    expect(t).toContain('multi-tenant B2B');
+    expect(t).toMatch(/infrastructure/i);
+  });
+});
+
 describe('projects index', () => {
   it('links every case study with Osoul first as flagship', () => {
     const doc = readHtml('/projects');

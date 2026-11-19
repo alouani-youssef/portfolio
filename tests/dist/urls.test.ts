@@ -42,12 +42,13 @@ describe('machine dates match the displayed periods', () => {
   });
   it('employment periods never overlap', () => {
     const jobs = api.filter((e) => e.id !== '10xjobs').sort((a, b) => a.start.localeCompare(b.start));
-    for (let i = 1; i < jobs.length; i++) expect(jobs[i - 1].end! < jobs[i].start, `${jobs[i - 1].id} overlaps ${jobs[i].id}`).toBe(true);
+    for (let i = 1; i < jobs.length; i++) // A shared month is a handover (Qalqul ends Jul 2023, Finamaze starts Jul 2023); anything longer is an overlap.
+      expect(jobs[i - 1].end! <= jobs[i].start, `${jobs[i - 1].id} overlaps ${jobs[i].id}`).toBe(true);
   });
   it('uses year precision where only years are known', () => {
     const by = Object.fromEntries(api.map((e) => [e.id, e]));
     expect([by.finamaze.start, by.finamaze.end]).toEqual(['2023-07', '2024-01']);
-    expect([by.qalqul.start, by.qalqul.end]).toEqual(['2021', '2023']);
+    expect([by.qalqul.start, by.qalqul.end]).toEqual(['2021-12', '2023-07']);
     expect([by.axelerated.start, by.axelerated.end]).toEqual(['2024-02', '2026-05']);
     expect([by.osoul.start, by.osoul.end]).toEqual(['2026-06', null]);
     const work = Object.fromEntries(resume.work.map((w: any) => [w.name, w]));

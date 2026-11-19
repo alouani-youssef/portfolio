@@ -12,7 +12,8 @@
 
 ## Decisions (from the user)
 
-- Finamaze ran **Jul 2023 – Jan 2024**. Axelerated Solutions (AXS) ran **Feb 2024 – May 2026**.
+- Qalqul ran **Dec 2021 – Jul 2023** (Jul 2023 is a handover month with Finamaze).
+- Finamaze ran **Jul 2023 – Jan 2024**; its main story is the **B2C → multi-tenant B2B migration** with infrastructure adaptation. Axelerated Solutions (AXS) ran **Feb 2024 – May 2026**.
 - Education: **Bachelor's degree, 2017–2021**. The *Diplôme d'Ingénieur 2019–2022* is wrong.
 - The Hertz client is **Hertz Morocco**.
 - 10xJobs is a **side project started a month ago**: Oct 2026.
@@ -164,7 +165,7 @@
 | ml | saudi-stt★ 2 | sowtek-voip → `en/saudi-stt` |
 | recsys | osoul-recommendations 12 | – |
 | etl | 10xjobs-ingestion 50, osoul-server-side-tracking 15 | 10xjobs-search → `en/10xjobs-ingestion` |
-| backend | osoul★ 1, sowtek-omnichannel-chat 20, finamaze-kyc 30 | osoul-multi-tenancy, osoul-table-sessions → `en/osoul`; sowtek-flowbuilder → `en/sowtek-omnichannel-chat`; finamaze-keycloak, finamaze-migration → `en/finamaze-kyc` |
+| backend | osoul★ 1, sowtek-omnichannel-chat 20, finamaze-migration 30 | osoul-multi-tenancy, osoul-table-sessions → `en/osoul`; sowtek-flowbuilder → `en/sowtek-omnichannel-chat`; finamaze-kyc, finamaze-keycloak → `en/finamaze-migration` |
 
 `osoul-ai-assistant`, `osoul-recommendations` and `osoul-server-side-tracking` lose their `parent` and become top-level. `archio` gets neither field and appears only on `/open-source`. ★ = `featured: true` (unchanged).
 
