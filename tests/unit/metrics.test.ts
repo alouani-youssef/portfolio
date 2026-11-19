@@ -21,3 +21,18 @@ it('treats the dev server and preview builds as preview, production builds as no
   expect(isPreview({ DEV: false, PUBLIC_PREVIEW: 'true' })).toBe(true);
   expect(isPreview({ DEV: false, PUBLIC_PREVIEW: undefined })).toBe(false);
 });
+
+import { checkMarkerViolations } from '../../src/lib/metrics';
+
+it('lists each CHECK marker as "<path>:<line>: <text>"', () => {
+  expect(checkMarkerViolations([{ path: 'a.mdx', text: 'x\nfoo {/* CHECK */}' }])).toEqual(['a.mdx:2: foo {/* CHECK */}']);
+});
+
+it('trims long lines to 120 characters', () => {
+  const [v] = checkMarkerViolations([{ path: 'a.mdx', text: `${'y'.repeat(200)} CHECK` }]);
+  expect(v).toBe(`a.mdx:1: ${'y'.repeat(120)}`);
+});
+
+it('returns nothing for text without markers', () => {
+  expect(checkMarkerViolations([{ path: 'a.mdx', text: 'all confirmed' }])).toEqual([]);
+});

@@ -7,6 +7,7 @@ import Figure from '../../components/Figure.astro';
 import { getProjects } from '../../lib/projects';
 import { entrySlug } from '../../lib/i18n';
 import { isPreview, placeholderViolations } from '../../lib/metrics';
+import { publishedCheckMarkers } from '../../lib/check-markers';
 import { projectJsonLd } from '../../lib/jsonld';
 
 export async function getStaticPaths() {
@@ -14,6 +15,12 @@ export async function getStaticPaths() {
   const violations = placeholderViolations(projects);
   if (!isPreview() && violations.length > 0) {
     throw new Error(`Placeholder metrics in production build:\n${violations.join('\n')}`);
+  }
+  const unconfirmed = publishedCheckMarkers();
+  if (unconfirmed.length > 0) {
+    const msg = `Unconfirmed claims (CHECK markers): ${unconfirmed.length}\n${unconfirmed.join('\n')}`;
+    if (!isPreview()) throw new Error(msg);
+    console.warn(`[preview] ${unconfirmed.length} CHECK markers left; production builds will fail. See docs/review/claims-to-confirm.md`);
   }
   return projects.map((project) => ({ params: { slug: entrySlug(project.id) }, props: { project } }));
 }
