@@ -1,20 +1,64 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import { entrySlug } from '../lib/i18n';
 interface Props { roles: CollectionEntry<'experience'>[] }
 const { roles } = Astro.props;
+const yearOf = (r: CollectionEntry<'experience'>) => r.data.start.getUTCFullYear();
 ---
-<ol class="relative space-y-10 border-l border-border pl-6">
-  {roles.map((r) => (
-    <li class="relative">
-      <span class="absolute -left-[29px] top-2 h-2.5 w-2.5 rounded-full border border-border bg-bg" aria-hidden="true"></span>
-      <p class="eyebrow">{r.data.period}</p>
-      <h2 class="mt-1 text-xl font-semibold">
-        <a href={`/experience/${entrySlug(r.id)}`} class="text-fg no-underline hover:text-accent">{r.data.company}</a>
-      </h2>
-      <p class="text-muted">{r.data.role}{r.data.alias ? ` · ${r.data.alias}` : ''}</p>
-      <p class="mt-2 max-w-[70ch]">{r.data.summary}</p>
-      <a href={`/experience/${entrySlug(r.id)}`} class="mt-2 inline-block text-sm">Read the role →</a>
-    </li>
-  ))}
+<ol class="timeline">
+  {roles.map((r, i) => {
+    const d = r.data;
+    const href = `/experience/${entrySlug(r.id)}`;
+    const newYear = i === 0 || yearOf(roles[i - 1]) !== yearOf(r);
+    return (
+      <>
+        {newYear && <li class="timeline-year" aria-hidden="true"><span>{yearOf(r)}</span></li>}
+        <li class:list={['timeline-item', d.sideProject && 'timeline-item--side']}>
+          <span class="timeline-logo">
+            <Image src={d.logo} alt={`${d.company} logo`} width={Math.min(96, d.logo.width)} height={Math.min(96, d.logo.height)} />
+          </span>
+          <p class="eyebrow">{d.period}</p>
+          <h2 class="mt-1 flex flex-wrap items-center gap-x-2 text-xl font-semibold">
+            <a href={href} class="text-fg no-underline hover:text-accent">{d.company}</a>
+            {d.sideProject && <span class="badge !ml-0">Side project</span>}
+          </h2>
+          <p class="text-muted">{d.role}{d.alias ? ` · ${d.alias}` : ''}</p>
+          <p class="mt-2 max-w-[70ch]">{d.summary}</p>
+          <a href={href} class="mt-2 inline-block text-sm">Read the role →</a>
+        </li>
+      </>
+    );
+  })}
 </ol>
+
+<style>
+  .timeline { --logo: 2.75rem; --rail: calc(var(--logo) / 2); position: relative; list-style: none; padding: 0; }
+  /* The rail runs through the centre of the main-lane logos. */
+  .timeline::before { content: ''; position: absolute; top: 0.5rem; bottom: 0.5rem; left: var(--rail); width: 1px; background: var(--border); }
+
+  .timeline-year { position: relative; margin: 2rem 0 1rem; }
+  .timeline-year:first-child { margin-top: 0; }
+  .timeline-year span {
+    position: relative; display: inline-block; margin-left: var(--rail); transform: translateX(-50%);
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: 0 0.5rem;
+  }
+
+  .timeline-item { position: relative; padding-left: calc(var(--logo) + 1.25rem); padding-bottom: 2.5rem; min-height: var(--logo); }
+  .timeline-logo {
+    position: absolute; left: 0; top: 0; width: var(--logo); height: var(--logo);
+    display: grid; place-items: center; overflow: hidden;
+    background: #fff; border: 1px solid var(--border); border-radius: 0.75rem;
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+  .timeline-logo img { width: 100%; height: 100%; object-fit: contain; }
+
+  /* Side projects sit in their own lane, joined to the rail by a dashed branch. */
+  .timeline-item--side { --side: 3.25rem; padding-left: calc(var(--side) + var(--logo) + 1.25rem); }
+  .timeline-item--side .timeline-logo { left: var(--side); width: calc(var(--logo) - 0.5rem); height: calc(var(--logo) - 0.5rem); top: 0.25rem; }
+  .timeline-item--side::before {
+    content: ''; position: absolute; top: calc(var(--logo) / 2); left: var(--rail); width: calc(var(--side) - var(--rail) + 0.25rem);
+    border-top: 1px dashed var(--muted);
+  }
+</style>

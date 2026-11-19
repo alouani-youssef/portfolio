@@ -49,6 +49,9 @@ const experience = defineCollection({
       alias: z.string().optional(),
       role: z.string(),
       founding: z.boolean().default(false),
+      /** Shown as a side project, not a job: its own lane on the timeline. */
+      sideProject: z.boolean().default(false),
+      logo: image(),
       teamSize: z.number().optional(),
       start: z.coerce.date(),
       end: z.coerce.date().nullable(),

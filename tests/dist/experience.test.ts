@@ -20,6 +20,33 @@ describe('experience', () => {
     expect(unique).toEqual(ROLES.map(([slug]) => `/experience/${slug}`));
   });
 
+  it('timeline uses each company logo as its dot', () => {
+    const items = readHtml('/experience').querySelectorAll('.timeline-item');
+    expect(items).toHaveLength(ROLES.length);
+    for (const [i, li] of items.entries()) {
+      const logo = li.querySelector('.timeline-logo img');
+      expect(logo, ROLES[i][0]).not.toBeNull();
+      expect(logo!.getAttribute('alt')).toBe(`${ROLES[i][1]} logo`);
+    }
+  });
+
+  it('marks 10xJobs, and only 10xJobs, as a side project', () => {
+    const items = readHtml('/experience').querySelectorAll('.timeline-item');
+    const side = items.filter((li) => li.classList.contains('timeline-item--side'));
+    expect(side).toHaveLength(1);
+    expect(side[0].querySelector('a[href="/experience/10xjobs"]')).not.toBeNull();
+    expect(side[0].text).toContain('Side project');
+  });
+
+  it('puts year markers on the line, newest first', () => {
+    const years = readHtml('/experience').querySelectorAll('.timeline-year').map((y) => y.text.trim());
+    expect(years).toEqual(['2026', '2024', '2023', '2021']);
+  });
+
+  it('describes four roles and a side project', () => {
+    expect(text('/experience')).toContain('Four roles and a side project over five years');
+  });
+
   it('timeline shows the education line', () => {
     expect(text('/experience')).toContain("Diplôme d'Ingénieur d'État in Computer Science, Hassan First University, FST Settat, 2019–2022");
   });
@@ -30,6 +57,8 @@ describe('experience', () => {
       const h1 = doc.querySelectorAll('h1');
       expect(h1).toHaveLength(1);
       expect(h1[0].text).toContain(company);
+      expect(doc.querySelector(`main header img[alt="${company} logo"]`), slug).not.toBeNull();
+      expect(doc.querySelector('main header')!.text.includes('Side project'), slug).toBe(slug === '10xjobs');
       expect(doc.querySelectorAll('main h2').map((h) => h.text.trim())).toEqual([
         'Context', 'My part', 'Stack', 'Outcome', "What I'd do differently",
       ]);
