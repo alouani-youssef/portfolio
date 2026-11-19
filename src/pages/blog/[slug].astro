@@ -12,7 +12,7 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 const d = post.data;
 ---
-<BaseLayout title={d.title} description={d.description} path={`/blog/${entrySlug(post.id)}`} noindex={d.draft} jsonLd={[blogPostingJsonLd(d, `${Astro.site!.origin}/blog/${entrySlug(post.id)}`)]}>
+<BaseLayout title={d.title} description={d.description} path={`/blog/${entrySlug(post.id)}`} noindex={d.draft} twin={!d.draft} jsonLd={[blogPostingJsonLd(d, `${Astro.site!.origin}/blog/${entrySlug(post.id)}`)]}>
   <article class="container-page py-12 sm:py-16">
     <div class="max-w-[70ch]">
       <a href="/blog" class="text-sm">← Blog</a>

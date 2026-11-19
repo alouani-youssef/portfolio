@@ -3,6 +3,7 @@ import { Font } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import { twinHref } from '../lib/markdown';
 
 export interface Props {
   title: string;
@@ -11,8 +12,10 @@ export interface Props {
   jsonLd?: object[];
   noindex?: boolean;
   ogImage?: string;
+  /** Set false for pages with no Markdown twin (tag pages, 404, drafts). */
+  twin?: boolean;
 }
-const { title, description, path, jsonLd = [], noindex = false, ogImage } = Astro.props;
+const { title, description, path, jsonLd = [], noindex = false, ogImage, twin = true } = Astro.props;
 const site = Astro.site!.origin;
 const canonical = `${site}${path === '/' ? '/' : path}`;
 const fullTitle = path === '/' ? title : `${title} · Youssef Alouani`;
@@ -29,6 +32,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem('theme');}catch(
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="en" href={canonical} />
     <link rel="alternate" hreflang="x-default" href={canonical} />
+    {twin && <link rel="alternate" type="text/markdown" href={twinHref(path)} />}
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:type" content="website" />

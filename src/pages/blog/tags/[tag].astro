@@ -9,7 +9,7 @@ export async function getStaticPaths() {
 }
 const { tag, posts } = Astro.props;
 ---
-<BaseLayout title={`Posts tagged ${tag}`} description={`Posts by Youssef Alouani tagged ${tag}.`} path={`/blog/tags/${tag}`}>
+<BaseLayout title={`Posts tagged ${tag}`} description={`Posts by Youssef Alouani tagged ${tag}.`} path={`/blog/tags/${tag}`} twin={false}>
   <div class="container-page py-12 sm:py-16">
     <div class="max-w-[70ch]">
       <a href="/blog" class="text-sm">← Blog</a>
