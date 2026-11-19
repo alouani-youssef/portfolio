@@ -1,0 +1,18 @@
+---
+import LayerDiagram from './LayerDiagram.astro';
+---
+<LayerDiagram
+  title="Customer Voice RAG pipeline"
+  desc="Structured sources, unstructured documents and customer interactions are ingested and embedded into Milvus. A gRPC retrieval module serves an MCP server, the pipeline's main retriever, which LLM clients call. Keycloak auth and the privacy and retention layer wrap retrieval and the MCP server; the ai-llm module tracks tokens, cost and privacy."
+  layers={[
+    { caption: 'Sources', nodes: [{ label: 'Structured data' }, { label: 'Documents' }, { label: 'Interactions', sub: 'calls · chats · tickets' }] },
+    { caption: 'Ingestion', nodes: [{ label: 'Ingest · chunk · embed' }] },
+    { caption: 'Retrieval', nodes: [{ label: 'Milvus', sub: 'vector index' }, { label: 'gRPC retrieval module', accent: true }] },
+    { caption: 'Access', nodes: [{ label: 'MCP server', sub: 'main retriever', accent: true }] },
+    { caption: 'Clients', nodes: [{ label: 'LLM clients', sub: 'chatbots · agents · analysts' }] },
+  ]}
+  frame={{ label: 'Auth · privacy · retention', from: 2, to: 3 }}
+  side={{ label: 'ai-llm module', sub: 'tokens · cost · privacy', layer: 4 }}
+>
+  <slot />
+</LayerDiagram>

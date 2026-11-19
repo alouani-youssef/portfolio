@@ -1,0 +1,62 @@
+---
+title: Saudi-dialect speech-to-text
+summary: Whisper large-v3 fine-tuned for Saudi dialect, with an audio pipeline for WhatsApp and Asterisk calls, behind live transcripts and tool-using voice agents.
+area: ai
+kind: employer
+company: en/axelerated
+status: shipped
+featured: true
+confidentiality: architecture-only
+order: 2
+skills: [whisper, fine-tuning, python, fastapi, rag]
+metrics:
+  - { label: "Word error rate, base Whisper large-v3 → fine-tuned", value: "38% → 19%", placeholder: true }
+media:
+  - { src: ../../../assets/projects/saudi-stt/live-transcript.png, alt: "Live call screen in Arabic: an incoming-call panel and a real-time transcript where the customer says their order has not arrived, the assistant calls the track_order tool, and answers that the order is out with the courier", caption: "Live transcript of a Saudi-dialect call with a tool call in the middle (demo data).", device: desktop }
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import SaudiSttDiagram from '../../../components/diagrams/SaudiSttDiagram.astro';
+
+## Problem
+
+Contact centres in Saudi Arabia take most of their calls and voice notes in Saudi dialect, not Modern Standard Arabic. Off-the-shelf speech-to-text models are trained mostly on MSA and other dialects, so they drop or mangle exactly the words that matter: order numbers, product names, complaints. Without reliable transcripts there is no search, no analytics, and no voice agent that can act on what the customer said.
+
+## Constraints
+
+- **Dialect and code-switching**: Saudi Arabic mixed with English product terms and numbers.
+- **Telephony audio**: narrow-band Asterisk recordings and compressed WhatsApp voice notes, with noise and cross-talk.
+- **Data residency**: government and enterprise clients, so audio and transcripts could not go to a third-party speech API.
+- **Real time**: transcripts feed a live agent, so latency matters as much as accuracy.
+
+## Architecture
+
+<SaudiSttDiagram>
+
+<details>
+<summary>Diagram source (Mermaid)</summary>
+
+```mermaid
+flowchart TB
+  wa[WhatsApp voice notes] --> prep[Resample · segment · label]
+  ast[Asterisk call audio] --> prep
+  prep --> model[Whisper large-v3 · fine-tuned for Saudi dialect]
+  model --> live[Live transcript · agent tools]
+  model --> cv[Customer Voice RAG pipeline]
+```
+
+</details>
+
+</SaudiSttDiagram>
+
+<Gallery items={props.media} />
+
+<p>
+  In the call above the customer says <span lang="ar" dir="rtl">«طلبي للحين ما وصلني»</span> ("my order still hasn't reached me"). The transcript is reliable enough for the agent to call <code>track_order</code> mid-call and answer with the courier status.
+</p>
+
+## Key decisions
+
+1. **Fine-tune Whisper large-v3 rather than use a hosted speech API.** Hosted APIs were weaker on Saudi dialect and would have sent client audio outside the deployment. Fine-tuning an open model kept audio in-house and let the vocabulary follow the clients' domains.
+2. **Invest in data preparation before training.** Every source was normalised to the same format, split at speaker turns and labelled, so the model learned the dialect rather than the quirks of each channel. {/* CHECK: hours of audio and labelling process */}
+3. **One model for live and offline use.** The same fine-tuned model serves live transcripts for agents and batch transcripts for the Customer Voice pipeline, so improvements reach both. {/* CHECK: confirm serving setup */}

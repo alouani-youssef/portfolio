@@ -1,0 +1,15 @@
+---
+import LayerDiagram from './LayerDiagram.astro';
+---
+<LayerDiagram
+  title="Saudi-dialect speech-to-text pipeline"
+  desc="WhatsApp voice notes and Asterisk call audio go through preparation (resampling, segmentation, labelling), then a Whisper large-v3 model fine-tuned for Saudi dialect. Transcripts feed the agent, which calls tools such as track_order, and the analytics pipeline."
+  layers={[
+    { caption: 'Sources', nodes: [{ label: 'WhatsApp audio', sub: 'voice notes' }, { label: 'Asterisk calls', sub: 'telephony audio' }] },
+    { caption: 'Preparation', nodes: [{ label: 'Resample · segment · label', sub: '16 kHz mono, speaker turns' }] },
+    { caption: 'Model', nodes: [{ label: 'Whisper large-v3', sub: 'fine-tuned for Saudi dialect', accent: true }] },
+    { caption: 'Consumers', nodes: [{ label: 'Live transcript', sub: 'agent tools, e.g. track_order' }, { label: 'Customer Voice', sub: 'RAG pipeline' }] },
+  ]}
+>
+  <slot />
+</LayerDiagram>

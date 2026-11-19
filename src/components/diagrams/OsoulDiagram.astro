@@ -1,0 +1,16 @@
+---
+import LayerDiagram from './LayerDiagram.astro';
+---
+<LayerDiagram
+  title="Osoul platform architecture"
+  desc="Guest App (NFC/QR), Waiter App and Osoul Portal call an API gateway secured by Keycloak. NestJS services for ordering, reservations, recommendations, ad signals and the AI assistant sit behind it, on per-tenant PostgreSQL and Redis. POS/PMS integrations and server-side CAPI events connect to the services."
+  layers={[
+    { caption: 'Front ends', nodes: [{ label: 'Guest App', sub: 'NFC/QR at the table' }, { label: 'Waiter App', sub: 'React Native' }, { label: 'Osoul Portal', sub: 'Next.js' }] },
+    { caption: 'Edge', nodes: [{ label: 'API gateway', sub: 'Keycloak · table sessions', accent: true }] },
+    { caption: 'NestJS services', nodes: [{ label: 'Ordering' }, { label: 'Reservations' }, { label: 'Recommend.' }, { label: 'Ad signals' }, { label: 'AI assistant', accent: true }] },
+    { caption: 'Data', nodes: [{ label: 'PostgreSQL', sub: 'per-tenant databases' }, { label: 'Redis', sub: 'sessions · queues · cache' }] },
+  ]}
+  side={{ label: 'POS/PMS · CAPI', sub: 'integrations', layer: 2 }}
+>
+  <slot />
+</LayerDiagram>

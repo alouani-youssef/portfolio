@@ -28,7 +28,7 @@ const posts = (await getCollection('blog', (p) => p.id.startsWith('en/') && !p.d
         <a href="/cv" class="rounded-md border border-border px-4 py-2 text-sm font-medium text-fg no-underline hover:border-accent">Read the CV</a>
       </div>
     </div>
-    <Picture src={headshot} alt="Portrait of Youssef Alouani" widths={[160, 320]} sizes="160px" formats={['avif', 'webp']} class="h-40 w-40 rounded-full border border-border object-cover" loading="eager" />
+    <Picture src={headshot} alt="Portrait of Youssef Alouani" widths={[160, 320]} sizes="160px" formats={['avif', 'webp']} class="order-first h-24 w-24 rounded-full border border-border object-cover md:order-none md:h-40 md:w-40" loading="eager" />
   </section>
 
   <section class="container-page py-10" aria-labelledby="expertise">

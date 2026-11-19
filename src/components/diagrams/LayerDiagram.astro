@@ -1,0 +1,96 @@
+---
+/**
+ * Top-to-bottom architecture diagram. Colours come only from theme variables
+ * (via classes), so it reads in light and dark mode.
+ */
+export interface DiagramNode { label: string; sub?: string; accent?: boolean }
+export interface Layer { nodes: DiagramNode[]; caption?: string }
+export interface Frame { label: string; from: number; to: number }
+interface Props { title: string; desc: string; layers: Layer[]; frame?: Frame; side?: { label: string; sub?: string; layer: number } }
+const { title, desc, layers, frame, side } = Astro.props;
+
+const W = 720;
+const PAD = 24;
+const NODE_H = 52;
+const ROW_GAP = 40;
+const NODE_GAP = 12;
+const CAPTION_H = 18;
+const sideW = side ? 150 : 0;
+const innerW = W - PAD * 2 - (side ? sideW + 24 : 0);
+const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+let y = PAD + (frame ? 22 : 0);
+const rows = layers.map((layer) => {
+  const top = y + (layer.caption ? CAPTION_H : 0);
+  const n = layer.nodes.length;
+  const w = (innerW - NODE_GAP * (n - 1)) / n;
+  const nodes = layer.nodes.map((node, i) => ({ ...node, x: PAD + i * (w + NODE_GAP), y: top, w }));
+  const row = { caption: layer.caption, captionY: y + 12, top, bottom: top + NODE_H, nodes };
+  y = top + NODE_H + ROW_GAP;
+  return row;
+});
+const H = y - ROW_GAP + PAD + (frame ? 12 : 0);
+const cx = PAD + innerW / 2;
+const frameBox = frame && {
+  x: PAD - 10,
+  y: rows[frame.from].top - (rows[frame.from].caption ? CAPTION_H : 0) - 26,
+  w: innerW + 20,
+  h: rows[frame.to].bottom - rows[frame.from].top + (rows[frame.from].caption ? CAPTION_H : 0) + 38,
+};
+const sideRow = side && rows[side.layer];
+---
+<figure class="diagram my-8">
+  <svg role="img" aria-labelledby={`${id}-t ${id}-d`} viewBox={`0 0 ${W} ${H}`} class="h-auto w-full">
+    <title id={`${id}-t`}>{title}</title>
+    <desc id={`${id}-d`}>{desc}</desc>
+    <defs>
+      <marker id={`${id}-arrow`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" class="d-arrowhead" />
+      </marker>
+    </defs>
+    {frameBox && (
+      <g>
+        <rect x={frameBox.x} y={frameBox.y} width={frameBox.w} height={frameBox.h} rx="12" class="d-frame" />
+        <text x={frameBox.x + 12} y={frameBox.y + 16} class="d-frame-label">{frame!.label}</text>
+      </g>
+    )}
+    {rows.map((row, i) => (
+      <g>
+        {row.caption && <text x={PAD} y={row.captionY} class="d-caption">{row.caption}</text>}
+        {row.nodes.map((n) => (
+          <g>
+            <rect x={n.x} y={n.y} width={n.w} height={NODE_H} rx="8" class:list={['d-node', n.accent && 'd-node-accent']} />
+            <text x={n.x + n.w / 2} y={n.y + (n.sub ? 22 : 31)} text-anchor="middle" class="d-label">{n.label}</text>
+            {n.sub && <text x={n.x + n.w / 2} y={n.y + 39} text-anchor="middle" class="d-sub">{n.sub}</text>}
+          </g>
+        ))}
+        {i < rows.length - 1 && (
+          <line x1={cx} y1={row.bottom + 4} x2={cx} y2={rows[i + 1].top - (rows[i + 1].caption ? CAPTION_H : 0) - 4} class="d-edge" marker-end={`url(#${id}-arrow)`} />
+        )}
+      </g>
+    ))}
+    {side && sideRow && (
+      <g>
+        <rect x={W - PAD - sideW} y={sideRow.top} width={sideW} height={NODE_H} rx="8" class="d-node d-node-dashed" />
+        <text x={W - PAD - sideW / 2} y={sideRow.top + (side.sub ? 22 : 31)} text-anchor="middle" class="d-label">{side.label}</text>
+        {side.sub && <text x={W - PAD - sideW / 2} y={sideRow.top + 39} text-anchor="middle" class="d-sub">{side.sub}</text>}
+        <line x1={PAD + innerW + 4} y1={sideRow.top + NODE_H / 2} x2={W - PAD - sideW - 4} y2={sideRow.top + NODE_H / 2} class="d-edge d-edge-dashed" marker-start={`url(#${id}-arrow)`} marker-end={`url(#${id}-arrow)`} />
+      </g>
+    )}
+  </svg>
+  <slot />
+</figure>
+
+<style>
+  .diagram svg { color: var(--fg); font-family: var(--font-sans); }
+  .d-node { fill: var(--bg); stroke: var(--border); stroke-width: 1.25; }
+  .d-node-accent { stroke: var(--accent); stroke-width: 1.75; }
+  .d-node-dashed { stroke-dasharray: 5 4; }
+  .d-label { fill: currentColor; font-size: 13px; font-weight: 600; }
+  .d-sub { fill: var(--muted); font-size: 11px; }
+  .d-caption, .d-frame-label { fill: var(--muted); font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+  .d-frame { fill: var(--subtle); stroke: var(--accent); stroke-width: 1; stroke-dasharray: 6 5; }
+  .d-edge { stroke: var(--muted); stroke-width: 1.25; }
+  .d-edge-dashed { stroke-dasharray: 4 4; }
+  .d-arrowhead { fill: var(--muted); }
+</style>
