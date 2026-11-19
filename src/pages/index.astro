@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { Picture } from 'astro:assets';
+import { Picture, Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExpertiseCards from '../components/ExpertiseCards.astro';
 import ClientGroups from '../components/ClientGroups.astro';
@@ -68,8 +68,11 @@ const posts = (await getPosts(false))
     </div>
     <ul class="mt-6 divide-y divide-border border-y border-border">
       {oss.map((o) => (
-        <li class="grid gap-1 py-4 sm:grid-cols-[12rem_1fr] sm:gap-6">
-          <a href={`/open-source#${o.id}`} class="font-medium">{o.data.name}</a>
+        <li class="grid gap-1 py-4 sm:grid-cols-[14rem_1fr] sm:gap-6">
+          <a href={`/open-source#${o.id}`} class="flex items-center gap-3 font-medium">
+            <Image src={o.data.logo} alt="" width={64} height={64} class="h-8 w-8 flex-none rounded-lg border border-border bg-white object-contain" />
+            {o.data.name}
+          </a>
           <p class="text-sm text-muted">{o.data.pitch}</p>
         </li>
       ))}

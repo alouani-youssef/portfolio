@@ -1,0 +1,16 @@
+---
+import LayerDiagram from './LayerDiagram.astro';
+---
+<LayerDiagram
+  title="translator: low-cost, context-aware translation"
+  desc="A client sends text to a FastAPI service. A three-tier cache on PostgreSQL with pgvector answers first: exact, normalized, then semantic matches. On a miss, the service routes by complexity: simple text goes to NLLB-200 3.3B, and text above the complexity threshold goes to an LLM (Gemini, Ollama or OpenRouter). The LLM can call semantic search as a tool to fetch validated translation examples. multilingual-e5 scores quality, and results are kept as JSON documents in S3 or MinIO."
+  layers={[
+    { caption: 'Request', nodes: [{ label: 'FastAPI service', sub: 'translate · score', accent: true }] },
+    { caption: 'Three-tier cache', nodes: [{ label: 'Exact' }, { label: 'Normalized' }, { label: 'Semantic', sub: 'PostgreSQL · pgvector' }] },
+    { caption: 'Routed by complexity', nodes: [{ label: 'NLLB-200 3.3B', sub: 'simple text' }, { label: 'LLM', sub: 'Gemini · Ollama · OpenRouter', accent: true }] },
+    { caption: 'Quality and storage', nodes: [{ label: 'multilingual-e5', sub: 'quality score' }, { label: 'S3 / MinIO', sub: 'JSON documents' }] },
+  ]}
+  side={{ label: 'Example search', sub: 'validated translations, as an LLM tool', layer: 2 }}
+>
+  <slot />
+</LayerDiagram>

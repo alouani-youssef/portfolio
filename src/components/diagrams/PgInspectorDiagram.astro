@@ -1,0 +1,16 @@
+---
+import LayerDiagram from './LayerDiagram.astro';
+---
+<LayerDiagram
+  title="pg_inspector: read-only PostgreSQL for AI assistants"
+  desc="An AI assistant connects to the pg_inspector MCP server over Streamable HTTP with an API key, or over stdio. The server offers read-only SQL, schema inspection, EXPLAIN plans and a health snapshot, plus five guided prompts for common investigations. Every query reaches PostgreSQL read-only."
+  layers={[
+    { caption: 'Client', nodes: [{ label: 'AI assistant', sub: 'MCP client' }] },
+    { caption: 'Transport', nodes: [{ label: 'Streamable HTTP', sub: 'API key' }, { label: 'stdio' }] },
+    { caption: 'pg_inspector tools', nodes: [{ label: 'Read-only SQL', accent: true }, { label: 'Schema' }, { label: 'EXPLAIN' }, { label: 'Health' }] },
+    { caption: 'Database', nodes: [{ label: 'PostgreSQL', sub: 'read-only access' }] },
+  ]}
+  side={{ label: '5 guided prompts', sub: 'common investigations', layer: 2 }}
+>
+  <slot />
+</LayerDiagram>

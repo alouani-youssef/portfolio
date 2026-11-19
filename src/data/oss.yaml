@@ -1,4 +1,5 @@
 - id: ai-stones
+  logo: ../assets/oss/ai-stones/logo.png
   name: AI Stones
   order: 1
   related: en/ai-stones
@@ -12,6 +13,7 @@
     - "24 skills that load only when a task needs them, from test-first development to system prompts and golden sets."
     - "Installed per project with npx ai-stones init, tailored to the detected stack; MIT on npm."
 - id: archio
+  logo: ../assets/oss/archio/logo.jpeg
   name: archio
   order: 2
   related: en/archio
@@ -24,6 +26,7 @@
     - "Multi-node cluster setup for high availability."
     - "Semantic search over documents, built on Docling."
 - id: translator
+  logo: ../assets/oss/translator/logo.jpeg
   name: translator
   order: 3
   pitch: "Low-cost, context-aware translation: NLLB-200 for simple text, an LLM above a complexity threshold, behind a three-tier cache."
@@ -36,6 +39,9 @@
     - "Semantic search exposed to the LLM as a tool that fetches validated translation examples, lifting domain accuracy even with local LLMs."
     - "multilingual-e5 quality scoring; S3/MinIO JSON documents."
 - id: pg-inspector
+  logo: ../assets/oss/pg-inspector/logo.jpg
+  media:
+    - { src: ../assets/oss/pg-inspector/illustration.jpg, alt: "Illustration of an MCP server chip next to a magnifying glass labelled Debug and Inspect over streams of queries and logs" }
   name: pg_inspector
   order: 5
   pitch: "An MCP server that gives AI assistants safe, read-only access to PostgreSQL."
@@ -47,6 +53,10 @@
     - "Read-only SQL, schema inspection, EXPLAIN plans and a health snapshot."
     - "Five guided prompts for common investigations."
 - id: tracking-kit
+  logo: ../assets/oss/tracking-kit/logo.jpg
+  status: Used in production
+  media:
+    - { src: ../assets/oss/tracking-kit/illustration.jpeg, alt: "Illustration of server-side tracking: a browser window sends events to a secured server and database, which feed analytics charts" }
   name: Tracking kit
   order: 4
   pitch: "A Go/Gin user-recognition service and a TypeScript browser SDK, with every event HMAC-signed."
@@ -59,3 +69,4 @@
     - "Gin service that receives and verifies tracking events for user recognition."
     - "TypeScript wrapper for browser-based tracking."
     - "HMAC request signing, so the service only accepts events from trusted clients."
+    - "Contributed to the community as open source, and already running in production."

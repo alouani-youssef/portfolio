@@ -26,6 +26,33 @@ describe('/open-source', () => {
     });
   });
 
+  it('gives every project its logo', () => {
+    cards.forEach((card, i) => {
+      expect(card.querySelector(`.oss-logo img[alt="${ENTRIES[i][1]} logo"]`), ENTRIES[i][0]).not.toBeNull();
+    });
+  });
+
+  it('attaches media to every project: an architecture diagram, plus an illustration where one exists', () => {
+    cards.forEach((card, i) => {
+      expect(card.querySelector('.oss-media svg'), ENTRIES[i][0]).not.toBeNull();
+    });
+    for (const id of ['tracking-kit', 'pg-inspector']) {
+      expect(doc.querySelector(`#${id} .oss-media img`), id).not.toBeNull();
+    }
+  });
+
+  it('has a project switcher linking to each project, with logos, in order', () => {
+    const links = doc.querySelectorAll('.oss-nav a');
+    expect(links.map((a) => a.getAttribute('href'))).toEqual(ENTRIES.map(([id]) => `#${id}`));
+    for (const a of links) expect(a.querySelector('img')).not.toBeNull();
+  });
+
+  it('marks the tracking kit as a community contribution used in production', () => {
+    expect(cards[3].querySelector('.oss-status')!.text.trim()).toBe('Used in production');
+    expect(cards[3].text).toMatch(/community/i);
+    expect(cards.filter((c) => c.querySelector('.oss-status'))).toHaveLength(1);
+  });
+
   it('links AI Stones to npm and the tracking kit to both repos', () => {
     expect(cards[0].querySelector('a[href="https://www.npmjs.com/package/ai-stones"]')).not.toBeNull();
     expect(cards[3].querySelector('a[href="https://github.com/alouani-youssef/tracker"]')).not.toBeNull();
@@ -39,6 +66,7 @@ describe('open source elsewhere', () => {
   });
   it('has a home block naming all five and linking to the page', () => {
     const block = readHtml('/').querySelector('#open-source')!;
+    expect(block.querySelectorAll('li img')).toHaveLength(5);
     for (const [, name] of ENTRIES) expect(block.text).toContain(name);
     expect(block.querySelector('a[href="/open-source"]')).not.toBeNull();
   });

@@ -115,7 +115,7 @@ const blog = defineCollection({
 
 const oss = defineCollection({
   loader: file('src/data/oss.yaml'),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     id: z.string(),
     name: z.string(),
     order: z.number(),
@@ -126,6 +126,11 @@ const oss = defineCollection({
     links: z.array(z.object({ label: z.string(), url: z.url() })).default([]),
     highlights: z.array(z.string()).min(2).max(4),
     related: reference('projects').optional(),
+    logo: image(),
+    /** Illustrations shown above the architecture diagram. */
+    media: z.array(z.object({ src: image(), alt: z.string().min(1) })).default([]),
+    /** Shown as a badge; only set when the project runs in production. */
+    status: z.literal('Used in production').optional(),
   }),
 });
 

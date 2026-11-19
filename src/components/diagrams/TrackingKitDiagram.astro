@@ -1,0 +1,15 @@
+---
+import LayerDiagram from './LayerDiagram.astro';
+---
+<LayerDiagram
+  title="Tracking kit: signed events for user recognition"
+  desc="In the browser, the TypeScript tracking-sdk wraps tracking calls and signs every event with HMAC. The Go service, tracker, built on Gin, receives each event and verifies its signature, so only events from trusted clients are accepted, and then uses them for user recognition."
+  layers={[
+    { caption: 'Browser', nodes: [{ label: 'Website or app' }, { label: 'tracking-sdk', sub: 'TypeScript', accent: true }] },
+    { caption: 'Every event', nodes: [{ label: 'HMAC signature', sub: 'trusted clients only' }] },
+    { caption: 'Service', nodes: [{ label: 'tracker', sub: 'Go · Gin · verifies signatures', accent: true }] },
+    { caption: 'Result', nodes: [{ label: 'User recognition' }] },
+  ]}
+>
+  <slot />
+</LayerDiagram>
