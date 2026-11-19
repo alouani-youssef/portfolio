@@ -1,0 +1,51 @@
+---
+title: "Software architecture styles, 2026 edition"
+description: "Monoliths, modular monoliths, microservices and events, plus the decision my 2022 post missed: how a multi-tenant SaaS isolates its tenants."
+pubDate: 2026-12-10
+tags: [architecture]
+related: [en/osoul]
+draft: true
+---
+import ArchitectureStylesDiagram from '../../../components/diagrams/ArchitectureStylesDiagram.astro';
+
+In 2022 I wrote [A Vision about Software Architecture Styles](https://alouani-youssef.medium.com/a-vision-about-software-architcture-styles-3ec0666b692c), a tour of the main ways to structure a system. {/* CHECK: confirm which styles the 2022 post covered */} Four years and a founder's role later, two things are missing from it: the modular monolith, which is what most teams should start with, and multi-tenancy, which turns out to be an architecture decision of its own.
+
+<ArchitectureStylesDiagram />
+
+## Three questions, not one list
+
+The 2022 post treated styles as one list to pick from. I now think of them as three separate questions.
+
+1. **How is the code deployed?** One unit (monolith), one unit with enforced internal boundaries (modular monolith), or many independently deployed services (microservices).
+2. **How do the parts talk?** In-process calls, events on a broker such as Kafka or RabbitMQ, or synchronous APIs over REST or gRPC.
+3. **How are tenants isolated?** Shared tables with a tenant column, a schema per tenant, or a database per tenant.
+
+You can combine the answers almost freely. A modular monolith can publish events; microservices can share one database per tenant.
+
+## The modular monolith
+
+A modular monolith is deployed as one unit but built as separate modules with explicit interfaces: each module owns its data and exposes only what others may call. You get the simple deployment, debugging and transactions of a monolith, and you keep the option of extracting a module into a service later, because its boundary already exists.
+
+The usual path from monolith to microservices goes through it whether you name it or not. Splitting a codebase without boundaries just turns function calls into network calls. {/* CHECK: confirm this matches your experience */}
+
+## Microservices, honestly
+
+Microservices pay off when teams need to deploy independently and parts of the system need to scale differently. They cost a network between every pair of modules, distributed failures, and data that no longer joins. A team of a few engineers rarely has the first problem and always has the second.
+
+## Events
+
+Events are not a fourth style; they are a way for any of the three to communicate. They are the right tool when the sender should not wait for, or even know about, the reaction: indexing a file after upload, sending a reminder, updating analytics. They are the wrong tool when the caller needs an answer now.
+
+## Multi-tenancy: the decision I missed
+
+If you build SaaS, the most consequential decision may not be monolith or microservices. It is how one customer's data is kept apart from another's.
+
+- **Shared tables with a tenant column** are the cheapest to run, and one missing filter away from showing one customer another customer's data.
+- **A schema per tenant** keeps tables apart inside one database.
+- **A database per tenant** makes isolation structural: a query cannot cross tenants because the connection cannot see them, and a tenant can be exported or deleted cleanly.
+
+[Osoul](/projects/osoul) uses dual-database multi-tenant provisioning with NestJS and TypeORM, because restaurant guest data is exactly the kind you never want to leak across customers. {/* CHECK: describe the dual-database split precisely */} The cost is operational: provisioning, migrations and backups run per tenant, so they have to be automated from the first tenant.
+
+## The short version
+
+Start with a modular monolith, use events where the sender shouldn't wait, extract services only when a team or a load profile demands it, and decide tenant isolation on day one, because it is the one decision that is expensive to change later.

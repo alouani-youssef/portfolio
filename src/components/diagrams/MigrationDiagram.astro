@@ -1,0 +1,15 @@
+---
+import LayerDiagram from './LayerDiagram.astro'; // CHECK: where state moved (sessions, files) and the provisioning tool split are inferred
+---
+<LayerDiagram
+  title="From Docker Compose to Kubernetes"
+  desc="Before: stateful services run with Docker Compose on Hetzner servers. First step: make services stateless by moving state out of containers. Then: the same services run on Kubernetes on Oracle Cloud, with Ansible for provisioning. Finally: the same deployment runs as hybrid deployments inside private, banking and government institutions."
+  layers={[
+    { caption: 'Before', nodes: [{ label: 'Docker Compose', sub: 'stateful services' }, { label: 'Hetzner', sub: 'servers' }] },
+    { caption: 'Step 1', nodes: [{ label: 'Go stateless', sub: 'state out of containers', accent: true }] },
+    { caption: 'Step 2', nodes: [{ label: 'Kubernetes', sub: 'orchestration' }, { label: 'Oracle Cloud', sub: 'hosting' }, { label: 'Ansible', sub: 'provisioning' }] },
+    { caption: 'Result', nodes: [{ label: 'Hybrid deployments', sub: 'private · banking · government', accent: true }] },
+  ]}
+>
+  <slot />
+</LayerDiagram>

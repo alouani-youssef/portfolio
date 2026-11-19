@@ -1,0 +1,14 @@
+---
+import LayerDiagram from './LayerDiagram.astro';
+---
+<LayerDiagram
+  title="Architecture styles in 2026"
+  desc="Deployment styles run from a monolith through a modular monolith to microservices, with event-driven communication usable at any point. Multi-tenancy is a separate decision: shared tables with a tenant column, a schema per tenant, or a database per tenant, which is what Osoul uses."
+  layers={[
+    { caption: 'How code is deployed', nodes: [{ label: 'Monolith' }, { label: 'Modular monolith', accent: true }, { label: 'Microservices' }] },
+    { caption: 'How parts talk', nodes: [{ label: 'In-process calls' }, { label: 'Events', sub: 'Kafka · RabbitMQ' }, { label: 'APIs', sub: 'REST · gRPC' }] },
+    { caption: 'How tenants are isolated', nodes: [{ label: 'Shared tables', sub: 'tenant column' }, { label: 'Schema per tenant' }, { label: 'Database per tenant', sub: 'Osoul', accent: true }] },
+  ]}
+>
+  <slot />
+</LayerDiagram>

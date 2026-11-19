@@ -21,7 +21,7 @@ const d = post.data;
         <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{d.title}</h1>
         <p class="mt-4 text-lg text-muted">{d.description}</p>
       </header>
-      <div class="post-body mt-10 space-y-4 [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mt-1">
+      <div class="post-body mt-10 space-y-4 [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1">
         <Content />
       </div>
       <ul class="mt-10 flex flex-wrap gap-2">{d.tags.map((t) => <li><a class="chip" href={`/blog/tags/${t}`}>{t}</a></li>)}</ul>

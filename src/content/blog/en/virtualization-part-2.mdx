@@ -1,0 +1,34 @@
+---
+title: "Virtualization and containerization, part 2: from Docker Compose to Kubernetes"
+description: "What changed when a platform moved from Docker Compose on Hetzner to Kubernetes on Oracle Cloud, and why going stateless had to come first."
+pubDate: 2026-12-03
+tags: [containers, infrastructure, kubernetes]
+draft: true
+---
+import MigrationDiagram from '../../../components/diagrams/MigrationDiagram.astro';
+
+In 2023 I wrote [The Philosophy Behind Virtualization and Containerization](https://alouaniyoussef.medium.com/the-philosophy-behind-virtualization-and-containerization-c13866d74ed5): why virtual machines and containers exist and what each one isolates. This is the practical sequel. At Axelerated Solutions I helped move a platform from Docker Compose to Kubernetes, and the containers turned out to be the easy part.
+
+## Why Docker Compose stopped being enough
+
+Compose is a fine way to run a product on a few servers. Ours ran on Hetzner, and for a B2C product that was enough. Then the business moved from B2C to B2B, and the customers changed: private companies, banks and government institutions, several of which needed the platform deployed inside their own environment. {/* CHECK: confirm which customer requirements forced the change */} A Compose file describes one set of containers on one machine. It does not describe how to scale a service, replace a failed node, roll out a release without downtime, or run the same platform in someone else's data centre.
+
+## Step 1: go stateless before you move anything
+
+The tempting order is "set up Kubernetes, then move the services". It fails, because Kubernetes assumes it can kill and reschedule any pod at any time. A service that keeps sessions in memory or writes uploads to its own disk loses them every time that happens.
+
+So the first step was making services stateless: anything that must survive a restart moves out of the container, into the database, a cache or object storage. {/* CHECK: which state moved where (sessions, files, jobs) */} This is the part that touches application code, and it is worth doing even if you never adopt Kubernetes: stateless services are the ones you can scale horizontally.
+
+<MigrationDiagram />
+
+## Step 2: Kubernetes, Oracle Cloud and Ansible
+
+With stateless services, the move itself was mostly translation: Compose services became Kubernetes deployments and services, environment files became config and secrets, and volumes that still mattered became persistent volumes. {/* CHECK: confirm mapping and any tooling used */} Hosting moved from Hetzner to Oracle Cloud, and Ansible took over provisioning the machines underneath. {/* CHECK: why Oracle Cloud; what Ansible provisioned */}
+
+## The real payoff: hybrid deployments
+
+The reason it mattered is the last box in the diagram. Once the platform was described as Kubernetes manifests rather than one Compose file on one host, the same description could be deployed into a customer's environment. Hybrid deployments for private, banking and government institutions became a configuration problem instead of a rewrite. {/* CHECK: how environment-specific configuration was handled */}
+
+## What I would tell my 2023 self
+
+Containers are packaging; orchestration is a contract. Kubernetes keeps its side of the contract (restart, reschedule, scale) only if your services keep theirs: no state in the container, health checks that mean something, and configuration from outside. Do that first, and the migration is the easy part.
