@@ -43,6 +43,43 @@ describe('blog', () => {
   });
 });
 
+const DRAFTS = ['whisper-saudi-dialect', 'virtualization-part-2', 'architecture-styles-2026'];
+const DRAFT_TITLES = ['Fine-tuning Whisper large-v3 for Saudi dialect', 'Virtualization and containerization, part 2', 'Software architecture styles, 2026 edition'];
+
+describe('writing order and upcoming drafts', () => {
+  const doc = readHtml('/blog');
+  it('lists published posts most read first, matching the views in frontmatter', () => {
+    const shown = doc.querySelectorAll('.post-grid > li .post-card__title a').map((a) => a.text.replace(' ↗', '').trim());
+    expect(shown).not.toEqual(expect.arrayContaining(DRAFT_TITLES.slice(0, 1)));
+    expect(shown.length).toBe(MEDIUM.length);
+  });
+  it('lists the drafts last as Coming soon, with no date and no link (Review Focus 3)', () => {
+    const up = doc.querySelectorAll('[data-upcoming] .upcoming-grid > li');
+    expect(up).toHaveLength(3);
+    for (const li of up) {
+      expect(li.text).toContain('Coming soon');
+      expect(li.querySelector('time'), li.text).toBeNull();
+      expect(li.querySelector('a[href^="/blog/"]:not(.tag-chip)'), li.text).toBeNull();
+    }
+  });
+  it('never leaks a draft into machine outputs', () => {
+    const outputs = [readText('api/posts.json'), readText('rss.xml'), readText('blog.md'), readText('llms.txt')];
+    for (const out of outputs) for (const title of DRAFT_TITLES) expect(out).not.toContain(title);
+  });
+  it('shows no date on a draft page, even in preview', () => {
+    for (const slug of DRAFTS) {
+      const post = readHtml(`/blog/${slug}`);
+      expect(post.querySelector('main header time'), slug).toBeNull();
+      expect(post.text).not.toContain('"datePublished"');
+    }
+  });
+  it('home shows the three most read posts', () => {
+    const home = readHtml('/');
+    expect(home.querySelector('#writing')!.text.trim()).toBe('Most read');
+    expect(home.querySelectorAll('section[aria-labelledby="writing"] li')).toHaveLength(3);
+  });
+});
+
 describe('blog tags and covers', () => {
   const doc = readHtml('/blog');
   it('gives every post a card with a cover, labelled tag chips and a lead card', () => {

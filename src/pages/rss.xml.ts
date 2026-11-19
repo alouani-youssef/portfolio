@@ -4,7 +4,8 @@ import { getPosts } from '../lib/post-queries';
 import { entrySlug } from '../lib/i18n';
 
 export async function GET(context: APIContext) {
-  const posts = await getPosts(false);
+  // Feeds stay chronological; only pages sort by popularity.
+  const posts = (await getPosts(false)).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
   return rss({
     title: 'Youssef Alouani',
     description: 'Writing on backend architecture, RAG, MCP and speech-to-text.',

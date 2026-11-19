@@ -27,9 +27,8 @@ const minutes = readingMinutes(post.body ?? '');
         <h1 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">{d.title}</h1>
         <p class="mt-4 text-lg text-muted">{d.description}</p>
         <p class="eyebrow mt-5">
-          <time datetime={d.pubDate.toISOString().slice(0, 10)}>{d.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}</time>
+          {d.draft ? <span class="badge">Coming soon</span> : <time datetime={d.pubDate.toISOString().slice(0, 10)}>{d.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}</time>}
           <span> · {minutes} min read</span>
-          {d.draft && <span class="badge">draft</span>}
         </p>
       </header>
     </div>

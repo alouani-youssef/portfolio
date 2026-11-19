@@ -2,9 +2,10 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/blog/PostCard.astro';
 import SkillIcon from '../../components/SkillIcon.astro';
-import { getPosts } from '../../lib/post-queries';
+import { getPosts, getUpcomingPosts } from '../../lib/post-queries';
 import { tagCounts, tagMeta } from '../../lib/tags';
-const posts = await getPosts(true);
+const posts = await getPosts(false);
+const upcoming = await getUpcomingPosts();
 const tags = tagCounts(posts);
 ---
 <BaseLayout title="Blog" description="Writing on backend architecture, RAG, MCP and speech-to-text, plus earlier posts on Medium." path="/blog">
@@ -34,6 +35,15 @@ const tags = tagCounts(posts);
         </li>
       ))}
     </ul>
+
+    {upcoming.length > 0 && (
+      <section class="mt-14" aria-labelledby="upcoming-h" data-upcoming>
+        <h2 id="upcoming-h" class="text-xl font-semibold">Coming soon</h2>
+        <ul class="upcoming-grid mt-6">
+          {upcoming.map((p) => <li><PostCard post={p} /></li>)}
+        </ul>
+      </section>
+    )}
   </div>
 </BaseLayout>
 
@@ -82,7 +92,7 @@ const tags = tagCounts(posts);
   .tag-filter { flex: none; padding-block: 0.3125rem; }
   .tag-filter[data-filter='all'][aria-current] { background: var(--fg); border-color: var(--fg); color: var(--bg); }
   .tag-filter[data-filter='all'][aria-current] .tag-chip__count { color: inherit; opacity: 0.7; }
-  .post-grid { list-style: none; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
+  .post-grid, .upcoming-grid { list-style: none; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
   .post-grid__lead { grid-column: 1 / -1; }
   /* While filtering, the lead card drops back into the grid like the others. */
   .is-filtered .post-grid__lead { grid-column: auto; }

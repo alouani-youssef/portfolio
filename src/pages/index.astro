@@ -24,9 +24,7 @@ const others = recs.filter((r) => r !== pull).sort((a, b) => b.data.date.getTime
 const featured = (await getCollection('projects', (p) => p.data.featured && p.id.startsWith('en/'))).sort((a, b) => a.data.order - b.data.order);
 const oss = await getOss();
 const projectCount = (await getProjectAreas()).reduce((n, a) => n + a.projects.length, 0);
-const posts = (await getPosts(false))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 3);
+const posts = (await getPosts(false)).slice(0, 3);
 ---
 <BaseLayout title="Youssef Alouani · AI Systems Engineer" description={profile.oneLiner} path="/" jsonLd={[profilePageJsonLd(profile, Astro.site!.origin)]}>
   <section class="container-page grid items-center gap-10 py-16 sm:py-24 md:grid-cols-[1fr_auto]">
@@ -110,7 +108,7 @@ const posts = (await getPosts(false))
   {posts.length > 0 && (
     <section class="container-page py-10" aria-labelledby="writing">
       <div class="flex items-baseline justify-between">
-        <h2 id="writing" class="text-xl font-semibold">Latest writing</h2>
+        <h2 id="writing" class="text-xl font-semibold">Most read</h2>
         <a href="/blog" class="text-sm">All posts →</a>
       </div>
       <ul class="mt-6 divide-y divide-border border-y border-border">

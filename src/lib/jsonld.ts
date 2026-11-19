@@ -51,15 +51,15 @@ export function projectJsonLd(
   };
 }
 
-export function blogPostingJsonLd(post: { title: string; description: string; pubDate: Date; updatedDate?: Date; tags?: readonly string[] }, url: string): object {
+export function blogPostingJsonLd(post: { title: string; description: string; pubDate: Date; updatedDate?: Date; tags?: readonly string[]; draft?: boolean }, url: string): object {
   return {
     '@context': CTX,
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
     url,
-    datePublished: post.pubDate.toISOString().slice(0, 10),
-    dateModified: (post.updatedDate ?? post.pubDate).toISOString().slice(0, 10),
+    // A draft has no publication date yet: its pubDate is only a plan.
+    ...(post.draft ? {} : { datePublished: post.pubDate.toISOString().slice(0, 10), dateModified: (post.updatedDate ?? post.pubDate).toISOString().slice(0, 10) }),
     ...(post.tags?.length ? { keywords: post.tags.join(', ') } : {}),
     author,
   };
