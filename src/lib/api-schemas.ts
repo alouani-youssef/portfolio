@@ -64,13 +64,25 @@ export const apiPosts = z.array(z.object({
   external: z.boolean(),
 }));
 
-export const API_NAMES = ['profile', 'experience', 'projects', 'skills', 'posts'] as const;
+export const apiOss = z.array(z.object({
+  ...item,
+  name: z.string(),
+  pitch: z.string(),
+  languages: z.array(z.string()),
+  license: z.enum(['MIT', 'Apache-2.0']),
+  repos: z.array(z.object({ label: z.string(), url: z.url() })),
+  links: z.array(z.object({ label: z.string(), url: z.url() })),
+  highlights: z.array(z.string()),
+}));
+
+export const API_NAMES = ['profile', 'experience', 'projects', 'oss', 'skills', 'posts'] as const;
 export type ApiName = (typeof API_NAMES)[number];
 
 export const API_SCHEMAS = {
   profile: apiProfile,
   experience: apiExperience,
   projects: apiProjects,
+  oss: apiOss,
   skills: apiSkills,
   posts: apiPosts,
 } satisfies Record<ApiName, z.ZodType>;

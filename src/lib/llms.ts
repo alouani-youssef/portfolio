@@ -6,9 +6,10 @@ interface LlmsInput {
   roles: Array<{ slug: string; company: string }>;
   projects: Array<{ slug: string; title: string; summary: string }>;
   posts: Array<{ slug: string; title: string; external?: { url: string } }>;
+  oss?: Array<{ id: string; name: string; pitch: string }>;
 }
 
-export function buildLlmsTxt({ profile, site, roles, projects, posts }: LlmsInput): string {
+export function buildLlmsTxt({ profile, site, roles, projects, posts, oss = [] }: LlmsInput): string {
   const lines = [
     `# ${profile.name}`,
     '',
@@ -28,12 +29,13 @@ export function buildLlmsTxt({ profile, site, roles, projects, posts }: LlmsInpu
     '## Projects',
     ...projects.map((p) => `- [${p.title}](${site}/projects/${p.slug}.md): ${p.summary}`),
     '',
+    ...(oss.length ? ['## Open source', ...oss.map((o) => `- [${o.name}](${site}/open-source.md): ${o.pitch}`), ''] : []),
     '## Writing',
     `- [All posts](${site}/blog.md)`,
     ...posts.filter((p) => !p.external).map((p) => `- [${p.title}](${site}/blog/${p.slug}.md)`),
     '',
     '## Data',
-    ...['profile', 'experience', 'projects', 'skills', 'posts'].map((n) => `- [${n}.json](${site}/api/${n}.json) (schema: ${site}/api/schema/${n}.json)`),
+    ...['profile', 'experience', 'projects', 'oss', 'skills', 'posts'].map((n) => `- [${n}.json](${site}/api/${n}.json) (schema: ${site}/api/schema/${n}.json)`),
     '',
     '## Optional',
     `- [Full site in one file](${site}/llms-full.txt)`,

@@ -3,6 +3,9 @@ import { profile } from '../../src/data/profile';
 import { buildResume } from '../../src/lib/resume';
 import { buildLlmsTxt } from '../../src/lib/llms';
 import { API_SCHEMAS } from '../../src/lib/api-schemas';
+import { ossJsonLd } from '../../src/lib/jsonld';
+
+const OSS = [{ id: 'ai-stones', name: 'AI Stones', pitch: 'CLI.', languages: ['JavaScript'], license: 'MIT' as const, repos: [{ label: 'GitHub', url: 'https://github.com/alouani-youssef/stones' }], links: [], highlights: ['a', 'b'] }];
 
 const roles = [
   { slug: 'osoul', company: 'Osoul', role: 'Technical Founder', url: 'https://osoul.io', start: new Date('2026-06-01'), end: null, precision: 'month' as const, summary: 'RaaS.', highlights: ['NFC/QR ordering'] },
@@ -23,6 +26,10 @@ describe('buildResume', () => {
     expect(r.work[0].endDate).toBeUndefined();
     expect(r.work[1].endDate).toBe('2022');
   });
+  it('lists open-source work as projects', () => {
+    const withOss = buildResume(profile, roles, [], [], OSS) as any;
+    expect(withOss.projects).toEqual([{ name: 'AI Stones', description: 'CLI.', url: 'https://github.com/alouani-youssef/stones', keywords: ['JavaScript'] }]);
+  });
   it('includes education, skills, languages and references', () => {
     expect(r.education[0].institution).toBe('Hassan First University, FST Settat');
     expect(r.skills[0]).toEqual({ name: 'language', keywords: ['Go'] });
@@ -38,6 +45,7 @@ describe('buildLlmsTxt', () => {
     roles: [{ slug: 'osoul', company: 'Osoul' }],
     projects: [{ slug: 'osoul', title: 'Osoul platform', summary: 'S' }],
     posts: [{ slug: 'p', title: 'P', external: undefined }],
+    oss: [{ id: 'ai-stones', name: 'AI Stones', pitch: 'CLI.' }],
   });
   it('has the llms.txt structure', () => {
     expect(txt.startsWith('# Youssef Alouani\n\n> ')).toBe(true);
@@ -45,14 +53,28 @@ describe('buildLlmsTxt', () => {
     expect(txt).toContain('[Osoul platform](https://youssefalouani.com/projects/osoul.md)');
     expect(txt).toContain('(https://youssefalouani.com/llms-full.txt)');
     expect(txt).toContain('(https://youssefalouani.com/resume.json)');
+    expect(txt).toContain('## Open source\n- [AI Stones](https://youssefalouani.com/open-source.md): CLI.');
   });
 });
 
 describe('API schemas', () => {
   it('cover the five collections', () => {
-    expect(Object.keys(API_SCHEMAS).sort()).toEqual(['experience', 'posts', 'profile', 'projects', 'skills']);
+    expect(Object.keys(API_SCHEMAS).sort()).toEqual(['experience', 'oss', 'posts', 'profile', 'projects', 'skills']);
+  });
+  it('require a licence on open-source items', () => {
+    expect(API_SCHEMAS.oss.safeParse([{ id: 'x', updatedAt: '2026-11-19', url: 'https://youssefalouani.com/open-source#x', name: 'X', pitch: 'p', languages: ['Go'], repos: [], links: [], highlights: [] }]).success).toBe(false);
   });
   it('reject items without id, updatedAt or url', () => {
     expect(API_SCHEMAS.skills.safeParse([{ name: 'Go' }]).success).toBe(false);
+  });
+});
+
+describe('ossJsonLd', () => {
+  it('describes a repo as SoftwareSourceCode with an SPDX licence URL', () => {
+    const ld = ossJsonLd(OSS[0]) as any;
+    expect(ld['@type']).toBe('SoftwareSourceCode');
+    expect(ld.codeRepository).toBe('https://github.com/alouani-youssef/stones');
+    expect(ld.license).toBe('https://spdx.org/licenses/MIT.html');
+    expect(ld.programmingLanguage).toEqual(['JavaScript']);
   });
 });

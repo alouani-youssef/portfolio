@@ -63,3 +63,16 @@ export function blogPostingJsonLd(post: { title: string; description: string; pu
     author,
   };
 }
+
+export function ossJsonLd(entry: { name: string; pitch: string; languages: string[]; license: string; repos: Array<{ url: string }> }): object {
+  return {
+    '@context': CTX,
+    '@type': 'SoftwareSourceCode',
+    name: entry.name,
+    description: entry.pitch,
+    codeRepository: entry.repos[0].url,
+    programmingLanguage: entry.languages,
+    license: `https://spdx.org/licenses/${entry.license}.html`,
+    author,
+  };
+}

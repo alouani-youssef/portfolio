@@ -13,6 +13,7 @@ export function buildResume(
   roles: RoleIn[],
   skills: Array<{ name: string; category: string }>,
   recommendations: Array<{ author: string; quote: string }>,
+  oss: Array<{ name: string; pitch: string; languages: string[]; repos: Array<{ url: string }> }> = [],
 ): object {
   const categories = [...new Set(skills.map((s) => s.category))];
   return {
@@ -49,5 +50,6 @@ export function buildResume(
     skills: categories.map((c) => ({ name: c, keywords: skills.filter((s) => s.category === c).map((s) => s.name) })),
     languages: profile.languages.map((l) => ({ language: l.name })),
     references: recommendations.map((r) => ({ name: r.author, reference: r.quote })),
+    ...(oss.length ? { projects: oss.map((o) => ({ name: o.name, description: o.pitch, url: o.repos[0].url, keywords: o.languages })) } : {}),
   };
 }

@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile } from '../data/profile';
 import { getRoles } from '../lib/experience';
+import { getOss } from '../lib/oss';
 const roles = await getRoles();
 const skills = await getCollection('skills');
 const CATS = [
@@ -10,6 +11,7 @@ const CATS = [
   ['security', 'Identity and security'], ['infra', 'Infra'], ['frontend', 'Front end'], ['realtime', 'Real-time'],
 ] as const;
 const e = profile.education;
+const oss = await getOss();
 ---
 <BaseLayout title="CV" description="Printable CV of Youssef Alouani, Lead Backend & AI Engineer." path="/cv">
   <div class="container-page py-12 print:py-0">
@@ -40,6 +42,15 @@ const e = profile.education;
             <ul class="mt-1 list-disc pl-5 text-sm">{r.data.highlights.map((h) => <li>{h}</li>)}</ul>
           </div>
         ))}
+      </section>
+
+      <section class="mt-6 break-inside-avoid">
+        <h2 class="eyebrow">Open source</h2>
+        <ul class="mt-2 space-y-1 text-sm">
+          {oss.map((o) => (
+            <li><span class="font-medium">{o.data.name}</span> · {o.data.pitch} <span class="text-muted">{o.data.repos[0].url.replace('https://', '')}</span></li>
+          ))}
+        </ul>
       </section>
 
       <section class="mt-6 break-inside-avoid">

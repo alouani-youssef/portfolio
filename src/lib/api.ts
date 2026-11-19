@@ -8,6 +8,7 @@ import { getPosts } from './post-queries';
 import { twinHref } from './markdown';
 import type { ApiName } from './api-schemas';
 import { partialDate } from './resume';
+import { getOss } from './oss';
 
 const SITE = 'https://youssefalouani.com';
 const day = (d: Date) => d.toISOString().slice(0, 10);
@@ -72,6 +73,19 @@ export async function buildApi(name: ApiName): Promise<unknown> {
           metrics: p.data.metrics.map((m) => ({ label: m.label, value: m.value, confirmed: !m.placeholder })),
           markdown: `${SITE}${twinHref(`/projects/${slug}`)}`,
         };
+      }));
+    case 'oss':
+      return (await getOss()).map((o) => ({
+        id: o.id,
+        updatedAt: profile.now.updated,
+        url: `${SITE}/open-source#${o.id}`,
+        name: o.data.name,
+        pitch: o.data.pitch,
+        languages: o.data.languages,
+        license: o.data.license,
+        repos: o.data.repos,
+        links: o.data.links,
+        highlights: o.data.highlights,
       }));
     case 'skills':
       return (await getCollection('skills')).map((s) => ({
