@@ -1,7 +1,11 @@
 import { entrySlug } from './i18n';
 
-export function isPreview(): boolean {
-  return import.meta.env.PUBLIC_PREVIEW === 'true';
+/**
+ * Preview mode: the dev server and `npm run build:preview`. Only a production build
+ * (`npm run build`) hides drafts and refuses placeholder metrics.
+ */
+export function isPreview(env: { DEV?: boolean; PUBLIC_PREVIEW?: string } = import.meta.env): boolean {
+  return env.DEV === true || env.PUBLIC_PREVIEW === 'true';
 }
 
 type WithMetrics = { id: string; data: { metrics: Array<{ label: string; placeholder: boolean }> } };
