@@ -1,9 +1,9 @@
 ---
-import LayerDiagram from './LayerDiagram.astro';
+import LayerDiagram from './LayerDiagram.astro'; // CHECK: selfie, web and mobile sign-up, review queue are inferred
 ---
 <LayerDiagram
   title="Finamaze KYC and reconciliation"
-  desc="Investors sign up and submit identity documents and a selfie. Document verification and visual verification run before an account can invest; unclear cases go to a review queue. Reconciliation compares the platform's ledger with custodian and bank records and flags breaks."
+  desc="Investors sign up and submit identity documents and a selfie. Document verification and visual verification run before an account can invest; unclear cases go to a review queue. Reconciliation compares the platform's ledger with bank records and flags breaks."
   layers={[
     { caption: 'Onboarding', nodes: [{ label: 'Sign-up', sub: 'web and mobile' }, { label: 'Documents · selfie' }] },
     { caption: 'Verification', nodes: [{ label: 'Document verification', accent: true }, { label: 'Visual verification', accent: true }] },

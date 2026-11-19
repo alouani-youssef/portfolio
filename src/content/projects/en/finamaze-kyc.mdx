@@ -21,18 +21,18 @@ import FinamazeKycDiagram from '../../../components/diagrams/FinamazeKycDiagram.
 
 ## Problem
 
-Finamaze runs a robo-advisor that builds AI-tailored portfolios for each investor's risk profile. Before anyone can invest, the platform has to know who they are, and once money moves, its own ledger has to agree with the bank's records to the cent. Both jobs used to depend on people checking documents and spreadsheets by hand. {/* CHECK: confirm the manual starting point */}
+Finamaze runs a robo-advisor that builds AI-tailored portfolios for each investor's risk profile. Before anyone can invest, the platform has to know who they are, and once money moves, its own ledger has to agree with the bank's records to the cent. Both jobs used to depend on people checking documents and spreadsheets by hand. {/* CHECK: "to the cent" and the manual starting point are inferred */}
 
 ## Constraints
 
 - **Regulated onboarding**: identity checks are a precondition for investing, for a platform serving Saudi National Bank. {/* CHECK: confirm regulatory framing */}
 - **Two kinds of evidence**: the document itself and the person presenting it both need verifying.
-- **Money must reconcile**: any difference between the platform's records and the bank's has to surface quickly, not at month end.
+- **Money must reconcile**: any difference between the platform's records and the bank's has to surface quickly, not at month end. {/* CHECK: cadence inferred */}
 - **Privacy**: identity documents are among the most sensitive data a fintech holds.
 
 ## Architecture
 
-<FinamazeKycDiagram>
+<FinamazeKycDiagram> {/* CHECK: selfie, web and mobile sign-up, review queue are inferred */}
 
 <details>
 <summary>Diagram source (Mermaid)</summary>
