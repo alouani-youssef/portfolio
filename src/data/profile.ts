@@ -19,7 +19,8 @@ export const profileSchema = z.object({
   }),
   sameAs: z.array(z.url()),
   education: z.object({ degree: z.string(), school: z.string(), start: z.number(), end: z.number() }),
-  expertise: z.array(z.object({ title: z.string(), body: z.string(), skills: z.array(z.string()) })).length(4),
+  /** `project` is the slug of the case study that best shows the area, featured on the home page. */
+  expertise: z.array(z.object({ title: z.string(), body: z.string(), skills: z.array(z.string()), project: z.string() })).length(4),
   faq: z.array(z.object({ q: z.string(), a: z.string() })).min(6).max(8),
   now: z.object({ updated: z.string(), items: z.array(z.string()) }),
   knowsAbout: z.array(z.string()),
@@ -69,21 +70,25 @@ export const profile: Profile = {
       title: 'Backend and distributed systems',
       body: 'Multi-tenant SaaS, dual-database provisioning, API gateways, messaging (Kafka, RabbitMQ), real-time over WebSockets and SSE, push notifications, recommendation systems, ad signal infrastructure.',
       skills: ['nestjs', 'typeorm', 'kafka', 'rabbitmq', 'websockets', 'sse'],
+      project: 'osoul-multi-tenancy',
     },
     {
       title: 'Applied AI and LLM systems',
       body: 'RAG on Milvus, MCP servers, tool-using agents with LangChain and LangGraph, local models via Ollama, OpenAI-compatible APIs, model-serving REST APIs with FastAPI, AI assistants with PII redaction and user auth propagation, familiarity with LLM evaluation tools (DeepEval, Giskard), and AI Stones, a personal AI harness for Claude.',
       skills: ['rag', 'mcp', 'milvus', 'langchain', 'langgraph', 'ollama', 'fastapi'],
+      project: 'customer-voice',
     },
     {
       title: 'Speech and language',
       body: 'Whisper large-v3 fine-tuning for Saudi dialect, call-audio data preparation, NLP/NLU engines on language servers and Duckling, Botpress v12 core, KYC document and visual verification.',
       skills: ['whisper', 'fine-tuning', 'nllb-200'],
+      project: 'saudi-stt',
     },
     {
       title: 'Security, privacy and platform',
       body: 'Keycloak auth, data-retention and privacy layers, session-token design for NFC/QR tables, Kubernetes, Ansible, migrations (Docker Compose to Kubernetes, Hetzner to Oracle Cloud, stateful to stateless), hybrid deployments for banking and government institutions.',
       skills: ['keycloak', 'privacy-retention', 'token-session-design', 'kubernetes', 'ansible', 'hybrid-deployments'],
+      project: 'osoul-table-sessions',
     },
   ],
   faq: [

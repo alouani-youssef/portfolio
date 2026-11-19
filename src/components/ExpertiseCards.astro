@@ -1,11 +1,32 @@
 ---
+import { getEntry } from 'astro:content';
+import { Picture } from 'astro:assets';
 import { profile } from '../data/profile';
+import { entrySlug } from '../lib/i18n';
+
+const cards = await Promise.all(
+  profile.expertise.map(async (e) => {
+    const project = await getEntry('projects', `en/${e.project}`);
+    if (!project) throw new Error(`Expertise "${e.title}" points to unknown project "${e.project}"`);
+    return { ...e, project, href: `/projects/${entrySlug(project.id)}` };
+  }),
+);
+const short = (t: string) => t.replace(/^.*deep-dive:\s*/, '').replace(/^./, (c) => c.toUpperCase());
 ---
 <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-  {profile.expertise.map((e) => (
-    <li class="expertise-card card flex flex-col">
-      <h3 class="font-semibold">{e.title}</h3>
-      <p class="mt-2 text-sm text-muted">{e.body}</p>
+  {cards.map((e) => (
+    <li class="expertise-card card flex flex-col overflow-hidden !p-0">
+      <a href={e.href} class="block aspect-[16/9] overflow-hidden border-b border-border bg-subtle" tabindex="-1" aria-hidden="true">
+        <Picture src={e.project.data.cover} alt="" widths={[400, 800]} sizes="(min-width: 1024px) 270px, (min-width: 640px) 50vw, 100vw" formats={['avif', 'webp']} class="h-full w-full object-cover object-top" loading="lazy" />
+      </a>
+      <div class="flex flex-1 flex-col p-5">
+        <h3 class="font-semibold">{e.title}</h3>
+        <p class="mt-2 text-sm text-muted">{e.body}</p>
+        <p class="mt-auto pt-4 text-sm">
+          <span class="eyebrow block">Top project</span>
+          <a href={e.href} class="expertise-project mt-1 inline-block font-medium">{short(e.project.data.title)} →</a>
+        </p>
+      </div>
     </li>
   ))}
 </ul>

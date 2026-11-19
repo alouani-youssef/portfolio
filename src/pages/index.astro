@@ -44,8 +44,12 @@ const posts = (await getPosts(false))
   </section>
 
   <section class="container-page py-10" aria-labelledby="expertise">
-    <h2 id="expertise" class="text-xl font-semibold">What I build</h2>
+    <div class="flex items-baseline justify-between">
+      <h2 id="expertise" class="text-xl font-semibold">What I build</h2>
+      <a href="/projects" class="text-sm">See all projects →</a>
+    </div>
     <div class="mt-6"><ExpertiseCards /></div>
+    <a href="/projects" class="mt-6 inline-block rounded-md border border-border px-4 py-2 text-sm font-medium text-fg no-underline hover:border-accent">See all {projectCount} projects</a>
   </section>
 
   <CoreStack />

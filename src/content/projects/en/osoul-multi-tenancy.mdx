@@ -11,9 +11,10 @@ confidentiality: public
 order: 10
 skills: [nestjs, typeorm, postgresql, keycloak, oauth2-oidc, redis, token-session-design]
 media:
+  - { src: ../../../assets/projects/osoul/multi-tenant-platform.png, alt: "Multi-tenant SaaS diagram: tenants A, B and C each with their own isolated data stores on a shared core application, middleware and hardware; users reach only their tenant, a user can belong to tenants B and C, tenant C has an admin, and the SaaS provider operates the core", caption: "The model: isolated tenant data on one shared platform. A user can belong to several tenants, each tenant has its own admins, and Osoul as the provider owns provisioning.", device: desktop }
   - { src: ../../../assets/projects/osoul/portal-dashboard.png, alt: "Osoul Portal dashboard for one venue: revenue, orders, average check, seat occupancy and guest visits, with the venue switcher blurred", caption: "Every Portal screen is scoped to one tenant and one venue. Personal data blurred.", device: desktop }
 cover: ../../../assets/projects/covers/osoul-multi-tenancy.jpg
-coverAlt: "Illustration contrasting data privacy, how data is collected and used, with data security, protecting it from attackers"
+coverAlt: "Multi-tenant SaaS diagram: tenants A, B and C each with their own data stores on a shared core application, middleware and hardware, with tenant users, a tenant admin and the SaaS provider"
 updatedAt: 2026-11-19
 ---
 import Gallery from '../../../components/Gallery.astro';
