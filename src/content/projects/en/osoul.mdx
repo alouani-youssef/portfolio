@@ -65,11 +65,11 @@ flowchart TB
 
 The machinery behind the KPIs, each one its own deep-dive later:
 
-- **Table sessions**: NFC/QR taps open a short-lived, table-bound session for anonymous diners.
+- **[Table sessions](/projects/osoul-table-sessions)**: NFC/QR taps open a short-lived, table-bound session for anonymous diners.
 - **Multi-tenant provisioning**: dual-database provisioning with NestJS and TypeORM.
-- **Recommendations**: menu data architecture, dish and beverage recommendations, meal-completion promos.
+- **[Recommendations](/projects/osoul-recommendations)**: menu data architecture, dish and beverage recommendations, meal-completion promos.
 - **Ad signals**: a tracking event schema and server-side CAPI events for ad-audience optimisation.
-- **AI assistant**: LangChain tools that run with the user's own auth, PII redaction, and confirmation before any write.
+- **[AI assistant](/projects/osoul-ai-assistant)**: LangChain tools that run with the user's own auth, PII redaction, and confirmation before any write.
 - **Diner identity**: reservation and diner profiles merged into one guest record.
 - **Reservations and flow control**: deposits, queues, multi-channel reminders and bots, loyalty to smooth peak hours.
 - **Operations and revenue**: occupancy and SLA tracking with escalations, event-based dynamic menu pricing, POS/PMS integrations.

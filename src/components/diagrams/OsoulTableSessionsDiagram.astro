@@ -1,0 +1,15 @@
+---
+import LayerDiagram from './LayerDiagram.astro';
+---
+<LayerDiagram
+  title="Osoul NFC/QR table sessions"
+  desc="Each table carries an NFC tag and QR code that identify the table with a credential. A tap opens a short-lived session bound to that table and visit, which the Guest App uses to order. The Waiter App sees the same session on the floor view, and the session ends when the table is cleared."
+  layers={[
+    { caption: 'Table', nodes: [{ label: 'NFC tag · QR code', sub: 'table id + credential' }] },
+    { caption: 'Session', nodes: [{ label: 'Table session', sub: 'short-lived · one table, one visit', accent: true }] },
+    { caption: 'Apps', nodes: [{ label: 'Guest App', sub: 'order · call service' }, { label: 'Waiter App', sub: 'floor · sections · status' }] },
+    { caption: 'End', nodes: [{ label: 'Table cleared', sub: 'session closed' }] },
+  ]}
+>
+  <slot />
+</LayerDiagram>

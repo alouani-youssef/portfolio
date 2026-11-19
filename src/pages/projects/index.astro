@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getProjects } from '../../lib/projects';
 import { entrySlug } from '../../lib/i18n';
-const projects = await getProjects();
+const projects = (await getProjects()).filter((p) => !p.data.parent); // deep-dives live under their parent
 const AREAS = [
   ['ai', 'AI'],
   ['backend', 'Backend'],

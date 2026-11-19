@@ -1,0 +1,14 @@
+---
+import LayerDiagram from './LayerDiagram.astro';
+---
+<LayerDiagram
+  title="Osoul recommendations"
+  desc="Menu data (dishes, beverages, options and pairings) and the guest's current order and history feed the recommendation service. It produces three surfaces in the Guest App: complete your meal, more like your favourites, and pairings and drinks on a dish page."
+  layers={[
+    { caption: 'Data', nodes: [{ label: 'Menu data', sub: 'dishes · drinks · options' }, { label: 'Current order', sub: 'what is in the cart' }, { label: 'Guest history', sub: 'favourites' }] },
+    { caption: 'Service', nodes: [{ label: 'Recommendation service', sub: 'pairings · completion · similarity', accent: true }] },
+    { caption: 'Guest App', nodes: [{ label: 'Complete your meal' }, { label: 'More like your favourites' }, { label: 'Pairings · drinks' }] },
+  ]}
+>
+  <slot />
+</LayerDiagram>

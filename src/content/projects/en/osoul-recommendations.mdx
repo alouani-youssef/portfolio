@@ -1,0 +1,61 @@
+---
+title: "Osoul deep-dive: recommendations that complete the meal"
+summary: Dish and beverage recommendations, pairings and meal-completion prompts in the Guest App, built on a menu data model designed for them.
+area: ai
+kind: founder
+company: en/osoul
+parent: en/osoul
+status: live
+featured: false
+confidentiality: public
+order: 12
+skills: [nestjs, postgresql, typeorm, embeddings]
+media:
+  - { src: ../../../assets/projects/osoul/guest-home.png, alt: "Osoul Guest App home: Start ordering, quick actions for the dish recommender, physical menu and reporting an issue, and Picked For You recommendations with Complete your meal and More like your favourites filters", caption: "Picked for you: complete the meal, or more like the guest's favourites.", device: phone }
+  - { src: ../../../assets/projects/osoul/guest-pairings.png, alt: "Osoul Guest App item page: the selection with a beverage add-on and item total, dish pairings, drinks to go with it, and Add to cart", caption: "On a dish page: pairings and drinks to go with it.", device: phone }
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import OsoulRecommendationsDiagram from '../../../components/diagrams/OsoulRecommendationsDiagram.astro';
+
+Part of the [Osoul platform](/projects/osoul) case study.
+
+## Problem
+
+In a fine-dining room the waiter suggests the starter, the wine and the dessert. When guests order from their phone at the table, those suggestions disappear, and so does part of the ticket. Osoul's recommendations put them back in the Guest App, at the moments a waiter would make them.
+
+## Constraints
+
+- **Menus are not catalogues**: dishes have options, add-ons and pairings that change by service and by season. {/* CHECK */}
+- **Few signals per guest**: most diners visit a handful of times, so suggestions cannot rely on long histories. {/* CHECK */}
+- **Never pushy**: a suggestion that feels like an ad lowers trust in the whole menu.
+- **Measurable**: the point is the average ticket, so every surface has to be attributable. {/* CHECK: confirm attribution approach */}
+
+## Architecture
+
+<OsoulRecommendationsDiagram>
+
+<details>
+<summary>Diagram source (Mermaid)</summary>
+
+```mermaid
+flowchart TB
+  menu[Menu data · dishes, drinks, options] --> svc[Recommendation service]
+  cart[Current order] --> svc
+  history[Guest history · favourites] --> svc
+  svc --> complete[Complete your meal]
+  svc --> similar[More like your favourites]
+  svc --> pairings[Pairings · drinks to go with it]
+```
+
+</details>
+
+</OsoulRecommendationsDiagram>
+
+<Gallery items={props.media} />
+
+## Key decisions
+
+1. **Model the menu for recommendations first.** A flat list of dishes can only recommend "popular". Pairings, courses and beverage links are part of the menu data, so the service can reason about what completes a meal. {/* CHECK: confirm menu data model */}
+2. **Recommend in context, not on a separate page.** Suggestions appear where the decision happens: on the home screen as "complete your meal", and on a dish page as pairings and drinks to go with it.
+3. **Start from the order, then the guest.** The current order is the strongest signal at the table; favourites refine it for returning guests. {/* CHECK: confirm signal ordering */}

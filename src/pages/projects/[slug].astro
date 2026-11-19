@@ -22,10 +22,12 @@ const d = project.data;
 const path = `/projects/${entrySlug(project.id)}`;
 const company = d.company ? await getEntry(d.company) : undefined;
 const preview = isPreview();
+const parent = d.parent ? await getEntry(d.parent) : undefined;
+const children = (await getProjects()).filter((p) => p.data.parent?.id === project.id);
 ---
 <BaseLayout title={d.title} description={d.summary} path={path} jsonLd={[projectJsonLd(d, `${Astro.site!.origin}${path}`)]}>
   <article class="container-page py-12 sm:py-16">
-    <a href="/projects" class="text-sm">← Projects</a>
+    {parent ? <a href={`/projects/${entrySlug(parent.id)}`} class="text-sm">← {parent.data.title}</a> : <a href="/projects" class="text-sm">← Projects</a>}
     <header class="mt-6 max-w-[70ch]">
       <p class="eyebrow">{d.kind === 'founder' ? 'Flagship · ' : ''}{company ? company.data.company : 'Independent'} · {d.status}</p>
       <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{d.title}</h1>
@@ -36,6 +38,12 @@ const preview = isPreview();
       <h2>Results</h2>
       <MetricList metrics={d.metrics} preview={preview} />
       <h2>Stack and links</h2>
+      {children.length > 0 && (
+        <div>
+          <h3>Deep dives</h3>
+          <ul>{children.map((c) => <li><a href={`/projects/${entrySlug(c.id)}`}>{((t) => t.charAt(0).toUpperCase() + t.slice(1))(c.data.title.replace(/^.*deep-dive:\s*/, ''))}</a>: {c.data.summary}</li>)}</ul>
+        </div>
+      )}
       <StackChips skills={d.skills} />
       <ul class="!list-none !pl-0 flex flex-wrap gap-x-6 gap-y-2 text-sm">
         {d.links.repo && <li><a href={d.links.repo}>Repository</a></li>}
