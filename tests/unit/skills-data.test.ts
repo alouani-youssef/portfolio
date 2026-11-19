@@ -59,4 +59,8 @@ describe('skills.yaml', () => {
     expect(inCat('security')).toContain('pii-redaction');
     expect(inCat('frontend')).toContain('chat-widgets');
   });
+
+  it('marks FastAPI as daily', () => {
+    expect(skills.find((s) => s.id === 'fastapi')!.level).toBe('daily');
+  });
 });

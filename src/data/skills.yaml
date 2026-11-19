@@ -5,7 +5,7 @@
 - { id: sql, name: "SQL", category: language, level: daily, evidence: [osoul, axelerated, qalqul, archio, tracker], icon: "lucide:table" }
 - { id: nestjs, name: "NestJS", category: backend, level: daily, evidence: [osoul, customer-voice, tracker], icon: "si:nestjs", core: 4 }
 - { id: nodejs, name: "Node.js", category: backend, level: daily, evidence: [osoul, customer-voice, tracker], icon: "si:nodedotjs" }
-- { id: fastapi, name: "FastAPI", category: backend, level: production, evidence: [osoul, customer-voice, tracker], icon: "si:fastapi" }
+- { id: fastapi, name: "FastAPI", category: backend, level: daily, evidence: [osoul, customer-voice, tracker], icon: "si:fastapi" }
 - { id: gin, name: "Gin", category: backend, level: production, evidence: [osoul, customer-voice, tracker], icon: "si:gin" }
 - { id: typeorm, name: "TypeORM", category: backend, level: daily, evidence: [osoul, customer-voice, tracker], icon: "si:typeorm" }
 - { id: postgresql, name: "PostgreSQL", category: databases, level: daily, evidence: [osoul, customer-voice], icon: "si:postgresql", core: 5 }
