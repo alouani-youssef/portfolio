@@ -1,8 +1,16 @@
 ---
 import { getEntries } from 'astro:content';
+import SkillIcon from './SkillIcon.astro';
 interface Props { skills: Array<{ collection: 'skills'; id: string }> }
 const entries = await getEntries(Astro.props.skills);
 ---
 <ul class="!list-none !pl-0 flex flex-wrap gap-2" aria-label="Stack">
-  {entries.map((s) => (<li><a class="chip" href={`/about#skill-${s.id}`}>{s.data.name}</a></li>))}
+  {entries.map((s) => (
+    <li>
+      <a class="chip inline-flex items-center gap-1.5" href={`/about#skill-${s.id}`}>
+        <SkillIcon icon={s.data.icon} />
+        {s.data.name}
+      </a>
+    </li>
+  ))}
 </ul>

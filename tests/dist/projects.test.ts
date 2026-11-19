@@ -22,6 +22,14 @@ describe.each(CASES)('/projects/%s', (slug) => {
   it('follows the case-study template', () => {
     expect(doc.querySelectorAll('main h2').map((h) => h.text.trim())).toEqual(H2);
   });
+  it('shows each stack chip with an icon, linking to its skill', () => {
+    const chips = doc.querySelectorAll('ul[aria-label="Stack"] a.chip');
+    expect(chips.length).toBeGreaterThan(0);
+    for (const a of chips) {
+      expect(a.getAttribute('href')).toMatch(/^\/about#skill-[a-z0-9-]+$/);
+      expect(a.querySelector('svg[aria-hidden="true"]'), a.text).not.toBeNull();
+    }
+  });
   it('has an accessible diagram with its Mermaid source', () => {
     expect(doc.querySelector('svg[role="img"] title')?.text.trim()).toBeTruthy();
     const source = doc.querySelectorAll('main details').find((d) => d.text.includes('Diagram source'));
