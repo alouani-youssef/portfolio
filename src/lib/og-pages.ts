@@ -20,6 +20,7 @@ export async function getOgPages(): Promise<OgPage[]> {
     { slug: 'about', title: 'About', subtitle: clip(profile.oneLiner) },
     { slug: 'experience', title: 'Experience', subtitle: 'Five roles over five years, each with an AI thread.' },
     { slug: 'projects', title: 'Projects', subtitle: 'Case studies at the architecture level.' },
+    { slug: 'open-source', title: 'Open source', subtitle: 'AI Stones, archio, translator, pg_inspector and a tracking kit.' },
     { slug: 'blog', title: 'Blog', subtitle: 'Backend architecture, RAG, MCP and speech-to-text.' },
     { slug: 'now', title: 'Now', subtitle: 'What I am building and writing this month.' },
     { slug: 'contact', title: 'Contact', subtitle: profile.email },

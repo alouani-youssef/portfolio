@@ -7,6 +7,7 @@ import { getProjects } from './projects';
 import { getPosts } from './post-queries';
 import { isPreview } from './metrics';
 import { mdxToMarkdown, twinHref } from './markdown';
+import { getOss } from './oss';
 
 const SITE = 'https://youssefalouani.com';
 
@@ -89,6 +90,16 @@ export async function buildTwins(): Promise<Twin[]> {
       `## Stack and links\n\n${stack}${d.links.repo ? `\n\nRepository: ${d.links.repo}` : ''}${d.links.demo ? `\n\nLive product: ${d.links.demo}` : ''}`,
     ]));
   }
+
+  const oss = await getOss();
+  twins.push(page('/open-source', 'Open source', [
+    oss.map((o) => [
+      `## ${o.data.name}`,
+      o.data.pitch,
+      list([`Languages: ${o.data.languages.join(', ')}`, `Licence: ${o.data.license}`, ...o.data.repos.map((r) => `Repository (${r.label}): ${r.url}`), ...o.data.links.map((l) => `${l.label}: ${l.url}`)]),
+      list(o.data.highlights),
+    ].join('\n\n')).join('\n\n'),
+  ]));
 
   twins.push(page('/blog', 'Blog', [
     list(posts.map((p) => `${date(p.data.pubDate)}: [${p.data.title}](${p.data.external ? p.data.external.url : `${SITE}${twinHref(`/blog/${entrySlug(p.id)}`)}`})${p.data.external ? ' (on Medium)' : ''}. ${p.data.description}`)),

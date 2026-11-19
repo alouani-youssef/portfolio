@@ -9,12 +9,14 @@ import { profile } from '../data/profile';
 import { entrySlug } from '../lib/i18n';
 import { getPosts } from '../lib/post-queries';
 import { profilePageJsonLd } from '../lib/jsonld';
+import { getOss } from '../lib/oss';
 import headshot from '../assets/media/headshot.png';
 
 const [lead, rest] = profile.headline.split(/(?<=Osoul\.)\s/);
 const recs = await getCollection('recommendations');
 const pull = recs.find((r) => r.id === 'mohammad-al-ahmad')!;
 const featured = (await getCollection('projects', (p) => p.data.featured && p.id.startsWith('en/'))).sort((a, b) => a.data.order - b.data.order);
+const oss = await getOss();
 const posts = (await getPosts(false))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
@@ -55,6 +57,21 @@ const posts = (await getPosts(false))
       </ul>
     </section>
   )}
+
+  <section id="open-source" class="container-page py-10" aria-labelledby="oss-h">
+    <div class="flex items-baseline justify-between">
+      <h2 id="oss-h" class="text-xl font-semibold">Open source</h2>
+      <a href="/open-source" class="text-sm">All open source →</a>
+    </div>
+    <ul class="mt-6 divide-y divide-border border-y border-border">
+      {oss.map((o) => (
+        <li class="grid gap-1 py-4 sm:grid-cols-[12rem_1fr] sm:gap-6">
+          <a href={`/open-source#${o.id}`} class="font-medium">{o.data.name}</a>
+          <p class="text-sm text-muted">{o.data.pitch}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
 
   <section class="container-page grid gap-12 py-10 md:grid-cols-2">
     <ClientGroups />

@@ -102,4 +102,20 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { skills, clients, recommendations, experience, projects, blog };
+const oss = defineCollection({
+  loader: file('src/data/oss.yaml'),
+  schema: z.object({
+    id: z.string(),
+    name: z.string(),
+    order: z.number(),
+    pitch: z.string().max(160),
+    languages: z.array(z.string()).min(1),
+    license: z.enum(['MIT', 'Apache-2.0']),
+    repos: z.array(z.object({ label: z.string(), url: z.url() })).min(1),
+    links: z.array(z.object({ label: z.string(), url: z.url() })).default([]),
+    highlights: z.array(z.string()).min(2).max(4),
+    related: reference('projects').optional(),
+  }),
+});
+
+export const collections = { skills, clients, recommendations, experience, projects, blog, oss };

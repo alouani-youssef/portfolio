@@ -1,0 +1,59 @@
+- id: ai-stones
+  name: AI Stones
+  order: 1
+  pitch: "A Node.js CLI that detects a project's stack and conventions, then generates a tailored Claude Code setup."
+  languages: [JavaScript, Node.js]
+  license: MIT
+  repos: [{ label: GitHub, url: "https://github.com/alouani-youssef/stones" }]
+  links: [{ label: npm, url: "https://www.npmjs.com/package/ai-stones" }]
+  highlights:
+    - "Run it with npx ai-stones init in any repository."
+    - "Generates .claude/ hooks, skills and MCP server config, plus AGENT.md and ROADMAP.md."
+    - "Published on npm under MIT, with CI."
+- id: archio
+  name: archio
+  order: 2
+  pitch: "Object storage in Go with a multi-node, high-availability cluster and semantic search over stored files, built on Docling."
+  languages: [Go]
+  license: Apache-2.0
+  repos: [{ label: GitHub, url: "https://github.com/alouani-youssef/archio" }]
+  highlights:
+    - "File processing, storage and delivery optimisation."
+    - "Multi-node cluster setup for high availability."
+    - "Semantic search over documents, built on Docling."
+- id: translator
+  name: translator
+  order: 3
+  pitch: "Low-cost, context-aware translation: NLLB-200 for simple text, an LLM above a complexity threshold, behind a three-tier cache."
+  languages: [Python]
+  license: Apache-2.0
+  repos: [{ label: GitHub, url: "https://github.com/alouani-youssef/translator" }]
+  highlights:
+    - "FastAPI service routing between NLLB-200 3.3B and an LLM (Gemini, Ollama or OpenRouter) by complexity."
+    - "Exact, normalized and semantic cache on PostgreSQL with pgvector."
+    - "Semantic search exposed to the LLM as a tool that fetches validated translation examples, lifting domain accuracy even with local LLMs."
+    - "multilingual-e5 quality scoring; S3/MinIO JSON documents."
+- id: pg-inspector
+  name: pg_inspector
+  order: 4
+  pitch: "An MCP server that gives AI assistants safe, read-only access to PostgreSQL."
+  languages: [Python]
+  license: Apache-2.0
+  repos: [{ label: GitHub, url: "https://github.com/alouani-youssef/pg_inspector" }]
+  highlights:
+    - "Streamable HTTP with an API key, and stdio."
+    - "Read-only SQL, schema inspection, EXPLAIN plans and a health snapshot."
+    - "Five guided prompts for common investigations."
+- id: tracking-kit
+  name: Tracking kit
+  order: 5
+  pitch: "A Go/Gin user-recognition service and a TypeScript browser SDK, with every event HMAC-signed."
+  languages: [Go (Gin), TypeScript]
+  license: Apache-2.0
+  repos:
+    - { label: tracker, url: "https://github.com/alouani-youssef/tracker" }
+    - { label: tracking-sdk, url: "https://github.com/alouani-youssef/tracking-sdk" }
+  highlights:
+    - "Gin service that receives and verifies tracking events for user recognition."
+    - "TypeScript wrapper for browser-based tracking."
+    - "HMAC request signing, so the service only accepts events from trusted clients."

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OssCard from '../components/OssCard.astro';
+import { getOss } from '../lib/oss';
+const oss = await getOss();
+---
+<BaseLayout title="Open source" description="Open-source projects by Youssef Alouani: AI Stones, archio, translator, pg_inspector and a tracking kit." path="/open-source">
+  <div class="container-page py-12 sm:py-16">
+    <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Open source</h1>
+    <p class="mt-3 max-w-[70ch] text-muted">Tools I built in public, from a Claude Code setup generator to an MCP server for PostgreSQL.</p>
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      {oss.map((entry) => <OssCard entry={entry} />)}
+    </div>
+  </div>
+</BaseLayout>

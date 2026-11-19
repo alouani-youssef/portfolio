@@ -1,0 +1,21 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { entry: CollectionEntry<'oss'> }
+const { entry } = Astro.props;
+const d = entry.data;
+---
+<article id={entry.id} class="oss-card card scroll-mt-24">
+  <h2 class="text-xl font-semibold">{d.name}</h2>
+  <p class="mt-2 text-muted">{d.pitch}</p>
+  <ul class="mt-4 flex flex-wrap gap-2" aria-label="Languages and licence">
+    {d.languages.map((l) => <li class="chip">{l}</li>)}
+    <li class="chip license" title="Licence">{d.license}</li>
+  </ul>
+  <ul class="mt-4 list-disc space-y-1 pl-5 text-sm">
+    {d.highlights.map((h) => <li>{h}</li>)}
+  </ul>
+  <ul class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+    {d.repos.map((r) => <li><a href={r.url}>{d.repos.length > 1 ? `${r.label} on GitHub` : 'Repository on GitHub'}</a></li>)}
+    {d.links.map((l) => <li><a href={l.url}>{l.label}</a></li>)}
+  </ul>
+</article>
