@@ -37,7 +37,7 @@ Five roles over five years, each with a clear AI thread; the site shows them as 
 | Period | Company | Role | What to highlight |
 | --- | --- | --- | --- |
 | Nov 2026 – now | 10xJobs | Founder | Multi-user SaaS built on Apify actors: a pipeline tuned for cost, efficiency and performance that finds jobs and matches them to each registered user's published profile |
-| Jun 2026 – now | [Osoul](https://osoul.io) | Technical Founder | Revenue-as-a-Service (RaaS): a SaaS growth engine for fine dining built around specific revenue KPIs, with management tools built in, that turns lost data into KPI gains. Multi-tenant platform with NFC/QR ordering, reservations with deposits and bots, recommendation systems, ad signal infrastructure (CAPI ad-audience optimisation), AI assistant (LangChain, PII redaction, user auth propagation), POS/PMS integrations, identity merging, event-based dynamic pricing; front ends: Osoul Portal, Osoul Guest App, Osoul Waiter App (React Native); first customer: Casa Harris |
+| Jun 2026 – now | [Osoul](https://osoul.io) | Technical Founder | Revenue-as-a-Service (RaaS): a SaaS growth engine for fine dining built around specific revenue KPIs, with management tools built in, that turns lost data into KPI gains. Multi-tenant platform with NFC/QR ordering, reservations with deposits and bots, recommendation systems, ad signal infrastructure (CAPI ad-audience optimisation), AI assistant (LangChain, PII redaction, user auth propagation), POS/PMS integrations, identity merging, event-based dynamic pricing; front ends: Osoul Portal, Osoul Guest App, Osoul Waiter App (React Native); customers: Casa Harris, Shanzoo (Tangier) |
 | 2024 – 2026 | Axelerated Solutions (Sowtek AXS) | Lead Backend Engineer, founding engineer (team of 9) | Whisper large-v3 fine-tuned for Saudi dialect (WhatsApp and Asterisk audio pipeline), RAG on Milvus, coding agents, tool-using chatbots, Customer Voice RAG pipeline with an MCP server as its main retriever (architecture, auth, privacy and retention), an MCP server over backend APIs with Keycloak request validation, knowledge-base search on Docling and zero-shot classification; migrations and hybrid deployments (see below); clients: HRSD, Tahreez |
 | 2023 – 2024 | Finamaze | Backend Engineer | Reconciliation; KYC with document and visual verification; AI for robo-advisory; React/Next.js front ends; client: SNB |
 | 2021 – 2023 | Qalqul Engine | Software Engineer | NLP/NLU engines built on language servers and Duckling, Botpress v12 core, no-code workflows and n8n, portals, browser SDKs in TypeScript, Kotlin SDKs, React chat widgets; clients: King Saud Medical City, Hertz, CDM, SANLAM, AtlantaSanad, CityClub, YouCan |
@@ -54,11 +54,12 @@ Assisted as Lead Backend Engineer at Axelerated Solutions. Shown as its own bloc
 
 **Clients (end customers you may name)**
 
-Eleven named clients across banking, insurance, government, healthcare, retail and hospitality back up the hybrid-deployment and privacy claims. Show them as plain names under "Clients I have worked for" on Home and the relevant role pages: no links, no logos, no project details.
+Twelve named clients across banking, insurance, government, healthcare, retail and hospitality back up the hybrid-deployment and privacy claims. Show them as plain names under "Clients I have worked for" on Home and the relevant role pages: no links, no logos, no project details.
 
 | Client | Role | Market | Sector |
 | --- | --- | --- | --- |
 | Casa Harris | Osoul | Morocco | Hospitality (restaurant-lounge) |
+| Shanzoo (Tangier) | Osoul | Morocco | Hospitality (restaurant) |
 | HRSD (Ministry of Human Resources and Social Development) | Axelerated Solutions | Saudi Arabia | Government |
 | Tahreez | Axelerated Solutions | Saudi Arabia | Security and technology integration |
 | Saudi National Bank (SNB) | Finamaze | Saudi Arabia | Banking |
@@ -169,7 +170,7 @@ These figures are illustrative, so layouts can be built and reviewed with realis
 
 | Case study | Metric | Placeholder |
 | --- | --- | --- |
-| Osoul | Tenants live | 1 (Casa Harris), real figure |
+| Osoul | Tenants live | 2 (Casa Harris, Shanzoo), real figure |
 | Osoul | Average ticket from meal-completion promos | +8% |
 | Osoul | Reservation no-shows after reminders and deposits | −30% |
 | Saudi-dialect speech-to-text | Word error rate, base Whisper large-v3 → fine-tuned | 38% → 19% |
@@ -569,6 +570,6 @@ These are the facts the site still needs from you. Each one turns a vague claim 
 
 * [x] **Osoul's RaaS model**: what does RaaS stand for in your pitch, which KPIs does Osoul move, and which "lost data" does it recover? One before/after number per KPI makes the flagship page.
 * [x] **Social proof**: 2–3 LinkedIn recommendations you can quote with permission, plus any talks or press mentions.
-* [x] **Naming clients**: eleven clients are listed under Experience, including Casa Harris, Osoul's only customer so far.
+* [x] **Naming clients**: twelve clients are listed under Experience, including Casa Harris and Shanzoo (Tangier), Osoul's customers so far.
 
 **Sources**: [GitHub profile](https://github.com/alouani-youssef) and [Medium feed](https://alouani-youssef.medium.com/feed)s (two accounts), checked 19 Nov 2026.
