@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjects } from '../../lib/projects';
+import { entrySlug } from '../../lib/i18n';
+const projects = await getProjects();
+const AREAS = [
+  ['ai', 'AI'],
+  ['backend', 'Backend'],
+  ['platform', 'Platform'],
+  ['frontend', 'Front end'],
+] as const;
+const flagship = projects.find((p) => p.data.kind === 'founder' && p.data.featured);
+const groups = AREAS.map(([area, label]) => ({ area, label, items: projects.filter((p) => p.data.area === area && p !== flagship) })).filter((g) => g.items.length);
+---
+<BaseLayout title="Projects" description="Case studies: the Osoul platform, Saudi-dialect speech-to-text and Customer Voice (RAG + MCP)." path="/projects">
+  <div class="container-page py-12 sm:py-16">
+    <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Projects</h1>
+    <p class="mt-3 max-w-[70ch] text-muted">Case studies written at the architecture level: the problem, the design and the trade-offs, never client data.</p>
+    {groups.length > 0 && (
+      <nav aria-label="Filter by area" class="mt-6 flex flex-wrap gap-2">
+        {groups.map((g) => <a class="chip" href={`#${g.area}`}>{g.label}</a>)}
+      </nav>
+    )}
+    {flagship && (
+      <section class="mt-10" aria-label="Flagship">
+        <a href={`/projects/${entrySlug(flagship.id)}`} class="card block no-underline hover:border-accent">
+          <p class="eyebrow">Flagship</p>
+          <h2 class="mt-2 text-2xl font-semibold text-fg">{flagship.data.title}</h2>
+          <p class="mt-2 max-w-[70ch] text-muted">{flagship.data.summary}</p>
+        </a>
+      </section>
+    )}
+    {groups.map((g) => (
+      <section id={g.area} class="mt-12" aria-labelledby={`${g.area}-h`}>
+        <h2 id={`${g.area}-h`} class="eyebrow">{g.label}</h2>
+        <ul class="mt-4 grid gap-4 md:grid-cols-2">
+          {g.items.map((p) => (
+            <li>
+              <a href={`/projects/${entrySlug(p.id)}`} class="card block h-full no-underline hover:border-accent">
+                <h3 class="font-semibold text-fg">{p.data.title}</h3>
+                <p class="mt-2 text-sm text-muted">{p.data.summary}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

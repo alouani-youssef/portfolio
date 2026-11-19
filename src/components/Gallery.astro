@@ -1,0 +1,14 @@
+---
+import Figure from './Figure.astro';
+import type { ImageMetadata } from 'astro';
+interface Props { items: Array<{ src: ImageMetadata; alt: string; caption: string; device: 'desktop' | 'phone' }> }
+const { items } = Astro.props;
+const desktop = items.filter((i) => i.device === 'desktop');
+const phones = items.filter((i) => i.device === 'phone');
+---
+{desktop.map((m) => <Figure src={m.src} alt={m.alt} caption={m.caption} device="desktop" />)}
+{phones.length > 0 && (
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {phones.map((m) => <Figure src={m.src} alt={m.alt} caption={m.caption} device="phone" />)}
+  </div>
+)}

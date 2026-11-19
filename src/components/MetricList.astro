@@ -1,0 +1,17 @@
+---
+interface Props { metrics: Array<{ label: string; value: string; placeholder: boolean }>; preview: boolean }
+const { metrics, preview } = Astro.props;
+const shown = metrics.filter((m) => preview || !m.placeholder);
+---
+{shown.length > 0 ? (
+  <dl class="grid gap-4 sm:grid-cols-2">
+    {shown.map((m) => (
+      <div class="card metric">
+        <dt class="text-sm text-muted">{m.label}{m.placeholder && <span class="badge" title="Illustrative figure awaiting confirmation">sample</span>}</dt>
+        <dd class="mt-1 text-2xl font-semibold tracking-tight">{m.value}</dd>
+      </div>
+    ))}
+  </dl>
+) : (
+  <p class="text-muted">Numbers to come.</p>
+)}

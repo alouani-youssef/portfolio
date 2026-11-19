@@ -1,0 +1,47 @@
+---
+import { render, getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MetricList from '../../components/MetricList.astro';
+import StackChips from '../../components/StackChips.astro';
+import { getProjects } from '../../lib/projects';
+import { entrySlug } from '../../lib/i18n';
+import { isPreview, placeholderViolations } from '../../lib/metrics';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  const violations = placeholderViolations(projects);
+  if (!isPreview() && violations.length > 0) {
+    throw new Error(`Placeholder metrics in production build:\n${violations.join('\n')}`);
+  }
+  return projects.map((project) => ({ params: { slug: entrySlug(project.id) }, props: { project } }));
+}
+const { project } = Astro.props;
+const { Content } = await render(project);
+const d = project.data;
+const path = `/projects/${entrySlug(project.id)}`;
+const company = d.company ? await getEntry(d.company) : undefined;
+const preview = isPreview();
+---
+<BaseLayout title={d.title} description={d.summary} path={path}>
+  <article class="container-page py-12 sm:py-16">
+    <a href="/projects" class="text-sm">← Projects</a>
+    <header class="mt-6 max-w-[70ch]">
+      <p class="eyebrow">{d.kind === 'founder' ? 'Flagship · ' : ''}{company ? company.data.company : 'Independent'} · {d.status}</p>
+      <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{d.title}</h1>
+      <p class="mt-4 text-lg text-muted">{d.summary}</p>
+    </header>
+    <div class="case-body mt-10 max-w-[72ch] space-y-4 [&_h2]:mt-12 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1">
+      <Content media={d.media} />
+      <h2>Results</h2>
+      <MetricList metrics={d.metrics} preview={preview} />
+      <h2>Stack and links</h2>
+      <StackChips skills={d.skills} />
+      <ul class="!list-none !pl-0 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        {d.links.repo && <li><a href={d.links.repo}>Repository</a></li>}
+        {d.links.demo && <li><a href={d.links.demo}>Live product</a></li>}
+        {d.links.post && <li><a href={d.links.post}>Related post</a></li>}
+        {company && <li><a href={`/experience/${entrySlug(company.id)}`}>Role at {company.data.company}</a></li>}
+      </ul>
+    </div>
+  </article>
+</BaseLayout>

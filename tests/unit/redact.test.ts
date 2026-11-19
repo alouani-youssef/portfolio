@@ -3,7 +3,6 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import sharp from 'sharp';
 import { describe, it, expect } from 'vitest';
-// @ts-expect-error plain ESM script without types
 import { redact, MANIFEST } from '../../scripts/redact-media.mjs';
 
 const SRC = 'docs/osoul/portal_dashboard.png';
@@ -34,7 +33,7 @@ describe('redact', () => {
 
   it('redacts the staff name and the assistant payload on the dashboard', () => {
     const entry = MANIFEST.find((m: { output: string }) => m.output.endsWith('osoul/portal-dashboard.png'));
-    expect(entry.boxes).toEqual([
+    expect(entry!.boxes).toEqual([
       { left: 20, top: 1780, width: 490, height: 120 },
       { left: 2660, top: 1400, width: 780, height: 115 },
     ]);
