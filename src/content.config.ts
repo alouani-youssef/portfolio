@@ -2,6 +2,7 @@ import { defineCollection, reference } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob, file } from 'astro/loaders';
 import { resolveIcon, SKILL_CATEGORIES, type Category } from './lib/skill-icons';
+import { TAG_IDS } from './lib/tags';
 
 const skills = defineCollection({
   loader: file('src/data/skills.yaml'),
@@ -40,10 +41,16 @@ const recommendations = defineCollection({
     author: z.string(),
     title: z.string(),
     relationship: z.string(),
+    /** Who they were to me; drives the badge on the card. */
+    kind: z.enum(['manager', 'peer', 'report', 'client']),
+    /** The role we worked together in; links the card to that role. Omit when unsure. */
+    experience: reference('experience').optional(),
     date: z.coerce.date(),
     quote: z.string(),
+    /** Exact phrase from the quote to emphasise. */
+    highlight: z.string().optional(),
     url: z.url(),
-  }),
+  }).refine((r) => !r.highlight || r.quote.includes(r.highlight), { message: 'highlight must be an exact phrase from the quote', path: ['highlight'] }),
 });
 
 const experience = defineCollection({
@@ -92,7 +99,9 @@ const projects = defineCollection({
       links: z.object({ repo: z.url(), demo: z.url(), post: z.string() }).partial().default({}),
       metrics: z.array(z.object({ label: z.string(), value: z.string(), placeholder: z.boolean().default(true) })).default([]),
       media: z.array(z.object({ src: image(), alt: z.string().min(1), caption: z.string(), device: z.enum(['desktop', 'phone']).default('desktop') })).default([]),
-      cover: image().optional(),
+      /** Card and header image, unique per project. */
+      cover: image(),
+      coverAlt: z.string().min(1),
       order: z.number(),
       updatedAt: z.coerce.date(),
     }),
@@ -100,12 +109,15 @@ const projects = defineCollection({
 
 const blog = defineCollection({
   loader: glob({ pattern: '*/*.mdx', base: 'src/content/blog' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     description: z.string().max(160),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    tags: z.array(z.string()),
+    /** Ids from src/lib/tags.ts; the first one sets the generated cover's colour and icon. */
+    tags: z.array(z.enum(TAG_IDS)).min(1),
+    /** Optional real cover; without one, the post gets a generated cover from its tags. */
+    cover: z.object({ src: image(), alt: z.string().min(1) }).optional(),
     external: z.object({ platform: z.enum(['medium', 'devto', 'hashnode']), url: z.url() }).optional(),
     canonical: z.url().optional(),
     related: z.array(reference('projects')).default([]),

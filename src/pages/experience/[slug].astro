@@ -6,6 +6,8 @@ import Figure from '../../components/Figure.astro';
 import StackChips from '../../components/StackChips.astro';
 import ClientGroups from '../../components/ClientGroups.astro';
 import { getRoles } from '../../lib/experience';
+import { getProjects } from '../../lib/projects';
+import ProjectCard from '../../components/ProjectCard.astro';
 import { entrySlug } from '../../lib/i18n';
 
 export async function getStaticPaths() {
@@ -16,6 +18,7 @@ const { role } = Astro.props;
 const { Content } = await render(role);
 const d = role.data;
 const path = `/experience/${entrySlug(role.id)}`;
+const projects = (await getProjects()).filter((p) => p.data.company?.id === role.id);
 ---
 <BaseLayout title={`${d.role}, ${d.company}`} description={d.summary} path={path}>
   <article class="container-page py-12 sm:py-16">
@@ -48,6 +51,17 @@ const path = `/experience/${entrySlug(role.id)}`;
         <div class:list={['grid gap-6', d.media.every((m) => m.device === 'phone') ? 'sm:grid-cols-2 lg:grid-cols-3' : '']}>
           {d.media.map((m) => <Figure src={m.src} alt={m.alt} caption={m.caption} device={m.device} />)}
         </div>
+      </section>
+    )}
+    {projects.length > 0 && (
+      <section class="mt-12" aria-labelledby="role-projects">
+        <div class="flex items-baseline justify-between">
+          <h2 id="role-projects" class="text-xl font-semibold">Projects at {d.company}</h2>
+          <a href="/projects" class="text-sm">All projects →</a>
+        </div>
+        <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((p) => <li><ProjectCard project={p} /></li>)}
+        </ul>
       </section>
     )}
     <div class="mt-12 max-w-[70ch]"><ClientGroups experienceId={role.id} heading="Clients" headingLevel="h3" /></div>

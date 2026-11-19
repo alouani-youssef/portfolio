@@ -37,9 +37,14 @@ const e = profile.education;
       <div class="mt-6"><SkillsGrid /></div>
     </section>
 
-    <section class="mt-16" aria-labelledby="recs-h">
-      <h2 id="recs-h" class="text-xl font-semibold">Recommendations</h2>
-      <div class="mt-6 space-y-10 max-w-[70ch]">{recs.map((r) => <Recommendation rec={r} />)}</div>
+    <section id="recommendations" class="mt-16 scroll-mt-24" aria-labelledby="recs-h">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+        <h2 id="recs-h" class="text-xl font-semibold">Recommendations</h2>
+        <p class="text-sm text-muted">{recs.length} on LinkedIn, from managers and teammates, newest first.</p>
+      </div>
+      <ul class="rec-grid mt-6">
+        {recs.map((r, i) => <li class:list={{ 'rec-grid__lead': i === 0 }}><Recommendation rec={r} size={i === 0 ? 'lg' : 'md'} /></li>)}
+      </ul>
     </section>
 
     <section id="faq" class="mt-16 max-w-[70ch]" aria-labelledby="faq-h">
@@ -55,3 +60,11 @@ const e = profile.education;
     </section>
   </div>
 </BaseLayout>
+
+<style>
+  .rec-grid { list-style: none; padding: 0; display: grid; gap: 1.25rem; }
+  @media (min-width: 768px) {
+    .rec-grid { grid-template-columns: repeat(2, 1fr); }
+    .rec-grid__lead { grid-column: 1 / -1; }
+  }
+</style>

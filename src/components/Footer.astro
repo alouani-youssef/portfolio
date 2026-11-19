@@ -1,13 +1,23 @@
 ---
+export interface Props {
+  path?: string;
+}
+const { path = '' } = Astro.props;
 const year = new Date().getFullYear();
+// The contact page already lists every channel, so the footer drops them there.
+const onContact = path === '/contact';
 ---
 <footer class="mt-24 border-t border-border">
   <div class="container-page flex flex-col gap-4 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
     <p>© {year} Youssef Alouani · Casablanca</p>
     <ul class="flex flex-wrap gap-x-5 gap-y-2">
-      <li><a href="mailto:hello@youssefalouani.com">Email</a></li>
-      <li><a href="https://github.com/alouani-youssef">GitHub</a></li>
-      <li><a href="https://www.linkedin.com/in/alouani-youssef">LinkedIn</a></li>
+      {!onContact && (
+        <>
+          <li><a href="mailto:hello@youssefalouani.com">Email</a></li>
+          <li><a href="https://github.com/alouani-youssef">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/alouani-youssef">LinkedIn</a></li>
+        </>
+      )}
       <li><a href="/llms.txt">llms.txt</a></li>
       <li><a href="/resume.json">resume.json</a></li>
     </ul>

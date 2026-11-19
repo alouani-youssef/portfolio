@@ -1,0 +1,84 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import SkillIcon from '../SkillIcon.astro';
+import { tagMeta } from '../../lib/tags';
+interface Props {
+  slug: string;
+  tags: readonly string[];
+  cover?: { src: ImageMetadata; alt: string };
+  /** `hero` is the post header, `featured` the lead card, `card` everything else. */
+  size?: 'card' | 'featured' | 'hero';
+  /** Eager-load the image when it sits above the fold. */
+  eager?: boolean;
+}
+const { slug, tags, cover, size = 'card', eager = false } = Astro.props;
+
+/** Small stable hash so each post keeps the same pattern across builds. */
+const hash = [...slug].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+const primary = tagMeta(tags[0]);
+const secondary = tags[1] ? tagMeta(tags[1]) : primary;
+const pattern = (['dots', 'lines', 'rings', 'grid'] as const)[hash % 4];
+const id = `pc-${slug}-${size}`;
+const widths = size === 'card' ? [400, 800] : [800, 1200, 1600];
+const sizes = size === 'card' ? '(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw' : '(min-width: 1024px) 1100px, 100vw';
+---
+<div class:list={['post-cover', `post-cover--${size}`]} style={`--h: ${primary.hue}; --h2: ${secondary.hue}; --rot: ${(hash % 5) * 9 - 18}deg`}>
+  {cover ? (
+    <Image src={cover.src} alt={cover.alt} widths={widths} sizes={sizes} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} class="post-cover__img" />
+  ) : (
+    <div class="post-cover__art" aria-hidden="true">
+      <svg class="post-cover__pattern" preserveAspectRatio="xMidYMid slice" viewBox="0 0 400 210">
+        <defs>
+          {pattern === 'dots' && <pattern id={id} width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" /></pattern>}
+          {pattern === 'lines' && <pattern id={id} width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="1.2" height="12" /></pattern>}
+          {pattern === 'grid' && <pattern id={id} width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="currentColor" stroke-width="0.8" /></pattern>}
+        </defs>
+        {pattern === 'rings'
+          ? <g fill="none" stroke="currentColor" stroke-width="1">{[30, 55, 80, 105, 130, 155, 180].map((r) => <circle cx={300 + (hash % 60)} cy={150 - (hash % 40)} r={r} />)}</g>
+          : <rect width="400" height="210" fill={`url(#${id})`} />}
+      </svg>
+      <span class="post-cover__blob" />
+      <SkillIcon icon={primary.icon} class="post-cover__icon" />
+      {size !== 'card' && <span class="post-cover__label">{primary.label}</span>}
+    </div>
+  )}
+</div>
+
+<style>
+  .post-cover {
+    --c-bg1: oklch(95% 0.035 var(--h));
+    --c-bg2: oklch(88% 0.07 var(--h2));
+    --c-ink: oklch(46% 0.14 var(--h));
+    position: relative; overflow: hidden; aspect-ratio: 1200 / 630;
+    background: linear-gradient(135deg, var(--c-bg1) 10%, var(--c-bg2));
+    color: var(--c-ink);
+  }
+  :global(:root[data-theme='dark']) .post-cover {
+    --c-bg1: oklch(27% 0.05 var(--h));
+    --c-bg2: oklch(21% 0.06 var(--h2));
+    --c-ink: oklch(80% 0.11 var(--h));
+  }
+  .post-cover--hero { border-radius: 1rem; border: 1px solid var(--border); }
+  .post-cover__img { width: 100%; height: 100%; object-fit: cover; }
+  .post-cover__art { position: absolute; inset: 0; }
+  .post-cover__pattern { position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor; opacity: 0.22; }
+  .post-cover__blob {
+    position: absolute; width: 70%; aspect-ratio: 1; right: -12%; bottom: -55%; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in oklch, var(--c-ink) 28%, transparent), transparent 68%);
+  }
+  .post-cover__art :global(.post-cover__icon) {
+    position: absolute; right: 8%; bottom: 14%; width: 30%; height: auto; aspect-ratio: 1; max-width: 9rem;
+    opacity: 0.85; transform: rotate(var(--rot)); filter: drop-shadow(0 6px 18px color-mix(in oklch, var(--c-ink) 35%, transparent));
+  }
+  .post-cover--hero .post-cover__art :global(.post-cover__icon) { max-width: 12rem; }
+  .post-cover__label {
+    position: absolute; left: 1.25rem; top: 1rem; font-family: var(--font-mono); font-size: 0.75rem;
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .post-cover__art :global(.post-cover__icon), .post-cover__img { transition: transform 300ms ease; }
+    :global(.post-card:hover) .post-cover__art :global(.post-cover__icon) { transform: rotate(0deg) scale(1.06); }
+    :global(.post-card:hover) .post-cover__img { transform: scale(1.03); }
+  }
+</style>

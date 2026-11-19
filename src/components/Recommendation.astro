@@ -1,16 +1,77 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import { getEntry, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { entrySlug } from '../lib/i18n';
+import { initials, avatarHue, splitHighlight, KIND_LABELS } from '../lib/recommendations';
 interface Props { rec: CollectionEntry<'recommendations'>; size?: 'lg' | 'md' }
 const { rec, size = 'md' } = Astro.props;
 const d = rec.data;
-const date = d.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+const role = d.experience ? await getEntry(d.experience) : undefined;
+const date = d.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const [before, mark, after] = splitHighlight(d.quote, d.highlight);
 ---
-<figure class="border-l-2 border-accent pl-5">
-  <blockquote class:list={[size === 'lg' ? 'text-xl sm:text-2xl' : 'text-lg', 'leading-snug']}>
-    <p>“{d.quote}”</p>
+<figure class:list={['rec', `rec--${size}`]} style={`--h: ${avatarHue(d.author)}`}>
+  <svg class="rec__mark" viewBox="0 0 32 24" aria-hidden="true" focusable="false"><path d="M0 24V14C0 6 4 1 12 0l1 3c-4 1-6 4-6 8h5v13H0Zm19 0V14c0-8 4-13 12-14l1 3c-4 1-6 4-6 8h5v13H19Z" /></svg>
+  <blockquote class="rec__quote">
+    <p>“{before}{mark && <mark>{mark}</mark>}{after}”</p>
   </blockquote>
-  <figcaption class="mt-3 text-sm text-muted">
-    <span class="font-medium text-fg">{d.author}</span>, {d.title} · {d.relationship} · <time datetime={d.date.toISOString().slice(0, 10)}>{date}</time> ·
-    <a href={d.url}>Full recommendation on LinkedIn</a>
+  <figcaption class="rec__by">
+    <span class="rec__avatar" aria-hidden="true">{initials(d.author)}</span>
+    <span class="rec__who">
+      <span class="rec__name">{d.author}</span>
+      <span class="rec__title">{d.title}</span>
+      <span class="rec__meta">
+        <span class="rec__kind">{KIND_LABELS[d.kind]}</span>
+        <span>{d.relationship}</span> · <time datetime={d.date.toISOString().slice(0, 10)}>{date}</time>
+      </span>
+    </span>
   </figcaption>
+  <div class="rec__links">
+    {role && (
+      <a class="rec__role" href={`/experience/${entrySlug(role.id)}`}>
+        <Image src={role.data.logo} alt="" width={40} height={40} />
+        <span>at {role.data.company}</span>
+      </a>
+    )}
+    <a class="rec__li" href={d.url} target="_blank" rel="noopener">Full recommendation on LinkedIn <span aria-hidden="true">↗</span></a>
+  </div>
 </figure>
+
+<style>
+  .rec {
+    --tone: oklch(52% 0.12 var(--h)); --tone-bg: oklch(93% 0.04 var(--h));
+    position: relative; display: flex; flex-direction: column; height: 100%; margin: 0;
+    padding: 1.5rem 1.5rem 1.25rem; border: 1px solid var(--border); border-radius: 1rem;
+    background: linear-gradient(160deg, color-mix(in oklch, var(--accent) 5%, var(--bg)), var(--bg) 55%);
+  }
+  :global(:root[data-theme='dark']) .rec { --tone: oklch(80% 0.1 var(--h)); --tone-bg: oklch(30% 0.05 var(--h)); }
+  .rec__mark { width: 2rem; height: auto; fill: var(--accent); opacity: 0.25; }
+  .rec__quote { margin-top: 0.75rem; font-size: 1.0625rem; line-height: 1.55; letter-spacing: -0.005em; text-wrap: pretty; }
+  .rec--lg .rec__quote { font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem); line-height: 1.35; letter-spacing: -0.015em; font-weight: 500; }
+  .rec--lg { padding: 2rem 2rem 1.5rem; }
+  .rec--lg .rec__mark { width: 2.75rem; }
+  .rec__quote mark {
+    color: inherit; padding: 0 0.1em; border-radius: 0.2em; box-decoration-break: clone; -webkit-box-decoration-break: clone;
+    background: linear-gradient(transparent 58%, color-mix(in oklch, var(--accent) 28%, transparent) 58%);
+  }
+  .rec__by { display: flex; align-items: center; gap: 0.875rem; margin-top: auto; padding-top: 1.5rem; }
+  .rec__avatar {
+    flex: none; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%;
+    font-size: 0.875rem; font-weight: 600; letter-spacing: 0.02em; color: var(--tone); background: var(--tone-bg);
+    border: 1px solid color-mix(in oklch, var(--tone) 30%, transparent);
+  }
+  .rec__who { display: flex; flex-direction: column; min-width: 0; line-height: 1.35; }
+  .rec__name { font-weight: 600; }
+  .rec__title { font-size: 0.875rem; color: var(--muted); }
+  .rec__meta { margin-top: 0.25rem; font-size: 0.8125rem; color: var(--muted); }
+  .rec__kind {
+    display: inline-block; margin-right: 0.375rem; padding: 0 0.4375rem; border-radius: 999px;
+    font-family: var(--font-mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--tone); border: 1px solid color-mix(in oklch, var(--tone) 40%, transparent);
+  }
+  .rec__links { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; margin-top: 1rem; padding-top: 0.875rem; border-top: 1px dashed var(--border); font-size: 0.8125rem; }
+  .rec__role { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--fg); text-decoration: none; }
+  .rec__role:hover span { text-decoration: underline; }
+  .rec__role img { width: 1.25rem; height: 1.25rem; border-radius: 0.3rem; border: 1px solid var(--border); background: #fff; object-fit: contain; }
+  .rec__li { margin-left: auto; }
+</style>

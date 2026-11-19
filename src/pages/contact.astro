@@ -1,26 +1,413 @@
 ---
+import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile } from '../data/profile';
-const items = [
-  { label: 'Email', href: `mailto:${profile.email}`, text: profile.email },
-  { label: 'LinkedIn', href: profile.links.linkedin, text: 'linkedin.com/in/alouani-youssef' },
-  { label: 'GitHub', href: profile.links.github, text: 'github.com/alouani-youssef' },
-  { label: 'CV', href: '/cv', text: 'Printable CV (save as PDF)' },
+import { resolveIcon } from '../lib/skill-icons';
+import portrait from '../assets/media/youssef-portrait.png';
+import { services, mailtoHref } from '../data/services';
+
+const general = {
+  subject: 'Hello from your portfolio',
+  body: 'Hi Youssef,\n\n[What you would like to talk about]\n\nThanks,\n[Your name]\n[Company / role]',
+};
+const templates = [{ id: 'general', title: 'General', template: general }, ...services];
+
+const icon = (ref: string) => resolveIcon(ref).svg;
+// simple-icons dropped LinkedIn, so its mark is inlined here.
+const linkedinSvg =
+  '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>';
+
+const channels = [
+  { label: 'LinkedIn', href: profile.links.linkedin, text: 'in/alouani-youssef', svg: linkedinSvg, external: true },
+  { label: 'GitHub', href: profile.links.github, text: 'alouani-youssef', svg: icon('si:github'), external: true },
+  { label: 'CV', href: '/cv', text: 'Save as PDF', svg: icon('lucide:file-text'), external: false },
+];
+
+const facts = [
+  { svg: icon('lucide:map-pin'), text: `${profile.location.city}, Morocco` },
+  { svg: icon('lucide:clock'), text: 'GMT+1' },
+  { svg: icon('lucide:languages'), text: profile.languages.map((l) => l.name).join(' · ') },
 ];
 ---
 <BaseLayout title="Contact" description="How to reach Youssef Alouani: email, LinkedIn, GitHub and CV." path="/contact">
-  <div class="container-page py-12 sm:py-16">
-    <div class="max-w-[70ch]">
-      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Contact</h1>
-      <p class="mt-4 text-lg text-muted">The fastest way to reach me is email. I write in English, French and Arabic.</p>
-      <dl class="mt-10 divide-y divide-border border-y border-border">
-        {items.map((i) => (
-          <div class="grid gap-1 py-4 sm:grid-cols-[8rem_1fr]">
-            <dt class="eyebrow pt-1">{i.label}</dt>
-            <dd><a href={i.href}>{i.text}</a></dd>
+  <section class="contact relative overflow-hidden">
+    <div class="contact-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="container-page relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.35fr_0.65fr] lg:gap-6 lg:py-20">
+      <div class="reveal min-w-0">
+        <p class="status-pill">
+          <span class="status-dot" aria-hidden="true"></span>
+          Open to senior backend &amp; AI conversations
+        </p>
+        <h1 class="mt-6 text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+          Let’s build something that <span class="text-accent">holds up in production.</span>
+        </h1>
+        <p class="mt-5 max-w-[52ch] text-lg text-muted">
+          Have a platform to scale, an AI system to ship, or a role to talk about? Email is the fastest way to reach me.
+          I usually reply within a couple of days. <a href="#services">Pick a service</a> to start from a ready-made email.
+        </p>
+
+        <div class="email-card mt-8">
+          <span class="email-icon" set:html={icon('lucide:mail')} />
+          <div class="min-w-0 flex-1">
+            <p class="eyebrow">Email</p>
+            <a class="email-link" href={`mailto:${profile.email}`}>{profile.email}</a>
           </div>
-        ))}
-      </dl>
+          <button type="button" class="copy-btn no-print" data-copy={profile.email} aria-label="Copy email address">
+            <span class="copy-idle" set:html={icon('lucide:copy')} />
+            <span class="copy-done" set:html={icon('lucide:check')} />
+            <span class="copy-text" aria-live="polite">Copy</span>
+          </button>
+        </div>
+
+        <ul class="mt-4 grid gap-3 sm:grid-cols-3">
+          {channels.map((c) => (
+            <li>
+              <a class="channel" href={c.href} {...(c.external ? { rel: 'me noopener', target: '_blank' } : {})}>
+                <span class="channel-icon" set:html={c.svg} />
+                <span class="min-w-0">
+                  <span class="block font-medium text-fg">{c.label}</span>
+                  <span class="block truncate text-sm text-muted">{c.text}</span>
+                </span>
+                <span class="channel-arrow" set:html={icon('lucide:arrow-up-right')} />
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
+          {facts.map((f) => (
+            <li class="flex items-center gap-2"><span class="fact-icon" set:html={f.svg} />{f.text}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="portrait-wrap reveal reveal-delay">
+        <div class="portrait-glow" aria-hidden="true"></div>
+        <div class="portrait-ring" aria-hidden="true"></div>
+        <Picture
+          src={portrait}
+          alt="Youssef Alouani in a dark pinstripe suit"
+          widths={[320, 480, 640, 900]}
+          sizes="(min-width: 1024px) 420px, (min-width: 640px) 360px, 280px"
+          formats={['avif', 'webp']}
+          class="portrait-img"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <div class="portrait-badge" aria-hidden="true">
+          <span class="text-xs text-muted">Based in</span>
+          <span class="font-medium">Casablanca · MA</span>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
+
+  <section id="services" class="container-page scroll-mt-20 pt-8 sm:pt-12" aria-labelledby="services-title">
+    <p class="eyebrow">Services</p>
+    <h2 id="services-title" class="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">What I can help with</h2>
+    <p class="mt-3 max-w-[60ch] text-muted">
+      Freelance, contract or advisory work, plus full-time conversations. Each service comes with an email template that asks the right questions up front.
+    </p>
+    <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {services.map((s) => (
+        <li class="service">
+          <span class="service-icon" set:html={icon(s.icon)} />
+          <h3 class="mt-4 text-lg font-semibold">{s.title}</h3>
+          <p class="mt-2 text-sm text-muted">{s.summary}</p>
+          <ul class="mt-4 space-y-1.5 text-sm">
+            {s.points.map((p) => (
+              <li class="flex gap-2"><span class="service-check" set:html={icon('lucide:check')} />{p}</li>
+            ))}
+          </ul>
+          <a class="service-cta" href={mailtoHref(profile.email, s.template)} data-pick={s.id}>
+            <span set:html={icon('lucide:pencil-line')} />Use this email template
+          </a>
+        </li>
+      ))}
+      <li class="service service--ask">
+        <span class="service-icon" set:html={icon('lucide:message-square-text')} />
+        <h3 class="mt-4 text-lg font-semibold">Something else?</h3>
+        <p class="mt-2 text-sm text-muted">Not sure where it fits? Use the general template and describe the problem in a few lines.</p>
+        <a class="service-cta" href={mailtoHref(profile.email, general)} data-pick="general">
+          <span set:html={icon('lucide:pencil-line')} />Write a general email
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section id="compose" class="container-page scroll-mt-20 pt-16 no-print" aria-labelledby="compose-title">
+    <div class="composer" data-email={profile.email} data-templates={JSON.stringify(Object.fromEntries(templates.map((t) => [t.id, t.template])))}>
+      <div class="composer-head">
+        <div>
+          <p class="eyebrow">Email templates</p>
+          <h2 id="compose-title" class="mt-2 text-2xl font-semibold tracking-tight">Write your message</h2>
+          <p class="mt-2 text-sm text-muted">Choose a template, fill in the [brackets], then open it in your email app or copy it.</p>
+        </div>
+      </div>
+
+      <div class="mt-5 flex flex-wrap gap-2" role="group" aria-label="Email template">
+        {templates.map((t, i) => (
+          <button type="button" class="tpl-chip" data-tpl={t.id} aria-pressed={i === 0 ? 'true' : 'false'}>{t.title}</button>
+        ))}
+      </div>
+
+      <div class="mt-5 grid gap-3">
+        <label class="field">
+          <span class="eyebrow">To</span>
+          <input type="text" value={profile.email} readonly tabindex="-1" />
+        </label>
+        <label class="field">
+          <span class="eyebrow">Subject</span>
+          <input type="text" name="subject" value={general.subject} />
+        </label>
+        <label class="field">
+          <span class="eyebrow">Message</span>
+          <textarea name="body" rows="13">{general.body}</textarea>
+        </label>
+      </div>
+
+      <div class="mt-5 flex flex-wrap items-center gap-3">
+        <a class="btn-primary" data-send href={mailtoHref(profile.email, general)}>
+          <span set:html={icon('lucide:send')} />Open in email app
+        </a>
+        <button type="button" class="btn-ghost" data-copy-msg>
+          <span set:html={icon('lucide:copy')} /><span class="copy-msg-text" aria-live="polite">Copy message</span>
+        </button>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+      } catch {
+        return;
+      }
+      const label = btn.querySelector('.copy-text');
+      btn.classList.add('is-copied');
+      if (label) label.textContent = 'Copied';
+      setTimeout(() => {
+        btn.classList.remove('is-copied');
+        if (label) label.textContent = 'Copy';
+      }, 1800);
+    });
+  });
+
+  type Template = { subject: string; body: string };
+  const composer = document.querySelector<HTMLElement>('.composer');
+  if (composer) {
+    const email = composer.dataset.email ?? '';
+    const templates: Record<string, Template> = JSON.parse(composer.dataset.templates ?? '{}');
+    const subject = composer.querySelector<HTMLInputElement>('input[name="subject"]')!;
+    const body = composer.querySelector<HTMLTextAreaElement>('textarea[name="body"]')!;
+    const send = composer.querySelector<HTMLAnchorElement>('[data-send]')!;
+    const chips = [...composer.querySelectorAll<HTMLButtonElement>('[data-tpl]')];
+
+    const sync = () => {
+      send.href = `mailto:${email}?subject=${encodeURIComponent(subject.value)}&body=${encodeURIComponent(body.value)}`;
+    };
+    const pick = (id: string) => {
+      const t = templates[id];
+      if (!t) return;
+      subject.value = t.subject;
+      body.value = t.body;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.tpl === id)));
+      sync();
+    };
+
+    subject.addEventListener('input', sync);
+    body.addEventListener('input', sync);
+    chips.forEach((c) => c.addEventListener('click', () => pick(c.dataset.tpl ?? '')));
+
+    // Service cards are plain mailto links without JS; with JS they load the template into the composer.
+    document.querySelectorAll<HTMLAnchorElement>('[data-pick]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        pick(a.dataset.pick ?? '');
+        composer.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        const first = body.value.indexOf('[');
+        body.focus({ preventScroll: true });
+        if (first >= 0) body.setSelectionRange(first, body.value.indexOf(']', first) + 1);
+      });
+    });
+
+    const copyBtn = composer.querySelector<HTMLButtonElement>('[data-copy-msg]');
+    const copyLabel = composer.querySelector('.copy-msg-text');
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(`To: ${email}\nSubject: ${subject.value}\n\n${body.value}`);
+      } catch {
+        return;
+      }
+      if (copyLabel) copyLabel.textContent = 'Copied';
+      setTimeout(() => { if (copyLabel) copyLabel.textContent = 'Copy message'; }, 1800);
+    });
+  }
+</script>
+
+<style>
+  .service {
+    display: flex; flex-direction: column;
+    border: 1px solid var(--border); border-radius: 1rem; padding: 1.25rem;
+    background: var(--bg);
+  }
+  .service:hover { border-color: color-mix(in oklab, var(--accent) 45%, var(--border)); }
+  .service--ask { border-style: dashed; background: var(--subtle); }
+  .service-icon {
+    display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem;
+    background: color-mix(in oklab, var(--accent) 12%, var(--bg)); color: var(--accent);
+  }
+  .service-icon :global(svg) { width: 1.2rem; height: 1.2rem; }
+  .service-check { display: inline-flex; flex: none; margin-top: 0.2rem; color: var(--accent); }
+  .service-check :global(svg) { width: 0.95rem; height: 0.95rem; }
+  .service-cta {
+    margin-top: auto; padding-top: 1.25rem;
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    font-size: 0.875rem; font-weight: 500; text-decoration: none;
+  }
+  .service-cta :global(svg) { width: 0.95rem; height: 0.95rem; }
+  .service-cta:hover { text-decoration: underline; }
+
+  .composer {
+    border: 1px solid var(--border); border-radius: 1.25rem; padding: 1.25rem;
+    background: linear-gradient(160deg, color-mix(in oklab, var(--accent) 7%, var(--bg)), var(--bg) 55%);
+    box-shadow: 0 20px 50px -30px color-mix(in oklab, var(--accent) 50%, transparent);
+  }
+  @media (min-width: 640px) { .composer { padding: 2rem; } }
+  .tpl-chip {
+    border: 1px solid var(--border); border-radius: 999px; padding: 0.35rem 0.85rem;
+    background: var(--bg); color: var(--fg); font-size: 0.875rem; cursor: pointer;
+  }
+  .tpl-chip:hover { border-color: var(--accent); }
+  .tpl-chip[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .field { display: grid; gap: 0.35rem; }
+  .field input, .field textarea {
+    width: 100%; border: 1px solid var(--border); border-radius: 0.75rem; padding: 0.65rem 0.85rem;
+    background: var(--bg); color: var(--fg); font: inherit; font-size: 0.9375rem;
+  }
+  .field textarea { resize: vertical; min-height: 15rem; line-height: 1.55; }
+  .field input[readonly] { background: var(--subtle); color: var(--muted); }
+  .field input:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+  .btn-primary, .btn-ghost {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border-radius: 0.75rem; padding: 0.65rem 1.1rem; font-size: 0.9375rem; font-weight: 500;
+    text-decoration: none; cursor: pointer;
+  }
+  .btn-primary { background: var(--accent); color: var(--bg); border: 1px solid var(--accent); }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost { background: var(--bg); color: var(--fg); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); }
+  .btn-primary :global(svg), .btn-ghost :global(svg) { width: 1rem; height: 1rem; }
+
+  .contact { isolation: isolate; }
+  .contact-grid {
+    z-index: -1;
+    background-image:
+      linear-gradient(to right, var(--border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.55;
+    mask-image: radial-gradient(ellipse 70% 60% at 70% 40%, #000 20%, transparent 75%);
+  }
+
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid var(--border); border-radius: 999px;
+    background: color-mix(in oklab, var(--subtle) 80%, transparent);
+    padding: 0.3rem 0.85rem; font-size: 0.8125rem; color: var(--muted);
+    backdrop-filter: blur(6px);
+  }
+  .status-dot { position: relative; width: 0.5rem; height: 0.5rem; border-radius: 999px; background: #22c55e; }
+  .status-dot::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; background: inherit;
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .email-card {
+    display: flex; align-items: center; gap: 1rem;
+    border: 1px solid var(--border); border-radius: 1rem; padding: 1rem 1rem 1rem 1.125rem;
+    background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 9%, var(--bg)), var(--bg) 60%);
+    box-shadow: 0 1px 0 color-mix(in oklab, var(--fg) 4%, transparent), 0 12px 32px -18px color-mix(in oklab, var(--accent) 45%, transparent);
+  }
+  .email-icon, .channel-icon {
+    display: grid; place-items: center; flex: none; width: 2.75rem; height: 2.75rem; border-radius: 0.75rem;
+    background: color-mix(in oklab, var(--accent) 12%, var(--bg)); color: var(--accent);
+  }
+  .email-icon :global(svg), .channel-icon :global(svg) { width: 1.25rem; height: 1.25rem; }
+  .email-link {
+    display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-size: clamp(1.05rem, 2.4vw, 1.375rem); font-weight: 600; color: var(--fg); text-decoration: none;
+  }
+  .email-link:hover { color: var(--accent); }
+
+  .copy-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem; flex: none;
+    border: 1px solid var(--border); border-radius: 0.625rem; padding: 0.5rem 0.75rem;
+    background: var(--bg); color: var(--fg); font-size: 0.875rem; cursor: pointer;
+  }
+  .copy-btn:hover { border-color: var(--accent); }
+  .copy-btn :global(svg) { width: 1rem; height: 1rem; }
+  .copy-done { display: none; color: #16a34a; }
+  .copy-btn.is-copied .copy-idle { display: none; }
+  .copy-btn.is-copied .copy-done { display: inline-flex; }
+  @media (max-width: 420px) { .copy-text, .email-icon { display: none; } .email-card { gap: 0.75rem; } }
+
+  .channel {
+    display: flex; align-items: center; gap: 0.75rem; height: 100%;
+    border: 1px solid var(--border); border-radius: 0.875rem; padding: 0.75rem;
+    background: var(--bg); text-decoration: none;
+  }
+  .channel .channel-icon { width: 2.25rem; height: 2.25rem; border-radius: 0.625rem; }
+  .channel .channel-icon :global(svg) { width: 1.05rem; height: 1.05rem; }
+  .channel-arrow { margin-left: auto; color: var(--muted); flex: none; }
+  .channel-arrow :global(svg) { width: 1rem; height: 1rem; }
+  .channel:hover { border-color: var(--accent); }
+  .channel:hover .channel-arrow { color: var(--accent); transform: translate(2px, -2px); }
+
+  .fact-icon { display: inline-flex; color: var(--accent); }
+  .fact-icon :global(svg) { width: 1rem; height: 1rem; }
+
+  .portrait-wrap {
+    position: relative; justify-self: center; width: min(100%, 22rem);
+    aspect-ratio: 929 / 1250; display: flex; align-items: flex-end; justify-content: center;
+  }
+  @media (min-width: 1024px) { .portrait-wrap { width: min(100%, 26rem); } }
+  .portrait-glow {
+    position: absolute; inset: 12% 2% 0; border-radius: 2rem 2rem 1.25rem 1.25rem;
+    background:
+      radial-gradient(circle at 50% 28%, color-mix(in oklab, var(--accent) 55%, transparent), transparent 62%),
+      linear-gradient(180deg, color-mix(in oklab, var(--accent) 22%, var(--subtle)), var(--subtle));
+    border: 1px solid var(--border);
+  }
+  .portrait-ring {
+    position: absolute; left: 50%; top: 6%; width: 78%; aspect-ratio: 1; translate: -50% 0;
+    border-radius: 999px; border: 1px dashed color-mix(in oklab, var(--accent) 45%, transparent);
+  }
+  .portrait-wrap :global(picture) { position: relative; display: block; width: 88%; }
+  .portrait-wrap :global(.portrait-img) {
+    display: block; width: 100%; height: auto; max-height: 100%;
+    object-fit: cover; object-position: top; aspect-ratio: 929 / 1180;
+    filter: drop-shadow(0 18px 30px rgb(0 0 0 / 0.25));
+    mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
+  }
+  .portrait-badge {
+    position: absolute; left: -0.5rem; bottom: 12%;
+    display: flex; flex-direction: column; line-height: 1.25;
+    border: 1px solid var(--border); border-radius: 0.875rem; padding: 0.6rem 0.9rem;
+    background: color-mix(in oklab, var(--bg) 82%, transparent); backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.3);
+  }
+
+  @keyframes ping { 75%, 100% { transform: scale(2.4); opacity: 0; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { animation: rise 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    .reveal-delay { animation-delay: 120ms; }
+    .channel-arrow { transition: transform 150ms ease, color 150ms ease; }
+  }
+  @media (prefers-reduced-motion: reduce) { .status-dot::after { animation: none; } }
+  @media print { .contact-grid, .portrait-wrap { display: none; } }
+</style>

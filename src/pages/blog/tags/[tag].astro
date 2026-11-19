@@ -1,27 +1,51 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostCard from '../../../components/blog/PostCard.astro';
+import TagChip from '../../../components/blog/TagChip.astro';
+import SkillIcon from '../../../components/SkillIcon.astro';
 import { getPosts } from '../../../lib/post-queries';
-import { entrySlug } from '../../../lib/i18n';
+import { tagCounts, tagMeta } from '../../../lib/tags';
 export async function getStaticPaths() {
   const posts = await getPosts(true);
-  const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
-  return tags.map((tag) => ({ params: { tag }, props: { tag, posts: posts.filter((p) => p.data.tags.includes(tag)) } }));
+  const all = tagCounts(posts);
+  return all.map(({ id }) => ({
+    params: { tag: id },
+    props: { tag: id, posts: posts.filter((p) => p.data.tags.includes(id)), others: all.filter((t) => t.id !== id) },
+  }));
 }
-const { tag, posts } = Astro.props;
+const { tag, posts, others } = Astro.props;
+const m = tagMeta(tag);
 ---
-<BaseLayout title={`Posts tagged ${tag}`} description={`Posts by Youssef Alouani tagged ${tag}.`} path={`/blog/tags/${tag}`} twin={false}>
+<BaseLayout title={`Writing on ${m.label}`} description={`${m.blurb} Posts by Youssef Alouani tagged ${m.label}.`} path={`/blog/tags/${tag}`} twin={false}>
   <div class="container-page py-12 sm:py-16">
-    <div class="max-w-[70ch]">
-      <a href="/blog" class="text-sm">← Blog</a>
-      <h1 class="mt-6 text-3xl font-semibold tracking-tight">Tagged “{tag}”</h1>
-      <ul class="mt-8 divide-y divide-border border-y border-border">
-        {posts.map((p) => (
-          <li class="py-4">
-            <a href={p.data.external?.url ?? `/blog/${entrySlug(p.id)}`} class="font-medium">{p.data.title}</a>
-            <p class="text-sm text-muted"><time datetime={p.data.pubDate.toISOString().slice(0, 10)}>{p.data.pubDate.getUTCFullYear()}</time>{p.data.external && ' · on Medium'}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <a href="/blog" class="text-sm">← All posts</a>
+    <header class="tag-hero mt-6" style={`--h: ${m.hue}`}>
+      <span class="tag-hero__icon"><SkillIcon icon={m.icon} /></span>
+      <div>
+        <p class="eyebrow">Tag · {posts.length} post{posts.length === 1 ? '' : 's'}</p>
+        <h1 class="mt-1 text-3xl font-semibold tracking-tight sm:text-4xl">{m.label}</h1>
+        <p class="mt-2 text-muted">{m.blurb}</p>
+      </div>
+    </header>
+    <ul class="post-grid mt-10">
+      {posts.map((p) => <li><PostCard post={p} currentTag={tag} /></li>)}
+    </ul>
+    {others.length > 0 && (
+      <nav aria-labelledby="other-tags" class="mt-14">
+        <h2 id="other-tags" class="eyebrow">Other tags</h2>
+        <ul class="mt-3 flex flex-wrap gap-2">{others.map((t) => <li><TagChip tag={t.id} count={t.count} /></li>)}</ul>
+      </nav>
+    )}
   </div>
 </BaseLayout>
+
+<style>
+  .tag-hero { --tag: oklch(47% 0.13 var(--h)); display: flex; align-items: center; gap: 1.25rem; }
+  :global(:root[data-theme='dark']) .tag-hero { --tag: oklch(80% 0.1 var(--h)); }
+  .tag-hero__icon {
+    flex: none; display: grid; place-items: center; width: 4rem; height: 4rem; border-radius: 1rem; color: var(--tag);
+    background: color-mix(in oklch, var(--tag) 12%, transparent); border: 1px solid color-mix(in oklch, var(--tag) 30%, transparent);
+  }
+  .tag-hero__icon :global(.skill-icon) { width: 1.75rem; height: 1.75rem; }
+  .post-grid { list-style: none; padding: 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
+</style>

@@ -51,7 +51,7 @@ export function projectJsonLd(
   };
 }
 
-export function blogPostingJsonLd(post: { title: string; description: string; pubDate: Date; updatedDate?: Date }, url: string): object {
+export function blogPostingJsonLd(post: { title: string; description: string; pubDate: Date; updatedDate?: Date; tags?: readonly string[] }, url: string): object {
   return {
     '@context': CTX,
     '@type': 'BlogPosting',
@@ -60,6 +60,7 @@ export function blogPostingJsonLd(post: { title: string; description: string; pu
     url,
     datePublished: post.pubDate.toISOString().slice(0, 10),
     dateModified: (post.updatedDate ?? post.pubDate).toISOString().slice(0, 10),
+    ...(post.tags?.length ? { keywords: post.tags.join(', ') } : {}),
     author,
   };
 }

@@ -1,0 +1,64 @@
+---
+title: "10xJobs: search optimisation with segmentation"
+summary: "Matching jobs to profiles like a hash table: both are reduced to segment keys, so each job is only compared with the profiles in its bucket instead of every profile."
+area: backend
+kind: side
+company: en/10xjobs
+status: live
+featured: false
+confidentiality: public
+order: 51
+skills: [typescript, postgresql, data-pipelines]
+links: { demo: "https://10xjobs.vercel.app/" }
+media:
+  - { src: ../../../assets/experience/10xjobs/preferences.png, alt: "10xJobs preferences form for an AI Engineer profile: position, years of experience and seniority checkboxes", caption: "Profile answers become the segment keys a user subscribes to.", device: phone }
+  - { src: ../../../assets/experience/10xjobs/navigation.png, alt: "10xJobs navigation with Matches, Applications and Preferences", caption: "Users only ever see the matches from their own segments.", device: phone }
+cover: ../../../assets/projects/covers/10xjobs-search.jpg
+coverAlt: "Diagram of the hashing analogy: a job and a profile are both reduced to a segment key such as AI Engineer, Senior, Remote, EU, which points to one bucket; only the profiles in that bucket are compared"
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
+
+## Problem
+
+The naive matcher compares every new job with every published profile: N jobs × M profiles, and each comparison checks role, seniority, arrangement, places, contract and a whole tech stack. Most of those comparisons are pointless, a senior backend profile in Europe will never match a junior iOS job in the US, but they still cost time and, when a model is involved, money. The cost grows with both sides at once.
+
+## Constraints
+
+- **Exact results**: the optimisation must never drop a job that the full comparison would have matched.
+- **Cheap updates**: users edit profiles and new jobs arrive constantly; the index must update per record, not by rebuilding.
+- **Multi-valued profiles**: a profile can accept several seniorities, places or arrangements.
+
+## The hashing analogy
+
+A hash table does not search every slot: it computes a key from the item and goes straight to one bucket, and only items in that bucket are compared for equality. Matching works the same way.
+
+- **Hash function → segmentation.** The fields that must match exactly (role family, seniority, arrangement, region, contract) are reduced to a segment key, for example `ai-engineer | senior | remote | eu`.
+- **Buckets → segments.** A profile is registered in every segment its answers allow; a profile accepting mid and senior lives in both buckets. A job, once its fields are extracted, lands in its segment.
+- **Lookup → candidate set.** A new job only looks at the profiles in its bucket: a direct lookup instead of a scan.
+- **Collisions → the full check.** Sharing a bucket only means "possibly a match". The precise comparison (every answer, the rated tech stack) runs only on that small candidate set, the way a hash table still compares keys inside a bucket.
+- **Unknowns → wildcard buckets.** A post with seniority "Not stated" is placed so that it can still reach the profiles that accept it, rather than vanishing from every bucket. {/* CHECK: confirm how Not stated fields are segmented */}
+
+## Architecture
+
+<LayerDiagram
+  title="10xJobs segmentation"
+  desc="A typed job from the ingestion pipeline and every published profile are reduced to segment keys built from role family, seniority, arrangement, region and contract. The segment index maps each key to the profiles in it. A new job looks up its key, gets a small candidate set, and only those candidates go through the full check of every answer and the tech stack."
+  layers={[
+    { caption: 'Inputs', nodes: [{ label: 'Typed job', sub: 'from ingestion' }, { label: 'Published profiles', sub: 'answers · tech stack' }] },
+    { caption: 'Hash', nodes: [{ label: 'Segment key', sub: 'role · seniority · arrangement · region · contract', accent: true }] },
+    { caption: 'Buckets', nodes: [{ label: 'Segment index', sub: 'key → profiles', accent: true }] },
+    { caption: 'Compare', nodes: [{ label: 'Candidate set', sub: 'same bucket only' }, { label: 'Full check', sub: 'every answer · tech stack' }, { label: 'Matches' }] },
+  ]}
+/>
+{/* CHECK: exact key fields and where the index lives (PostgreSQL) are inferred */}
+
+<Gallery items={props.media} />
+
+## Key decisions
+
+1. **Segment on the fields that must match exactly.** Only hard filters go into the key; graded signals like the tech-stack ratings stay in the full check, so segmentation never changes the result, only the work.
+2. **Pay at write time, not at read time.** A profile is placed in its buckets when it is saved, so each new job costs one lookup plus a handful of comparisons, instead of M comparisons.
+3. **Coarse keys over perfect keys.** Like choosing a hash function, a key that is too fine fragments profiles across many buckets; a coarse key with a fast exact check inside the bucket was simpler and just as correct. {/* CHECK */}
+4. **Keep the exact check.** The bucket narrows; it never decides. That is what keeps the optimisation safe.

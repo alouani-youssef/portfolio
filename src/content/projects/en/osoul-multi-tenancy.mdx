@@ -1,0 +1,54 @@
+---
+title: "Osoul deep-dive: multi-tenant platform with owned provisioning"
+summary: "Custom onboarding and Osoul-owned tenant provisioning, with full isolation of data, identity and configuration between restaurant groups."
+area: platform
+kind: founder
+company: en/osoul
+parent: en/osoul
+status: live
+featured: false
+confidentiality: public
+order: 10
+skills: [nestjs, typeorm, postgresql, keycloak, oauth2-oidc, redis, token-session-design]
+media:
+  - { src: ../../../assets/projects/osoul/portal-dashboard.png, alt: "Osoul Portal dashboard for one venue: revenue, orders, average check, seat occupancy and guest visits, with the venue switcher blurred", caption: "Every Portal screen is scoped to one tenant and one venue. Personal data blurred.", device: desktop }
+cover: ../../../assets/projects/covers/osoul-multi-tenancy.jpg
+coverAlt: "Illustration contrasting data privacy, how data is collected and used, with data security, protecting it from attackers"
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
+
+Part of the [Osoul platform](/projects/osoul) case study.
+
+## Problem
+
+Osoul serves restaurant groups that compete with each other. Each group has its own venues, staff, menus, guests and revenue data, and none of it may ever be visible to another group, by a bug, a mis-scoped query or a misconfigured token. At the same time, onboarding a new group has to be fast and repeatable: a restaurant should not wait weeks to go live.
+
+## Constraints
+
+- **Full isolation**: data, identities, configuration and secrets are separated per tenant, not just filtered in the UI.
+- **Custom onboarding**: each group brings its own venues, floors, menus, POS/PMS and brand, so onboarding is guided rather than self-serve.
+- **Owned provisioning**: Osoul provisions tenants itself, so every tenant is created the same way and can be audited. {/* CHECK: confirm provisioning is internal-only */}
+- **One codebase**: isolation must come from the platform, not from forking the product per client.
+
+## Architecture
+
+<LayerDiagram
+  title="Osoul tenant provisioning and isolation"
+  desc="An Osoul operator runs custom onboarding, which calls the provisioning service. Provisioning creates the tenant's identity realm, its isolated data, and its configuration. At runtime, every request carries a token scoped to one tenant, and the API resolves the tenant before touching data."
+  layers={[
+    { caption: 'Onboarding', nodes: [{ label: 'Custom onboarding', sub: 'venues · floors · menus · POS' }, { label: 'Provisioning service', sub: 'owned by Osoul', accent: true }] },
+    { caption: 'Per tenant', nodes: [{ label: 'Identity', sub: 'Keycloak realm / org' }, { label: 'Data', sub: 'isolated in PostgreSQL' }, { label: 'Config & secrets', sub: 'integrations · branding' }] },
+    { caption: 'Runtime', nodes: [{ label: 'Tenant-scoped token' }, { label: 'Tenant resolution', sub: 'before any query', accent: true }, { label: 'Portal · Guest · Waiter apps' }] },
+  ]}
+/>
+{/* CHECK: isolation mechanism (schema, database or row-level) and Keycloak layout are inferred */}
+
+<Gallery items={props.media} />
+
+## Key decisions
+
+1. **Provisioning is a product, not a script.** Creating a tenant goes through one service that sets up identity, data and configuration together, so a tenant is never half-created.
+2. **Isolation is enforced below the application code.** The tenant is resolved from the token before any query runs, so a missing filter cannot leak another group's data. {/* CHECK */}
+3. **Onboarding stays guided.** Fine-dining groups need their floors, menus and integrations right on day one; a guided onboarding beats a sign-up form for that.

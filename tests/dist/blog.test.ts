@@ -42,3 +42,50 @@ describe('blog', () => {
     for (const t of tags) expect(exists(`${t}.html`), t).toBe(true);
   });
 });
+
+describe('blog tags and covers', () => {
+  const doc = readHtml('/blog');
+  it('gives every post a card with a cover, labelled tag chips and a lead card', () => {
+    const items = doc.querySelectorAll('.post-grid > li');
+    expect(items.length).toBeGreaterThanOrEqual(MEDIUM.length);
+    for (const li of items) {
+      expect(li.querySelector('.post-cover'), li.text).not.toBeNull();
+      expect(li.getAttribute('data-tags')).toBeTruthy();
+      expect(li.querySelector('.tag-chip .skill-icon')).not.toBeNull();
+    }
+    expect(doc.querySelectorAll('.post-card--featured')).toHaveLength(1);
+  });
+  it('shows tag counts in the filter bar', () => {
+    const all = doc.querySelector('.tag-filter[data-filter="all"]')!;
+    expect(all.text).toContain(String(doc.querySelectorAll('.post-grid > li').length));
+  });
+  it('tag pages show the label, blurb and only matching posts', () => {
+    const page = readHtml('/blog/tags/messaging');
+    expect(page.querySelector('h1')!.text).toBe('Messaging');
+    expect(page.querySelector('meta[name="description"]')!.getAttribute('content')).toContain('Brokers');
+    const cards = page.querySelectorAll('.post-grid > li');
+    expect(cards.length).toBe(2);
+    for (const c of cards) expect(c.querySelector('a.tag-chip[aria-current="page"][href="/blog/tags/messaging"]')).not.toBeNull();
+  });
+  it('posts get a hero cover, reading time and related posts by tag', () => {
+    const post = readHtml('/blog/virtualization-part-2');
+    expect(post.querySelector('.post-cover--hero')).not.toBeNull();
+    expect(post.querySelector('.eyebrow')!.text).toMatch(/\d+ min read/);
+    expect(post.querySelector('aside a[href*="the-philosophy-behind-virtualization"]')).not.toBeNull();
+  });
+});
+
+describe('broker posts', () => {
+  for (const [tag, url, label] of [
+    ['kafka', 'https://alouani-youssef.medium.com/apache-kafka-all-what-i-know-71babb86a9ac', 'Kafka'],
+    ['rabbitmq', 'https://alouani-youssef.medium.com/rabbitmq-understand-how-it-works-under-the-hood-895b74c37f3b', 'RabbitMQ'],
+  ] as const) {
+    it(`${label} is tagged ${tag} and messaging, with the broker logo on its cover`, () => {
+      const card = readHtml('/blog').querySelector(`a[href="${url}"]`)!.closest('li')!;
+      const chips = card.querySelectorAll('.post-card__tags a.tag-chip').map((a) => a.text.trim());
+      expect(chips).toEqual([label, 'Messaging']);
+      expect(card.querySelector('.post-cover__icon.skill-icon--brand')).not.toBeNull();
+      expect(readHtml(`/blog/tags/${tag}`).querySelector(`a[href="${url}"]`)).not.toBeNull();
+    });
+  }
+});

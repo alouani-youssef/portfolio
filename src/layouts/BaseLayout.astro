@@ -58,7 +58,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem('theme');}catch(
     <main id="main" class="flex-1" data-pagefind-body={noindex || !twin ? undefined : true}>
       <slot />
     </main>
-    <Footer />
+    <Footer path={path} />
     {cfToken && <script defer is:inline src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: cfToken })}></script>}
   </body>
 </html>

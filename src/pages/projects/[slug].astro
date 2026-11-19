@@ -3,6 +3,7 @@ import { render, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MetricList from '../../components/MetricList.astro';
 import StackChips from '../../components/StackChips.astro';
+import Figure from '../../components/Figure.astro';
 import { getProjects } from '../../lib/projects';
 import { entrySlug } from '../../lib/i18n';
 import { isPreview, placeholderViolations } from '../../lib/metrics';
@@ -33,6 +34,7 @@ const children = (await getProjects()).filter((p) => p.data.parent?.id === proje
       <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{d.title}</h1>
       <p class="mt-4 text-lg text-muted">{d.summary}</p>
     </header>
+    {d.media.length === 0 && <div class="mt-8 max-w-[72ch]"><Figure src={d.cover} alt={d.coverAlt} caption="" /></div>}
     <div class="case-body mt-10 max-w-[72ch] space-y-4 [&_h2]:mt-12 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1">
       <Content media={d.media} />
       <h2>Results</h2>

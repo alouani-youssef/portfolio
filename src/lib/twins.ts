@@ -8,6 +8,7 @@ import { getPosts } from './post-queries';
 import { isPreview } from './metrics';
 import { mdxToMarkdown, twinHref } from './markdown';
 import { getOss } from './oss';
+import { services } from '../data/services';
 
 const SITE = 'https://youssefalouani.com';
 
@@ -114,7 +115,10 @@ export async function buildTwins(): Promise<Twin[]> {
   }
 
   twins.push(page('/now', 'Now', [`Updated: ${profile.now.updated}`, list(profile.now.items)]));
-  twins.push(page('/contact', 'Contact', [list([`Email: ${profile.email}`, `LinkedIn: ${profile.links.linkedin}`, `GitHub: ${profile.links.github}`, `CV: ${SITE}/cv`])]));
+  twins.push(page('/contact', 'Contact', [list([`Email: ${profile.email}`, `LinkedIn: ${profile.links.linkedin}`, `GitHub: ${profile.links.github}`, `CV: ${SITE}/cv`]),
+    '## Services',
+    services.map((s) => `### ${s.title}\n\n${s.summary}\n\n${list(s.points)}`).join('\n\n'),
+  ]));
   twins.push(page('/cv', `${profile.name}: CV`, [
     profile.headline,
     profile.shortBio,

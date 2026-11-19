@@ -61,6 +61,7 @@ describe('experience', () => {
       expect(doc.querySelector('main header')!.text.includes('Side project'), slug).toBe(slug === '10xjobs');
       expect(doc.querySelectorAll('main h2').map((h) => h.text.trim())).toEqual([
         'Context', 'My part', 'Stack', 'Outcome', "What I'd do differently",
+        `Projects at ${company}`,
       ]);
     });
   }

@@ -1,6 +1,6 @@
 ---
-title: "Osoul deep-dive: recommendations that complete the meal"
-summary: Dish and beverage recommendations, pairings and meal-completion prompts in the Guest App, built on a menu data model designed for them.
+title: "Osoul deep-dive: recommendations and dynamic pricing"
+summary: Dish and beverage recommendations, pairings and meal-completion promos in the Guest App, plus event-based dynamic menu pricing, on one menu data model.
 area: ai
 kind: founder
 company: en/osoul
@@ -9,10 +9,12 @@ status: live
 featured: false
 confidentiality: public
 order: 12
-skills: [nestjs, postgresql, typeorm]
+skills: [recommendation-systems, nestjs, postgresql, typeorm, event-driven]
 media:
   - { src: ../../../assets/projects/osoul/guest-home.png, alt: "Osoul Guest App home: Start ordering, quick actions for the dish recommender, physical menu and reporting an issue, and Picked For You recommendations with Complete your meal and More like your favourites filters", caption: "Picked for you: complete the meal, or more like the guest's favourites.", device: phone }
   - { src: ../../../assets/projects/osoul/guest-pairings.png, alt: "Osoul Guest App item page: the selection with a beverage add-on and item total, dish pairings, drinks to go with it, and Add to cart", caption: "On a dish page: pairings and drinks to go with it.", device: phone }
+cover: ../../../assets/projects/covers/osoul-recommendations.jpg
+coverAlt: "Two Osoul Guest App screens: Picked For You recommendations and dish pairings with drinks"
 updatedAt: 2026-11-19
 ---
 import Gallery from '../../../components/Gallery.astro';
@@ -54,8 +56,13 @@ flowchart TB
 
 <Gallery items={props.media} />
 
+### Dynamic pricing
+
+Recommendations raise the ticket; dynamic pricing fills the room when it would otherwise be empty. Pricing rules are attached to the menu and triggered by events such as the time of service, occupancy or a special night, and they feed meal-completion promos so a guest sees an offer at the moment it matters. {/* CHECK: inferred, confirm the event sources and how promos are attributed */}
+
 ## Key decisions
 
 1. **Model the menu for recommendations first.** A flat list of dishes can only recommend "popular". Pairings, courses and beverage links are part of the menu data, so the service can reason about what completes a meal. {/* CHECK: confirm menu data model */}
 2. **Recommend in context, not on a separate page.** Suggestions appear where the decision happens: on the home screen as "complete your meal", and on a dish page as pairings and drinks to go with it.
 3. **Start from the order, then the guest.** The current order is the strongest signal at the table; favourites refine it for returning guests. {/* CHECK: confirm signal ordering */}
+4. **Price by event, not by hand.** Dynamic pricing applies time- and event-based rules (a quiet service, a match night, a set menu) to the same menu model, so promos and recommendations always show the price the guest will pay. {/* CHECK: confirm pricing triggers */}

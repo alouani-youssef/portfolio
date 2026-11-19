@@ -6,18 +6,24 @@ import ExpertiseCards from '../components/ExpertiseCards.astro';
 import ClientGroups from '../components/ClientGroups.astro';
 import CoreStack from '../components/CoreStack.astro';
 import Recommendation from '../components/Recommendation.astro';
+import { initials, avatarHue } from '../lib/recommendations';
 import { profile } from '../data/profile';
 import { entrySlug } from '../lib/i18n';
 import { getPosts } from '../lib/post-queries';
 import { profilePageJsonLd } from '../lib/jsonld';
 import { getOss } from '../lib/oss';
+import { getProjectGroups } from '../lib/projects';
+import ProjectCard from '../components/ProjectCard.astro';
 import headshot from '../assets/media/headshot.png';
 
 const [lead, rest] = profile.headline.split(/(?<=Osoul\.)\s/);
 const recs = await getCollection('recommendations');
 const pull = recs.find((r) => r.id === 'mohammad-al-ahmad')!;
+const others = recs.filter((r) => r !== pull).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 const featured = (await getCollection('projects', (p) => p.data.featured && p.id.startsWith('en/'))).sort((a, b) => a.data.order - b.data.order);
 const oss = await getOss();
+const groups = await getProjectGroups();
+const projectCount = groups.reduce((n, g) => n + g.projects.length, 0);
 const posts = (await getPosts(false))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
@@ -30,6 +36,7 @@ const posts = (await getPosts(false))
       <p class="mt-4 max-w-[48ch] text-lg text-muted sm:text-xl">{rest}</p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a href="/contact" class="rounded-md bg-fg px-4 py-2 text-sm font-medium text-bg no-underline hover:opacity-90">Get in touch</a>
+        <a href="/projects" class="rounded-md border border-border px-4 py-2 text-sm font-medium text-fg no-underline hover:border-accent">See all projects</a>
         <a href="/cv" class="rounded-md border border-border px-4 py-2 text-sm font-medium text-fg no-underline hover:border-accent">Read the CV</a>
       </div>
     </div>
@@ -47,17 +54,29 @@ const posts = (await getPosts(false))
     <section class="container-page py-10" aria-labelledby="featured">
       <div class="flex items-baseline justify-between">
         <h2 id="featured" class="text-xl font-semibold">Featured case studies</h2>
-        <a href="/projects" class="text-sm">All projects →</a>
+        <a href="/projects" class="text-sm">All {projectCount} projects →</a>
       </div>
       <ul class="mt-6 grid gap-4 md:grid-cols-3">
-        {featured.map((p) => (
-          <li class="card featured-project">
-            <p class="eyebrow">{p.data.kind === 'founder' ? 'Flagship' : p.data.area.toUpperCase()}</p>
-            <h3 class="mt-2 font-semibold"><a href={`/projects/${entrySlug(p.id)}`} class="text-fg no-underline hover:text-accent">{p.data.title}</a></h3>
-            <p class="mt-2 text-sm text-muted">{p.data.summary}</p>
-          </li>
-        ))}
+        {featured.map((p) => <li class="featured-project"><ProjectCard project={p} /></li>)}
       </ul>
+      <div class="mt-8">
+        <h3 class="text-sm font-semibold">All {projectCount} projects, by company</h3>
+        <ul class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {groups.map((g) => (
+            <li>
+              <a href={`/projects#${g.anchor}`} class="card flex items-center gap-3 !py-3 no-underline hover:border-accent">
+                {g.role ? <Image src={g.role.data.logo} alt="" width={64} height={64} class="h-8 w-8 flex-none rounded-lg border border-border bg-white object-contain" /> : <span class="flex h-8 w-8 flex-none items-center justify-center rounded-lg border border-border text-xs text-muted" aria-hidden="true">OSS</span>}
+                <span class="min-w-0 flex-1">
+                  <span class="block font-medium text-fg">{g.role ? (g.role.data.alias?.replace(/\s*AXS$/, '') ?? g.role.data.company) : 'Open source and independent'}</span>
+                  <span class="block truncate text-xs text-muted">{g.projects.map((p) => p.data.title.replace(/^.*?:\s*/, '')).slice(0, 3).join(' · ')}</span>
+                </span>
+                <span class="text-sm text-muted">{g.projects.length}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a href="/projects" class="mt-4 inline-block text-sm">Browse all projects →</a>
+      </div>
     </section>
   )}
 
@@ -81,8 +100,27 @@ const posts = (await getPosts(false))
 
   <div class="container-page py-10"><ClientGroups /></div>
 
-  <section class="container-page py-10" aria-label="Recommendation">
-    <div class="max-w-[70ch]"><Recommendation rec={pull} size="lg" /></div>
+  <section class="container-page py-10" aria-labelledby="recs-h">
+    <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+      <h2 id="recs-h" class="text-xl font-semibold">What people I worked with say</h2>
+      <a href="/about#recommendations" class="text-sm">All {recs.length} recommendations →</a>
+    </div>
+    <div class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-stretch">
+      <Recommendation rec={pull} size="lg" />
+      <ul class="rec-others" aria-label="Also recommended by">
+        {others.map((r) => (
+          <li>
+            <a href="/about#recommendations" class="rec-other" style={`--h: ${avatarHue(r.data.author)}`}>
+              <span class="rec-other__avatar" aria-hidden="true">{initials(r.data.author)}</span>
+              <span class="min-w-0">
+                <span class="block font-medium">{r.data.author}</span>
+                <span class="block text-sm text-muted">“{r.data.highlight ?? r.data.title}”</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>
 
   {posts.length > 0 && (
@@ -102,3 +140,19 @@ const posts = (await getPosts(false))
     </section>
   )}
 </BaseLayout>
+
+<style>
+  .rec-others { list-style: none; padding: 0; display: grid; gap: 0.75rem; align-content: start; }
+  @media (min-width: 640px) and (max-width: 1023px) { .rec-others { grid-template-columns: repeat(2, 1fr); } }
+  .rec-other {
+    --tone: oklch(52% 0.12 var(--h)); --tone-bg: oklch(93% 0.04 var(--h));
+    display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1rem; border: 1px solid var(--border); border-radius: 0.875rem;
+    color: var(--fg); text-decoration: none; line-height: 1.35;
+  }
+  :global(:root[data-theme='dark']) .rec-other { --tone: oklch(80% 0.1 var(--h)); --tone-bg: oklch(30% 0.05 var(--h)); }
+  .rec-other:hover { border-color: var(--accent); }
+  .rec-other__avatar {
+    flex: none; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%;
+    font-size: 0.75rem; font-weight: 600; color: var(--tone); background: var(--tone-bg);
+  }
+</style>

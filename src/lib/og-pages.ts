@@ -3,6 +3,7 @@ import { entrySlug } from './i18n';
 import { getRoles } from './experience';
 import { getProjects } from './projects';
 import { getPosts } from './post-queries';
+import { tagMeta } from './tags';
 
 export interface OgPage { slug: string; title: string; subtitle?: string }
 
@@ -29,6 +30,6 @@ export async function getOgPages(): Promise<OgPage[]> {
     ...(await getRoles()).map((r) => ({ slug: `experience/${entrySlug(r.id)}`, title: r.data.company, subtitle: `${r.data.role} · ${r.data.period}` })),
     ...(await getProjects()).map((p) => ({ slug: `projects/${entrySlug(p.id)}`, title: p.data.title, subtitle: clip(p.data.summary) })),
     ...posts.filter((p) => !p.data.external).map((p) => ({ slug: `blog/${entrySlug(p.id)}`, title: p.data.title, subtitle: clip(p.data.description) })),
-    ...tags.map((t) => ({ slug: `blog/tags/${t}`, title: `Posts tagged “${t}”` })),
+    ...tags.map((t) => ({ slug: `blog/tags/${t}`, title: `Writing on ${tagMeta(t).label}`, subtitle: tagMeta(t).blurb })),
   ];
 }

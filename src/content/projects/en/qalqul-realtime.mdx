@@ -1,0 +1,54 @@
+---
+title: "Qalqul: stateless migration, real-time systems and task dispatching"
+summary: "Moving Qalqul's services to stateless, horizontally scaled processes with real-time messaging, a task dispatcher, and the infrastructure behind them."
+area: platform
+kind: employer
+company: en/qalqul
+status: shipped
+featured: false
+confidentiality: architecture-only
+order: 42
+skills: [nodejs, typescript, websockets, redis, rabbitmq, docker-compose, nginx]
+media:
+  - { src: ../../../assets/experience/qalqul/tickets.png, alt: "Qalqul ticketing dashboard with open, overdue and unassigned counts, a performance chart, and tickets by pipeline stage, channel and priority", caption: "Tickets, counts and queues update live for every agent.", device: desktop }
+  - { src: ../../../assets/experience/qalqul/calls.png, alt: "Qalqul new-interaction dialog with a call queue selector and a phone dial pad over the ticketing dashboard", caption: "Interactions are dispatched to queues and agents in real time.", device: desktop }
+cover: ../../../assets/projects/covers/qalqul-realtime.jpg
+coverAlt: "Qalqul ticketing dashboard with live counts and charts by pipeline stage, channel and priority"
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
+
+## Problem
+
+Qalqul's services kept sessions and connections in memory, which tied each user to one process: scaling meant bigger servers, and a restart dropped live conversations. As clients grew, the contact centre also needed to dispatch work (conversations, calls, tickets) to the right agent in real time, and the infrastructure had to keep up. {/* CHECK: starting point inferred */}
+
+## Constraints
+
+- **No dropped conversations**: deployments and restarts must not cut agents or customers off.
+- **Real time**: messages, ticket changes and agent states appear instantly across many agents.
+- **Fair dispatching**: tasks go to available, skilled agents, with no task lost or assigned twice.
+- **Small team**: infrastructure has to be simple to run and repeat for each client.
+
+## Architecture
+
+<LayerDiagram
+  title="Qalqul stateless real-time platform"
+  desc="Stateless API and WebSocket processes run behind a load balancer. Sessions and presence live in Redis, and a pub/sub layer fans real-time events out across processes. A task dispatcher pulls conversations, calls and tickets from queues and assigns them to available agents."
+  layers={[
+    { caption: 'Edge', nodes: [{ label: 'Load balancer', sub: 'Nginx' }] },
+    { caption: 'Stateless services', nodes: [{ label: 'API processes' }, { label: 'WebSocket gateways', sub: 'real time', accent: true }] },
+    { caption: 'Shared state', nodes: [{ label: 'Sessions & presence', sub: 'Redis' }, { label: 'Pub/sub fan-out' }, { label: 'Task queues' }] },
+    { caption: 'Dispatching', nodes: [{ label: 'Task dispatcher', sub: 'skills · availability', accent: true }, { label: 'Agents' }] },
+  ]}
+/>
+{/* CHECK: Redis, RabbitMQ and Nginx usage inferred; confirm */}
+
+<Gallery items={props.media} />
+
+## Key decisions
+
+1. **State out of the process.** Sessions, presence and connection routing moved to shared stores, so any process can serve any user.
+2. **Fan out through pub/sub.** A WebSocket gateway publishes once, and every gateway with a subscriber delivers.
+3. **One dispatcher, explicit queues.** Assignment is centralised so a task is never given to two agents.
+4. **Repeatable infrastructure.** Each client deployment is the same set of services, configured, not hand-built.

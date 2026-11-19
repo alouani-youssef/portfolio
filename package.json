@@ -14,7 +14,8 @@
     "test:unit": "vitest run --project unit",
     "test:dist": "vitest run --project dist",
     "astro": "astro",
-    "media": "node scripts/redact-media.mjs"
+    "media": "node scripts/redact-media.mjs",
+    "covers": "node scripts/build-covers.mjs"
   },
   "dependencies": {
     "astro": "^7.4.13"

@@ -3,17 +3,41 @@ import type { HTMLElement, Node } from 'node-html-parser';
 import { readHtml, listHtmlPages } from './helpers';
 
 const CASES = ['osoul', 'saudi-stt', 'customer-voice', 'ai-stones', 'archio', 'finamaze-kyc'] as const;
+const COMPANY_PROJECTS = [
+  ['osoul', ['osoul-multi-tenancy', 'osoul-recommendations', 'osoul-server-side-tracking']],
+  ['axelerated', ['saudi-stt', 'customer-voice', 'sowtek-omnichannel-chat', 'sowtek-voip', 'sowtek-flowbuilder']],
+  ['finamaze', ['finamaze-kyc', 'finamaze-keycloak', 'finamaze-migration']],
+  ['qalqul', ['qalqul-botpress', 'qalqul-nlu', 'qalqul-realtime']],
+  ['p-10xjobs', ['10xjobs-ingestion', '10xjobs-search']],
+] as const;
 const H2 = ['Problem', 'Constraints', 'Architecture', 'Key decisions', 'Results', 'Stack and links'];
 
 describe('projects index', () => {
   it('links every case study with Osoul first as flagship', () => {
     const doc = readHtml('/projects');
     const hrefs = [...new Set(doc.querySelectorAll('main a[href^="/projects/"]').map((a) => a.getAttribute('href')))];
-    expect(hrefs).toEqual(CASES.map((c) => `/projects/${c}`));
+    expect(hrefs[0]).toBe('/projects/osoul');
+    for (const slug of [...CASES, ...COMPANY_PROJECTS.flatMap(([, s]) => s)]) expect(hrefs, slug).toContain(`/projects/${slug}`);
     expect(doc.querySelector('main a[href="/projects/osoul"]')!.text).toContain('Flagship');
   });
-  it('home features the three case studies', () => {
-    expect(readHtml('/').querySelectorAll('.featured-project')).toHaveLength(3);
+  it('gives every project card its own cover with alt text', () => {
+    const imgs = readHtml('/projects').querySelectorAll('main .project-card img');
+    expect(imgs.length).toBe(21);
+    const names = imgs.map((i) => i.getAttribute('src')!.split('/').pop()!.split('.')[0]);
+    expect(new Set(names).size, names.join(', ')).toBe(imgs.length);
+    for (const img of imgs) expect(img.getAttribute('alt')?.trim()).toBeTruthy();
+  });
+  it('groups projects by company', () => {
+    const doc = readHtml('/projects');
+    for (const [company, slugs] of COMPANY_PROJECTS) {
+      for (const slug of slugs) expect(doc.querySelector(`#${company} a[href="/projects/${slug}"]`), `${company}/${slug}`).not.toBeNull();
+    }
+  });
+  it('home features the three case studies and links every company group', () => {
+    const home = readHtml('/');
+    expect(home.querySelectorAll('.featured-project')).toHaveLength(3);
+    for (const [company] of COMPANY_PROJECTS) expect(home.querySelector(`main a[href="/projects#${company}"]`), company).not.toBeNull();
+    expect(home.querySelectorAll('main a[href="/projects"]').length).toBeGreaterThan(0);
   });
 });
 
@@ -56,13 +80,33 @@ describe.each(CASES)('/projects/%s', (slug) => {
   });
 });
 
-it('image counts match the media plan', () => {
+describe.each(COMPANY_PROJECTS.flatMap(([, s]) => s).filter((s) => s.includes('-') && !['saudi-stt', 'customer-voice', 'finamaze-kyc', 'osoul-recommendations', '10xjobs-search'].includes(s)))('/projects/%s', (slug) => {
+  const doc = readHtml(`/projects/${slug}`);
+  it('follows the case-study template with an accessible diagram', () => {
+    expect(doc.querySelectorAll('main h2').map((h) => h.text.trim())).toEqual(H2);
+    expect(doc.querySelector('svg[role="img"] title')?.text.trim()).toBeTruthy();
+    for (const img of doc.querySelectorAll('main img')) expect(img.getAttribute('alt')?.trim()).toBeTruthy();
+  });
+});
+
+it('10xjobs search explains segmentation through the hashing analogy', () => {
+  const doc = readHtml('/projects/10xjobs-search');
+  expect(doc.querySelectorAll('main h2').map((h) => h.text.trim())).toEqual(['Problem', 'Constraints', 'The hashing analogy', 'Architecture', 'Key decisions', 'Results', 'Stack and links']);
+  expect(doc.querySelector('svg[role="img"] title')?.text.trim()).toBeTruthy();
+});
+
+it('10xjobs ingestion covers every pipeline stage', () => {
+  const svg = readHtml('/projects/10xjobs-ingestion').querySelector('svg[role="img"]')!.text;
+  for (const stage of ['Collection', 'Preprocessing', 'Processing', 'Matching']) expect(svg).toContain(stage);
+});
+
+it('image counts match the media plan (projects without screenshots show their cover)', () => {
   const count = (slug: string) => readHtml(`/projects/${slug}`).querySelectorAll('main picture').length;
   expect(count('osoul')).toBe(4);
   expect(count('saudi-stt')).toBe(1);
-  expect(count('customer-voice')).toBe(0);
-  expect(count('ai-stones')).toBe(0);
-  expect(count('archio')).toBe(0);
+  expect(count('customer-voice')).toBe(1);
+  expect(count('ai-stones')).toBe(1);
+  expect(count('archio')).toBe(1);
   expect(count('finamaze-kyc')).toBe(2);
 });
 

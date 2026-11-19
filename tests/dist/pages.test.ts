@@ -47,8 +47,10 @@ describe('home', () => {
     expect(byName('Saudi National Bank').querySelector('img[alt="Saudi National Bank logo"]')).not.toBeNull();
     expect(byName('Atlas Group').classList.contains('client-tile--dark')).toBe(true);
   });
-  it('shows exactly one recommendation pull quote', () => {
+  it('shows exactly one recommendation pull quote, with the others linking to the full list', () => {
     expect(doc.querySelectorAll('main blockquote')).toHaveLength(1);
+    expect(doc.querySelector('main blockquote mark')!.text).toBe('thinks like an architect');
+    expect(doc.querySelectorAll('.rec-others a[href="/about#recommendations"]')).toHaveLength(2);
   });
   it('shows the core stack strip with icons, linking to all skills', () => {
     const section = doc.querySelector('section[aria-labelledby="core-stack-h"]')!;
@@ -76,7 +78,10 @@ describe('about', () => {
     for (const q of quotes) {
       const fig = q.parentNode;
       expect(fig!.querySelector('a[href*="linkedin.com"]')).not.toBeNull();
+      expect(fig!.querySelector('.rec__avatar')!.text.trim()).toMatch(/^[A-Z]{2}$/);
     }
+    expect(doc.querySelector('#recommendations .rec--lg')).not.toBeNull();
+    expect(doc.querySelector('#recommendations a.rec__role[href="/experience/qalqul"]')).not.toBeNull();
   });
   it('has a 6–8 item FAQ', () => {
     const items = doc.querySelectorAll('#faq details');

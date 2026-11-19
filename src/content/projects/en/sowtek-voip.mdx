@@ -1,0 +1,51 @@
+---
+title: "Sowtek: VoIP, PBX processing and sentiment detection"
+summary: "Backend for Sowtek's call centre on Asterisk: PBX event processing, call recording pipelines and sentiment detection on transcribed calls."
+area: backend
+kind: employer
+company: en/axelerated
+status: shipped
+featured: false
+confidentiality: architecture-only
+order: 21
+skills: [nestjs, python, fastapi, whisper, zero-shot-classification, event-driven, websockets]
+media:
+  - { src: ../../../assets/projects/saudi-stt/live-transcript.png, alt: "Live call screen in Arabic: an incoming-call panel and a real-time transcript where the customer says their order has not arrived, the assistant calls the track_order tool, and answers that the order is out with the courier", caption: "A live call: PBX events, transcript and assistant in the agent workspace (demo data).", device: desktop }
+cover: ../../../assets/projects/covers/sowtek-voip.jpg
+coverAlt: "Sowtek live call panel in Arabic: an incoming call in progress with an audio waveform"
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
+
+## Problem
+
+Sowtek's contact centres run their calls on Asterisk. The PBX emits a constant stream of low-level events (channels, bridges, queues, hang-ups, recordings) that mean nothing to an agent or a supervisor until they are turned into calls, queues and outcomes. Supervisors also wanted to know how calls went, not just how long they lasted.
+
+## Constraints
+
+- **PBX events are noisy**: one call is dozens of events across channels and bridges, sometimes out of order. {/* CHECK */}
+- **Real time**: agents and supervisors see calls, queues and agent states live.
+- **Saudi dialect**: sentiment needs reliable transcripts first, from the [Saudi-dialect speech-to-text](/projects/saudi-stt) model.
+- **On-premise options**: government clients run the stack inside their own networks.
+
+## Architecture
+
+<LayerDiagram
+  title="Sowtek VoIP processing"
+  desc="Asterisk emits PBX events and call recordings. An event processor turns raw events into calls, queue states and agent states and pushes them to agent and supervisor screens. Recordings go through the Saudi-dialect speech-to-text model, then sentiment detection, and results are attached to the call and the customer profile."
+  layers={[
+    { caption: 'Telephony', nodes: [{ label: 'Asterisk PBX', sub: 'events · recordings' }, { label: 'FlowBuilder', sub: 'IVR · queues' }] },
+    { caption: 'Processing', nodes: [{ label: 'PBX event processor', sub: 'events → calls', accent: true }, { label: 'Speech-to-text', sub: 'Saudi dialect' }, { label: 'Sentiment detection', accent: true }] },
+    { caption: 'Product', nodes: [{ label: 'Agent workspace', sub: 'live calls' }, { label: 'Supervisor dashboards' }, { label: 'Customer profile' }] },
+  ]}
+/>
+{/* CHECK: AMI/ARI choice and sentiment model are not stated */}
+
+<Gallery items={props.media} />
+
+## Key decisions
+
+1. **Turn PBX events into domain events early.** Everything downstream works with calls, queues and agents, never with raw Asterisk channels.
+2. **Transcribe, then classify.** Sentiment runs on dialect-aware transcripts, so it understands what the customer actually said.
+3. **Calls join the customer's history.** A call, its transcript and its sentiment sit next to the customer's chats and tickets.

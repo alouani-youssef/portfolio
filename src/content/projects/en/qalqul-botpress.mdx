@@ -1,0 +1,50 @@
+---
+title: "Qalqul: Botpress integration"
+summary: "Integrating Botpress v12 into Qalqul's contact-centre suite, so bots, human agents and tickets share one conversation and hand-off path."
+area: ai
+kind: employer
+company: en/qalqul
+status: shipped
+featured: false
+confidentiality: architecture-only
+order: 40
+skills: [botpress, typescript, nodejs, websockets, chat-widgets]
+media:
+  - { src: ../../../assets/experience/qalqul/contact-profile.png, alt: "Qalqul contact profile with demographic and geographic data and histories for calls, SMS, email, discussions, leads and tickets", caption: "Bot conversations land in the same contact history as calls, emails and tickets.", device: desktop }
+cover: ../../../assets/projects/covers/qalqul-botpress.jpg
+coverAlt: "Diagram: a chat where a bot answers then hands off to an agent, next to the Qalqul conversation layer routing to Botpress and an agent queue"
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
+
+## Problem
+
+Qalqul's clients, banks, insurers, healthcare and retail, wanted bots on their channels that could answer the routine questions and hand the rest to an agent with the context intact. Botpress v12 gave a strong bot runtime, but on its own it was a separate product next to the contact centre.
+
+## Constraints
+
+- **Hand-off without loss**: an agent picking up a bot conversation sees the whole exchange and what the bot understood.
+- **Client-specific understanding**: Arabic, French and Darija, with each client's own intents. {/* CHECK: languages */}
+- **Embedded everywhere**: the same bots run in web widgets, mobile SDKs and messaging channels.
+
+## Architecture
+
+<LayerDiagram
+  title="Botpress inside Qalqul"
+  desc="Messages from chat widgets, SDKs and channels reach the Qalqul conversation layer, which routes them to Botpress v12. Botpress uses Qalqul's NLU engines for understanding. When the bot hands off, the conversation moves to an agent queue with its history, and outcomes are written to the contact profile and tickets."
+  layers={[
+    { caption: 'Entry', nodes: [{ label: 'React chat widgets' }, { label: 'Browser & Kotlin SDKs' }, { label: 'Channels' }] },
+    { caption: 'Conversation', nodes: [{ label: 'Qalqul conversation layer', sub: 'WebSockets', accent: true }] },
+    { caption: 'Bots & agents', nodes: [{ label: 'Botpress v12', sub: 'core and modules', accent: true }, { label: 'NLU engines' }, { label: 'Agent hand-off', sub: 'queues · tickets' }] },
+  ]}
+/>
+{/* CHECK: integration points in Botpress core */}
+
+<Gallery items={props.media} />
+
+## Key decisions
+
+1. **Bots are participants, not a separate product.** A bot is one more participant in a Qalqul conversation, so hand-off is a routing decision, not a migration.
+2. **Own the understanding.** Botpress calls Qalqul's [NLU engines](/projects/qalqul-nlu) for intents and entities.
+3. **Work in Botpress core where needed.** Some integration needed changes in Botpress v12 itself, not just a plugin.

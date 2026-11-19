@@ -1,0 +1,56 @@
+---
+title: "10xJobs: job ingestion pipeline"
+summary: "Collection, preprocessing, type-safe LLM extraction and matching: the pipeline that turns raw job posts into matches for each user's published profile."
+area: ai
+kind: side
+company: en/10xjobs
+status: live
+featured: false
+confidentiality: public
+order: 50
+skills: [typescript, nodejs, postgresql, data-pipelines, embeddings]
+links: { demo: "https://10xjobs.vercel.app/" }
+media:
+  - { src: ../../../assets/experience/10xjobs/job-detail.png, alt: "10xJobs job detail for an AI Engineer post on LinkedIn, with role, seniority, arrangement, places, contract type, engagement and salary fields, several marked Not stated", caption: "The output of the pipeline: typed fields extracted from the post, with Not stated instead of a guess.", device: phone }
+  - { src: ../../../assets/experience/10xjobs/tech-stack.png, alt: "10xJobs tech-stack ratings from 1 (learning) to 5 (expert) for FastAPI, Claude Code and Data Pipeline", caption: "What the matcher compares against: the user's rated tech stack.", device: phone }
+cover: ../../../assets/projects/covers/10xjobs-ingestion.jpg
+coverAlt: "Data ingestion pipeline diagram: streaming, CDC and batch sources flow through raw and curated stages into data science, AI/ML and analytics consumers"
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
+
+## Problem
+
+Job posts are written for humans: free text, every board with its own format, the same job reposted on several boards, and the facts an engineer filters on (seniority, remote or not, where, contract, salary, stack) buried in prose or missing. To match posts to profiles automatically, every post first has to become a clean, typed record, and every step has a cost: each scraped post, each LLM call and each comparison is paid for.
+
+## Constraints
+
+- **Cost per post**: scraping and LLM calls are the main costs, so nothing is processed twice and nothing is sent to an LLM that a cheaper step can handle.
+- **Type safety end to end**: the matcher must never see a field it cannot trust, so model output is validated against a schema, not parsed loosely.
+- **No invented facts**: if a post does not state the seniority or salary, the record says so; a guess would create false matches.
+- **Freshness**: new posts should reach users while they are still open.
+
+## Architecture
+
+<LayerDiagram
+  title="10xJobs ingestion pipeline"
+  desc="Collection: Apify actors pull new posts from job boards on a schedule. Preprocessing: posts are normalised, cleaned and deduplicated by a hash of their normalised content. Processing: an LLM extracts the job's fields into a typed schema, validated before anything is stored, with unknowns kept as Not stated. Matching: each typed job is matched against the published profiles in its segment, and matches are shown to users."
+  layers={[
+    { caption: '1 · Collection', nodes: [{ label: 'Apify actors', sub: 'job boards · schedules' }, { label: 'Raw posts', sub: 'stored as received' }] },
+    { caption: '2 · Preprocessing', nodes: [{ label: 'Normalise & clean', sub: 'text · places · titles' }, { label: 'Deduplicate', sub: 'content hash', accent: true }] },
+    { caption: '3 · Processing', nodes: [{ label: 'LLM extraction', sub: 'structured output' }, { label: 'Schema validation', sub: 'type-safe record', accent: true }] },
+    { caption: '4 · Matching', nodes: [{ label: 'Segment lookup', sub: 'see search optimisation' }, { label: 'Profile checks', sub: 'every answer · tech stack' }, { label: 'Matches', sub: 'per user' }] },
+  ]}
+/>
+{/* CHECK: schedule, dedup key, schema library and LLM provider are not stated */}
+
+<Gallery items={props.media} />
+
+## Key decisions
+
+1. **Four stages with a stored output each.** Collection, preprocessing, processing and matching each write their result, so a failure or a prompt change re-runs one stage, not the whole pipeline, and no post is scraped or sent to the LLM twice.
+2. **Cheap steps before the LLM.** Normalisation and deduplication run first; a post reposted on three boards costs one LLM call, not three.
+3. **The LLM fills a schema; the schema decides.** The model returns structured output for a typed job record, which is validated before it is stored. Output that fails validation is retried or rejected, never patched by hand in the matcher. {/* CHECK: retry policy */}
+4. **"Not stated" is a value.** Missing facts are explicit, so the matcher can treat them deliberately instead of trusting a hallucinated field.
+5. **Matching is exact on what the user published.** A job must satisfy every answer on the profile, and jobs needing tech outside the user's rated stack are skipped. How that stays fast is the [search optimisation](/projects/10xjobs-search).

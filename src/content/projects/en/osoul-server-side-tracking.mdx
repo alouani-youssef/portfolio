@@ -1,0 +1,55 @@
+---
+title: "Osoul deep-dive: server-side tracking and CAPI sync"
+summary: "A tracking service built on the open-source tracking kit, turning guest events into signed server-side Conversions API events for ad-audience optimisation."
+area: backend
+kind: founder
+company: en/osoul
+parent: en/osoul
+status: live
+featured: false
+confidentiality: public
+order: 15
+skills: [go, gin, typescript, hmac-signing, event-driven, privacy-retention]
+links: { repo: "https://github.com/alouani-youssef/tracker" }
+media:
+  - { src: ../../../assets/oss/tracking-kit/illustration.jpeg, alt: "Illustration of server-side tracking: a browser window sends events to a secured server and database, which feed analytics charts and ad platforms", caption: "Events go from the apps to Osoul's own server first, then to analytics and ad platforms.", device: desktop }
+cover: ../../../assets/projects/covers/osoul-server-side-tracking.jpg
+coverAlt: "Illustration of server-side tracking: browser events go to a secured server, then to analytics and ad platforms"
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
+
+Part of the [Osoul platform](/projects/osoul) case study. Built on the open-source [tracking kit](/open-source#tracking-kit).
+
+## Problem
+
+Restaurants spend on ads to fill tables, but ad platforms only learn from conversions they can see. Browser pixels are blocked, lose events and know nothing about what happens in the restaurant: a reservation that turned into a visit, a visit that turned into a high ticket. Without those signals, ad platforms optimise for clicks instead of guests who come and spend.
+
+## Constraints
+
+- **Server-side first**: events must reach ad platforms from Osoul's servers, not depend on the browser.
+- **Trusted events only**: anyone can call a public endpoint, so events must be signed by known clients.
+- **Privacy**: personal data is hashed before it leaves the platform, and only for tenants who enabled it. {/* CHECK: confirm consent and hashing rules */}
+- **One schema**: Guest App, Portal and reservation events share one tracking event schema.
+
+## Architecture
+
+<LayerDiagram
+  title="Osoul server-side tracking"
+  desc="The Guest App and Portal emit events through the tracking SDK, signed with HMAC. The Go tracking service verifies them, recognises the user and stores them against one event schema. A CAPI sync worker joins them with reservation and order outcomes and sends server-side conversion events to ad platforms."
+  layers={[
+    { caption: 'Sources', nodes: [{ label: 'Guest App', sub: 'tracking SDK' }, { label: 'Portal & reservations' }, { label: 'Orders · visits', sub: 'POS outcomes' }] },
+    { caption: 'Tracking service', nodes: [{ label: 'Verify HMAC' }, { label: 'User recognition', sub: 'tracking kit', accent: true }, { label: 'Event schema' }] },
+    { caption: 'Sync', nodes: [{ label: 'CAPI sync', sub: 'server-side conversions', accent: true }, { label: 'Ad platforms', sub: 'audience optimisation' }] },
+  ]}
+/>
+{/* CHECK: ad platforms and sync cadence */}
+
+<Gallery items={props.media} />
+
+## Key decisions
+
+1. **Reuse the open-source kit instead of a vendor.** The tracking kit already did signed events and user recognition; Osoul adds the restaurant event schema and the CAPI sync on top.
+2. **Send outcomes, not page views.** The valuable signals are a reservation honoured and a ticket closed, which only the server knows.
+3. **Sign every event.** HMAC request signing means the tracking service only accepts events from Osoul's own clients.

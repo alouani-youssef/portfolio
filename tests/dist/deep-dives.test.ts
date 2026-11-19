@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readHtml, readText } from './helpers';
 
-const DIVES = ['osoul-ai-assistant', 'osoul-recommendations', 'osoul-table-sessions'] as const;
+const DIVES = ['osoul-multi-tenancy', 'osoul-ai-assistant', 'osoul-recommendations', 'osoul-table-sessions', 'osoul-server-side-tracking'] as const;
 const H2 = ['Problem', 'Constraints', 'Architecture', 'Key decisions', 'Results', 'Stack and links'];
 
 describe.each(DIVES)('/projects/%s', (slug) => {
@@ -32,12 +32,12 @@ describe('deep-dive navigation', () => {
   });
   it('deep-dive link titles start with a capital letter', () => {
     const links = readHtml('/projects/osoul').querySelectorAll('main h3 + ul a');
-    expect(links.length).toBe(3);
+    expect(links.length).toBe(DIVES.length);
     for (const a of links) expect(a.text.trim()).toMatch(/^[A-Z]/);
   });
-  it('the projects index does not list deep-dives on their own', () => {
+  it('the projects index lists every deep-dive under Osoul', () => {
     const idx = readHtml('/projects');
-    for (const slug of DIVES) expect(idx.querySelector(`main a[href="/projects/${slug}"]`), slug).toBeNull();
+    for (const slug of DIVES) expect(idx.querySelector(`#osoul a[href="/projects/${slug}"]`), slug).not.toBeNull();
   });
   it('agents can reach them through llms.txt', () => {
     const llms = readText('llms.txt');

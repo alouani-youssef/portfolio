@@ -1,0 +1,45 @@
+---
+title: "Finamaze: architectural migration"
+summary: "Reshaping Finamaze's backend into clearly bounded services for onboarding, identity, portfolios and reconciliation, without stopping a live platform."
+area: backend
+kind: employer
+company: en/finamaze
+status: shipped
+featured: false
+confidentiality: architecture-only
+order: 32
+skills: [nodejs, typescript, postgresql, microservices, clean-architecture, event-driven]
+cover: ../../../assets/projects/covers/finamaze-migration.jpg
+coverAlt: "Event-driven financial platform: ledger and position sources stream through Kafka and Spark into a reporting data mart"
+updatedAt: 2026-11-19
+---
+import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
+
+## Problem
+
+Finamaze grew fast: onboarding, KYC, portfolios, payments and reconciliation lived close together in the backend, so a change in one area risked the others, and onboarding a bank partner meant touching everything. {/* CHECK: confirm the starting architecture */}
+
+## Constraints
+
+- **Live money**: investors keep trading and money keeps moving during the migration.
+- **No big bang**: the migration happens in steps, each one shippable on its own.
+- **Ledger correctness**: reconciliation must agree with the bank before and after every step.
+
+## Architecture
+
+<LayerDiagram
+  title="Finamaze migration"
+  desc="Before: one backend holds onboarding, identity, portfolios and reconciliation. Step by step, each domain moves behind its own boundary: identity to Keycloak, onboarding and KYC, portfolios, and reconciliation, communicating through explicit APIs and events."
+  layers={[
+    { caption: 'Before', nodes: [{ label: 'Coupled backend', sub: 'onboarding · portfolios · ledger' }] },
+    { caption: 'Step by step', nodes: [{ label: 'Extract identity', sub: 'Keycloak' }, { label: 'Bound domains', sub: 'APIs · events', accent: true }, { label: 'Verify ledger', sub: 'every step' }] },
+    { caption: 'After', nodes: [{ label: 'Onboarding & KYC' }, { label: 'Portfolios' }, { label: 'Reconciliation' }] },
+  ]}
+/>
+{/* CHECK: domain split and target style are inferred */}
+
+## Key decisions
+
+1. **Identity first.** Moving authentication to [Keycloak](/projects/finamaze-keycloak) removed the most shared concern before splitting anything else.
+2. **Strangle, don't rewrite.** Each domain moved behind its boundary while the old paths kept serving traffic.
+3. **Reconciliation as the safety net.** The ledger check proved after each step that no money moved differently.

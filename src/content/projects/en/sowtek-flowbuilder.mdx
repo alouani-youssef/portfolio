@@ -1,0 +1,52 @@
+---
+title: "Sowtek FlowBuilder: an in-house low-code engine"
+summary: "The engine behind FlowBuilder, Sowtek's low-code builder for call, chat and SMS workflows, from IVRs to database lookups and agent routing."
+area: platform
+kind: employer
+company: en/axelerated
+status: shipped
+featured: false
+confidentiality: architecture-only
+order: 22
+skills: [nestjs, typescript, event-driven, n8n]
+media:
+  - { src: ../../../assets/experience/axelerated/flowbuilder.jpeg, alt: "Sowtek FlowBuilder: a call workflow with Start, Answer, IVR, Say Digits, Get Variable, Direct Agent, Text Speech Playback, Database and Queue nodes", caption: "FlowBuilder: call, chat and SMS workflows in one builder, with a simulation mode (product marketing image).", device: desktop }
+cover: ../../../assets/projects/covers/sowtek-flowbuilder.jpg
+coverAlt: "Sowtek FlowBuilder with a call workflow of Answer, IVR, Queue and Direct Agent nodes"
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
+
+## Problem
+
+Every contact centre wants its own IVR, its own routing rules and its own bot flows, and wants to change them without waiting for an engineering release. Hard-coding each client's flows does not scale; giving them a general-purpose automation tool does not understand calls, queues and agents.
+
+## Constraints
+
+- **Domain nodes**: Answer, IVR, Queue, Direct Agent, Say Digits, Text-to-Speech, Call Back, Database, Email: the building blocks of a contact centre, not generic HTTP steps.
+- **One engine for calls, chat and SMS**.
+- **Safe changes**: a flow is drafted, simulated, then published, and a live call never runs a half-edited flow.
+- **Runs next to real-time traffic**: flow steps execute while a caller is waiting.
+
+## Architecture
+
+<LayerDiagram
+  title="Sowtek FlowBuilder engine"
+  desc="Supervisors design flows in the builder from domain nodes. Flows are saved as versioned definitions and published. The flow engine executes a published version for each call, chat or SMS, calling into telephony, channels, queues, the database and email, and the builder can simulate a flow without real traffic."
+  layers={[
+    { caption: 'Design', nodes: [{ label: 'Builder', sub: 'drag and drop' }, { label: 'Simulation', sub: 'test before publishing' }] },
+    { caption: 'Definitions', nodes: [{ label: 'Versioned flows', sub: 'draft · published', accent: true }] },
+    { caption: 'Runtime', nodes: [{ label: 'Flow engine', sub: 'one run per interaction', accent: true }] },
+    { caption: 'Actions', nodes: [{ label: 'Telephony', sub: 'IVR · TTS · dial' }, { label: 'Channels', sub: 'chat · SMS · email' }, { label: 'Queues · agents · DB' }] },
+  ]}
+/>
+{/* CHECK: versioning and simulation mechanics are inferred from the UI */}
+
+<Gallery items={props.media} />
+
+## Key decisions
+
+1. **Domain-specific nodes over generic steps.** Supervisors think in IVRs and queues, so the nodes are IVRs and queues.
+2. **Publish, don't edit live.** Each interaction runs one published version from start to end.
+3. **Simulation is part of the builder.** A flow can be walked through before any customer hears it.
