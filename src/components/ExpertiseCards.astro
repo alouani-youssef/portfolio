@@ -13,11 +13,11 @@ const cards = await Promise.all(
 );
 const short = (t: string) => t.replace(/^.*deep-dive:\s*/, '').replace(/^./, (c) => c.toUpperCase());
 ---
-<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
   {cards.map((e) => (
     <li class="expertise-card card flex flex-col overflow-hidden !p-0">
       <a href={e.href} class="block aspect-[16/9] overflow-hidden border-b border-border bg-subtle" tabindex="-1" aria-hidden="true">
-        <Picture src={e.project.data.cover} alt="" widths={[400, 800]} sizes="(min-width: 1024px) 270px, (min-width: 640px) 50vw, 100vw" formats={['avif', 'webp']} class="h-full w-full object-cover object-top" loading="lazy" />
+        <Picture src={e.project.data.cover} alt="" widths={[400, 800]} sizes="(min-width: 1024px) 370px, (min-width: 640px) 50vw, 100vw" formats={['avif', 'webp']} class="h-full w-full object-cover object-top" loading="lazy" />
       </a>
       <div class="flex flex-1 flex-col p-5">
         <h3 class="font-semibold">{e.title}</h3>

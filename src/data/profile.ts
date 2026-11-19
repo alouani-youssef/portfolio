@@ -1,4 +1,5 @@
 import { z } from 'astro/zod';
+import { FOCUS_IDS, focusTitle } from '../lib/focus';
 
 export const profileSchema = z.object({
   name: z.string(),
@@ -20,7 +21,10 @@ export const profileSchema = z.object({
   sameAs: z.array(z.url()),
   education: z.object({ degree: z.string(), school: z.string(), start: z.number(), end: z.number() }),
   /** `project` is the slug of the case study that best shows the area, featured on the home page. */
-  expertise: z.array(z.object({ title: z.string(), body: z.string(), skills: z.array(z.string()), project: z.string() })).length(4),
+  expertise: z
+    .array(z.object({ id: z.enum(FOCUS_IDS), title: z.string(), body: z.string(), skills: z.array(z.string()), project: z.string() }))
+    .length(6)
+    .refine((xs) => xs.every((x, i) => x.id === FOCUS_IDS[i] && x.title === focusTitle(x.id)), { message: 'expertise must follow FOCUS_AREAS order and titles' }),
   faq: z.array(z.object({ q: z.string(), a: z.string() })).min(6).max(8),
   now: z.object({ updated: z.string(), items: z.array(z.string()) }),
   knowsAbout: z.array(z.string()),
@@ -66,28 +70,46 @@ export const profile: Profile = {
   },
   expertise: [
     {
-      title: 'Backend and distributed systems',
-      body: 'Multi-tenant SaaS, dual-database provisioning, API gateways, messaging (Kafka, RabbitMQ), real-time over WebSockets and SSE, push notifications, recommendation systems, ad signal infrastructure.',
-      skills: ['nestjs', 'typeorm', 'kafka', 'rabbitmq', 'websockets', 'sse'],
-      project: 'osoul-multi-tenancy',
-    },
-    {
-      title: 'Applied AI and LLM systems',
-      body: 'RAG on Milvus, MCP servers, tool-using agents with LangChain and LangGraph, local models via Ollama, OpenAI-compatible APIs, model-serving REST APIs with FastAPI, AI assistants with PII redaction and user auth propagation, familiarity with LLM evaluation tools (DeepEval, Giskard), and AI Stones, a personal AI harness for Claude.',
-      skills: ['rag', 'mcp', 'milvus', 'langchain', 'langgraph', 'ollama', 'fastapi'],
+      id: 'agentic',
+      title: focusTitle('agentic'),
+      body: "RAG pipelines with an MCP server as the retriever, and assistants that act with the user's own permissions, redact personal data and ask before they write.",
+      skills: ['rag', 'mcp', 'langgraph', 'langchain', 'claude-harnesses'],
       project: 'customer-voice',
     },
     {
-      title: 'Speech and language',
-      body: 'Whisper large-v3 fine-tuning for Saudi dialect, call-audio data preparation, NLP/NLU engines on language servers and Duckling, Botpress v12 core, KYC document and visual verification.',
-      skills: ['whisper', 'fine-tuning', 'nllb-200'],
+      id: 'nlp',
+      title: focusTitle('nlp'),
+      body: 'Intent classification and entity extraction tuned per client across Arabic, French and Darija, on language servers, Duckling and Botpress v12 core.',
+      skills: ['duckling', 'botpress', 'zero-shot-classification', 'nllb-200'],
+      project: 'qalqul-nlu',
+    },
+    {
+      id: 'ml',
+      title: focusTitle('ml'),
+      body: 'Whisper large-v3 fine-tuned for Saudi-dialect calls, from audio preparation to evaluation, serving live transcripts and voice agents.',
+      skills: ['whisper', 'fine-tuning', 'huggingface-transformers'],
       project: 'saudi-stt',
     },
     {
-      title: 'Security, privacy and platform',
-      body: 'Keycloak auth, data-retention and privacy layers, session-token design for NFC/QR tables, Kubernetes, Ansible, migrations (Docker Compose to Kubernetes, Hetzner to Oracle Cloud, stateful to stateless), hybrid deployments for banking and government institutions.',
-      skills: ['keycloak', 'privacy-retention', 'token-session-design', 'kubernetes', 'ansible', 'hybrid-deployments'],
-      project: 'osoul-table-sessions',
+      id: 'recsys',
+      title: focusTitle('recsys'),
+      body: 'Dish and drink pairings, meal-completion promos and event-based dynamic pricing, built on one menu data model.',
+      skills: ['recommendation-systems', 'postgresql', 'redis'],
+      project: 'osoul-recommendations',
+    },
+    {
+      id: 'etl',
+      title: focusTitle('etl'),
+      body: 'Pipelines that collect, clean, extract into type-safe LLM schemas and load: job ingestion, call-recording pipelines and signed server-side CAPI events.',
+      skills: ['data-pipelines', 'docling', 'clickhouse'],
+      project: '10xjobs-ingestion',
+    },
+    {
+      id: 'backend',
+      title: focusTitle('backend'),
+      body: 'Multi-tenant SaaS with isolated data and identity per tenant, Kafka and RabbitMQ messaging, real time over WebSockets and SSE, Keycloak, and migrations to Kubernetes.',
+      skills: ['nestjs', 'postgresql', 'kafka', 'keycloak', 'kubernetes'],
+      project: 'osoul',
     },
   ],
   faq: [

@@ -15,10 +15,10 @@ describe('home', () => {
     expect(doc.querySelector('h1')!.text.trim()).toBe('AI Systems Engineer with a backend foundation.');
     expect(doc.querySelector('title')!.text).toBe('Youssef Alouani · AI Systems Engineer');
   });
-  it('shows four expertise cards', () => {
-    expect(doc.querySelectorAll('.expertise-card')).toHaveLength(4);
+  it('shows six focus-area expertise cards', () => {
+    expect(doc.querySelectorAll('.expertise-card')).toHaveLength(6);
     const tops = doc.querySelectorAll('.expertise-card a.expertise-project').map((a) => a.getAttribute('href'));
-    expect(tops).toEqual(['/projects/osoul-multi-tenancy', '/projects/customer-voice', '/projects/saudi-stt', '/projects/osoul-table-sessions']);
+    expect(tops).toEqual(['/projects/customer-voice', '/projects/qalqul-nlu', '/projects/saudi-stt', '/projects/osoul-recommendations', '/projects/10xjobs-ingestion', '/projects/osoul']);
     expect(doc.querySelector('section[aria-labelledby="expertise"] a[href="/projects"]')).not.toBeNull();
   });
   it('offers an All filter plus one per group, in order, with counts', () => {
