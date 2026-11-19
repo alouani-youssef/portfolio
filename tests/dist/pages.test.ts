@@ -44,7 +44,7 @@ describe('home', () => {
     expect(hertz.getAttribute('rel')).toContain('noopener');
     expect(hertz.querySelector('img[alt="Hertz logo"]')).not.toBeNull();
     expect(byName('CityClub').tagName).not.toBe('A');
-    expect(byName('Saudi National Bank').querySelector('img')).toBeNull();
+    expect(byName('Saudi National Bank').querySelector('img[alt="Saudi National Bank logo"]')).not.toBeNull();
     expect(byName('Atlas Group').classList.contains('client-tile--dark')).toBe(true);
   });
   it('shows exactly one recommendation pull quote', () => {

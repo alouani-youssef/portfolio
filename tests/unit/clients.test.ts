@@ -52,9 +52,8 @@ describe('clients.yaml', () => {
     for (const x of clients) expect(x.url, x.id).toBe(URLS[x.id]);
   });
 
-  it('has a logo file for every client except SNB', () => {
+  it('has a logo file for every client', () => {
     for (const x of clients) {
-      if (x.id === 'snb') { expect(x.logo, x.id).toBeUndefined(); continue; }
       expect(x.logo, x.id).toMatch(/^\.\.\/assets\/clients\//);
       expect(existsSync(`src/data/${x.logo}`), x.id).toBe(true);
     }

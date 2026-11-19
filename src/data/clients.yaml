@@ -1,6 +1,6 @@
 - { id: hrsd, name: "HRSD (Ministry of Human Resources and Social Development)", group: government, order: 1, experience: en/axelerated, market: Saudi Arabia, url: "https://www.hrsd.gov.sa", logo: "../assets/clients/hrsd.svg" }
 - { id: king-saud-medical-city, name: "King Saud Medical City", group: government, order: 2, experience: en/axelerated, market: Saudi Arabia, url: "https://www.ksmc.med.sa", logo: "../assets/clients/king-saud-medical-city.jpeg" }
-- { id: snb, name: "Saudi National Bank (SNB)", group: banks-insurers, order: 1, experience: en/finamaze, market: Saudi Arabia, url: "https://www.alahli.com" }
+- { id: snb, name: "Saudi National Bank (SNB)", group: banks-insurers, order: 1, experience: en/finamaze, market: Saudi Arabia, url: "https://www.alahli.com", logo: "../assets/clients/snb.jpeg" }
 - { id: cdm, name: "Crédit du Maroc (CDM)", group: banks-insurers, order: 2, experience: en/qalqul, market: Morocco, url: "https://www.creditdumaroc.ma", logo: "../assets/clients/cdm.svg" }
 - { id: sanlam, name: "SanlamAllianz", group: banks-insurers, order: 3, experience: en/qalqul, market: Morocco, url: "https://sanlamallianz.ma", logo: "../assets/clients/sanlamallianz.svg" }
 - { id: atlantasanad, name: "AtlantaSanad", group: banks-insurers, order: 4, experience: en/qalqul, market: Morocco, url: "https://www.atlantasanad.ma", logo: "../assets/clients/atlantasanad.svg" }
