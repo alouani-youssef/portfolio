@@ -1,0 +1,46 @@
+---
+title: "Fine-tuning Whisper large-v3 for Saudi dialect"
+description: "How we prepared WhatsApp and Asterisk call audio and fine-tuned Whisper large-v3 so speech-to-text understands Saudi customers."
+pubDate: 2026-11-26
+tags: [speech-to-text, whisper, fine-tuning, ai]
+related: [en/saudi-stt]
+draft: true
+---
+import SaudiSttDiagram from '../../../components/diagrams/SaudiSttDiagram.astro';
+
+Most of the customers calling the contact centres we served at Axelerated Solutions speak Saudi dialect. Off-the-shelf Whisper large-v3 handled Modern Standard Arabic well and Saudi speech badly: it dropped dialect words, rewrote them into MSA, and mangled the numbers that matter most on a support call. This post walks through how we fixed that by fine-tuning, from the audio to the evaluation. The architecture is on the [case study](/projects/saudi-stt).
+
+## The audio we started with
+
+Two channels produced almost everything: WhatsApp voice notes and phone calls recorded on Asterisk. They are very different inputs. Voice notes are short, compressed, recorded close to the phone and full of background noise. Asterisk recordings are long, narrow-band telephony audio with two speakers, hold music and cross-talk. {/* CHECK: channel mix and typical lengths */}
+
+We collected roughly 200 hours of consented, anonymised call and voice-note audio, of which about 40 hours were transcribed by native Saudi speakers to build the training and evaluation sets. {/* CHECK: hours collected and hours transcribed */}
+
+## Preparing the data
+
+Data preparation took longer than training, and it mattered more.
+
+- **One format**: every file was converted to 16 kHz mono, the input Whisper expects, so the model never had to learn the difference between channels.
+- **Segmentation**: long calls were split at speaker turns and silences into segments under 30 seconds, Whisper's window, and each segment was attributed to agent or customer. {/* CHECK: segmentation tool and maximum segment length */}
+- **Transcription guidelines**: annotators wrote what was said, in dialect, not what it would be in MSA. Numbers were written as digits, English product names in Latin script. {/* CHECK: guideline details */}
+- **Cleaning**: segments with music, overlapping speech or unintelligible audio were dropped rather than guessed. {/* CHECK */}
+- **Privacy**: names, phone numbers and account numbers were masked in transcripts before they entered the training set, and raw audio never left the client's environment. {/* CHECK: masking method */}
+
+<SaudiSttDiagram />
+
+## Fine-tuning
+
+We fine-tuned the full Whisper large-v3 model on the prepared segments with the Hugging Face Transformers training loop, a small learning rate and early stopping on the evaluation set's word error rate. {/* CHECK: full fine-tune vs LoRA, learning rate, epochs, GPUs */} The evaluation set came from different callers than the training set, so the score measured generalisation to new voices rather than memorisation.
+
+## Results
+
+Word error rate on the held-out Saudi-dialect set dropped from 38% with base Whisper large-v3 to 19% after fine-tuning. {/* CHECK: real WER numbers; these match the case-study placeholders */} The biggest wins were on dialect vocabulary and on numbers, which is what made it possible for a voice agent to call tools like `track_order` mid-call.
+
+## What went wrong
+
+- **Telephony audio was underrepresented at first.** Early runs looked good on voice notes and poor on calls, because voice notes were easier to collect. Rebalancing the channels fixed most of it. {/* CHECK */}
+- **The model learned to "correct" dialect into MSA when guidelines were inconsistent.** Tightening the transcription guidelines and re-annotating a sample mattered more than any training parameter. {/* CHECK */}
+
+## What I would do next
+
+Build the evaluation set first, before any training data, and keep it frozen. Every decision afterwards, data mix, guidelines, training settings, is only as good as the number you judge it by.

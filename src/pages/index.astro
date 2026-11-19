@@ -7,13 +7,14 @@ import ClientGroups from '../components/ClientGroups.astro';
 import Recommendation from '../components/Recommendation.astro';
 import { profile } from '../data/profile';
 import { entrySlug } from '../lib/i18n';
+import { getPosts } from '../lib/post-queries';
 import headshot from '../assets/media/headshot.png';
 
 const [lead, rest] = profile.headline.split(/(?<=Osoul\.)\s/);
 const recs = await getCollection('recommendations');
 const pull = recs.find((r) => r.id === 'mohammad-al-ahmad')!;
 const featured = (await getCollection('projects', (p) => p.data.featured && p.id.startsWith('en/'))).sort((a, b) => a.data.order - b.data.order);
-const posts = (await getCollection('blog', (p) => p.id.startsWith('en/') && !p.data.draft))
+const posts = (await getPosts(false))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
 ---

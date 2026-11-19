@@ -1,0 +1,29 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts } from '../../lib/post-queries';
+import { entrySlug } from '../../lib/i18n';
+export async function getStaticPaths() {
+  const posts = (await getPosts(true)).filter((p) => !p.data.external);
+  return posts.map((post) => ({ params: { slug: entrySlug(post.id) }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+---
+<BaseLayout title={d.title} description={d.description} path={`/blog/${entrySlug(post.id)}`} noindex={d.draft}>
+  <article class="container-page py-12 sm:py-16">
+    <div class="max-w-[70ch]">
+      <a href="/blog" class="text-sm">← Blog</a>
+      <header class="mt-6">
+        <p class="eyebrow"><time datetime={d.pubDate.toISOString().slice(0, 10)}>{d.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}</time>{d.draft && <span class="badge">draft</span>}</p>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{d.title}</h1>
+        <p class="mt-4 text-lg text-muted">{d.description}</p>
+      </header>
+      <div class="post-body mt-10 space-y-4 [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mt-1">
+        <Content />
+      </div>
+      <ul class="mt-10 flex flex-wrap gap-2">{d.tags.map((t) => <li><a class="chip" href={`/blog/tags/${t}`}>{t}</a></li>)}</ul>
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getPosts } from '../../../lib/post-queries';
+import { entrySlug } from '../../../lib/i18n';
+export async function getStaticPaths() {
+  const posts = await getPosts(true);
+  const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+  return tags.map((tag) => ({ params: { tag }, props: { tag, posts: posts.filter((p) => p.data.tags.includes(tag)) } }));
+}
+const { tag, posts } = Astro.props;
+---
+<BaseLayout title={`Posts tagged ${tag}`} description={`Posts by Youssef Alouani tagged ${tag}.`} path={`/blog/tags/${tag}`}>
+  <div class="container-page py-12 sm:py-16">
+    <div class="max-w-[70ch]">
+      <a href="/blog" class="text-sm">← Blog</a>
+      <h1 class="mt-6 text-3xl font-semibold tracking-tight">Tagged “{tag}”</h1>
+      <ul class="mt-8 divide-y divide-border border-y border-border">
+        {posts.map((p) => (
+          <li class="py-4">
+            <a href={p.data.external?.url ?? `/blog/${entrySlug(p.id)}`} class="font-medium">{p.data.title}</a>
+            <p class="text-sm text-muted"><time datetime={p.data.pubDate.toISOString().slice(0, 10)}>{p.data.pubDate.getUTCFullYear()}</time>{p.data.external && ' · on Medium'}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>
