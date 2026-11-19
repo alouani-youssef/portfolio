@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile } from '../data/profile';
+import { getRoles } from '../lib/experience';
+const roles = await getRoles();
+const skills = await getCollection('skills');
+const CATS = [
+  ['language', 'Languages'], ['backend', 'Backend'], ['data', 'Data'], ['ai', 'AI / LLM'],
+  ['security', 'Identity and security'], ['infra', 'Infra'], ['frontend', 'Front end'], ['realtime', 'Real-time'],
+] as const;
+const e = profile.education;
+---
+<BaseLayout title="CV" description="Printable CV of Youssef Alouani, Lead Backend & AI Engineer." path="/cv">
+  <div class="container-page py-12 print:py-0">
+    <article class="cv mx-auto max-w-[780px] text-[15px] leading-relaxed">
+      <p class="no-print mb-6 text-sm text-muted">Use your browser's print dialog and choose “Save as PDF”.</p>
+      <header class="border-b border-border pb-5">
+        <h1 class="text-3xl font-semibold tracking-tight">{profile.name}</h1>
+        <p class="mt-1 text-lg">{profile.headline}</p>
+        <p class="mt-2 text-sm text-muted">
+          {profile.location.city}, Morocco · {profile.email} · youssefalouani.com · github.com/alouani-youssef · linkedin.com/in/alouani-youssef
+        </p>
+      </header>
+
+      <section class="mt-6">
+        <h2 class="eyebrow">Profile</h2>
+        <p class="mt-2">{profile.shortBio}</p>
+      </section>
+
+      <section class="mt-6">
+        <h2 class="eyebrow">Experience</h2>
+        {roles.map((r) => (
+          <div class="cv-role mt-4 break-inside-avoid">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4">
+              <h3 class="font-semibold">{r.data.company} · {r.data.role}{r.data.founding ? ', founding engineer' : ''}</h3>
+              <span class="text-sm text-muted">{r.data.period}</span>
+            </div>
+            <p class="text-sm text-muted">{r.data.summary}</p>
+            <ul class="mt-1 list-disc pl-5 text-sm">{r.data.highlights.map((h) => <li>{h}</li>)}</ul>
+          </div>
+        ))}
+      </section>
+
+      <section class="mt-6 break-inside-avoid">
+        <h2 class="eyebrow">Skills</h2>
+        <dl class="cv-skills mt-2 grid grid-cols-[10rem_1fr] gap-x-4 gap-y-1 text-sm">
+          {CATS.map(([cat, label]) => (
+            <>
+              <dt class="font-medium">{label}</dt>
+              <dd>{skills.filter((s) => s.data.category === cat).map((s) => s.data.name).join(', ')}</dd>
+            </>
+          ))}
+        </dl>
+      </section>
+
+      <section class="mt-6 break-inside-avoid">
+        <h2 class="eyebrow">Education</h2>
+        <p class="mt-2 text-sm">{e.degree}, {e.school}, {e.start}–{e.end}</p>
+        <h2 class="eyebrow mt-4">Languages</h2>
+        <p class="mt-2 text-sm">{profile.languages.map((l) => l.name).join(', ')}</p>
+      </section>
+    </article>
+  </div>
+</BaseLayout>
+<style is:global>
+  @page { size: A4; margin: 16mm; }
+</style>
