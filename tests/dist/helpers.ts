@@ -14,7 +14,7 @@ export function readText(file: string): string {
 
 function htmlFileFor(route: string): string {
   const clean = route.replace(/^\/|\/$/g, '');
-  return clean === '' ? 'index.html' : `${clean}/index.html`;
+  return clean === '' ? 'index.html' : `${clean}.html`;
 }
 
 export function readHtml(route: string): HTMLElement {
@@ -28,13 +28,13 @@ function walk(dir: string): string[] {
   });
 }
 
-/** Routes of every index.html under dist/ (e.g. '/', '/about', '/projects/osoul'). */
+/** Routes of every page under dist/ (e.g. '/', '/about', '/projects/osoul'); build format is 'file'. */
 export function listHtmlPages(): string[] {
   return walk(DIST)
-    .filter((f) => f.endsWith(`${sep}index.html`) || f === join(DIST, 'index.html'))
+    .filter((f) => f.endsWith('.html'))
     .map((f) => {
-      const rel = relative(DIST, f).split(sep).slice(0, -1).join('/');
-      return rel === '' ? '/' : `/${rel}`;
+      const rel = relative(DIST, f).split(sep).join('/').replace(/\.html$/, '');
+      return rel === 'index' ? '/' : `/${rel}`;
     })
     .filter((r) => !r.startsWith('/pagefind') && !r.startsWith('/og'))
     .sort();

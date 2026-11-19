@@ -39,6 +39,6 @@ describe('blog', () => {
   it('has a page for every tag used', () => {
     const tags = new Set(doc.querySelectorAll('a[href^="/blog/tags/"]').map((a) => a.getAttribute('href')!));
     expect(tags.size).toBeGreaterThan(0);
-    for (const t of tags) expect(exists(`${t}/index.html`), t).toBe(true);
+    for (const t of tags) expect(exists(`${t}.html`), t).toBe(true);
   });
 });

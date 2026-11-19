@@ -1,7 +1,11 @@
 import type { Profile } from '../data/profile';
 
-interface RoleIn { company: string; role: string; url?: string; start: Date; end: Date | null; summary: string; highlights: string[] }
-const iso = (d: Date) => d.toISOString().slice(0, 10);
+interface RoleIn { company: string; role: string; url?: string; start: Date; end: Date | null; precision?: 'month' | 'year'; summary: string; highlights: string[] }
+
+/** ISO 8601 date truncated to what is actually known: '2023' or '2026-06'. */
+export function partialDate(d: Date, precision: 'month' | 'year' = 'year'): string {
+  return d.toISOString().slice(0, precision === 'month' ? 7 : 4);
+}
 
 /** JSON Resume v1.0.0 document. */
 export function buildResume(
@@ -30,8 +34,8 @@ export function buildResume(
       name: r.company,
       position: r.role,
       ...(r.url ? { url: r.url } : {}),
-      startDate: iso(r.start),
-      ...(r.end ? { endDate: iso(r.end) } : {}),
+      startDate: partialDate(r.start, r.precision),
+      ...(r.end ? { endDate: partialDate(r.end, r.precision) } : {}),
       summary: r.summary,
       highlights: r.highlights,
     })),

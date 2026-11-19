@@ -5,7 +5,7 @@ import { buildLlmsTxt } from '../../src/lib/llms';
 import { API_SCHEMAS } from '../../src/lib/api-schemas';
 
 const roles = [
-  { slug: 'osoul', company: 'Osoul', role: 'Technical Founder', url: 'https://osoul.io', start: new Date('2026-06-01'), end: null, summary: 'RaaS.', highlights: ['NFC/QR ordering'] },
+  { slug: 'osoul', company: 'Osoul', role: 'Technical Founder', url: 'https://osoul.io', start: new Date('2026-06-01'), end: null, precision: 'month' as const, summary: 'RaaS.', highlights: ['NFC/QR ordering'] },
   { slug: 'qalqul', company: 'Qalqul Engine', role: 'Software Engineer', start: new Date('2021-01-01'), end: new Date('2022-12-31'), summary: 'Bots.', highlights: [] },
 ];
 
@@ -19,9 +19,9 @@ describe('buildResume', () => {
     expect(r.basics.profiles.map((p: any) => p.network)).toEqual(expect.arrayContaining(['GitHub', 'LinkedIn']));
   });
   it('maps roles to work with ISO dates and no end for current roles', () => {
-    expect(r.work[0]).toMatchObject({ name: 'Osoul', position: 'Technical Founder', startDate: '2026-06-01', url: 'https://osoul.io' });
+    expect(r.work[0]).toMatchObject({ name: 'Osoul', position: 'Technical Founder', startDate: '2026-06', url: 'https://osoul.io' });
     expect(r.work[0].endDate).toBeUndefined();
-    expect(r.work[1].endDate).toBe('2022-12-31');
+    expect(r.work[1].endDate).toBe('2022');
   });
   it('includes education, skills, languages and references', () => {
     expect(r.education[0].institution).toBe('Hassan First University, FST Settat');

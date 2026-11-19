@@ -7,6 +7,7 @@ import { getProjects } from './projects';
 import { getPosts } from './post-queries';
 import { twinHref } from './markdown';
 import type { ApiName } from './api-schemas';
+import { partialDate } from './resume';
 
 const SITE = 'https://youssefalouani.com';
 const day = (d: Date) => d.toISOString().slice(0, 10);
@@ -41,8 +42,8 @@ export async function buildApi(name: ApiName): Promise<unknown> {
         company: r.data.company,
         role: r.data.role,
         period: r.data.period,
-        start: day(r.data.start),
-        end: r.data.end ? day(r.data.end) : null,
+        start: partialDate(r.data.start, r.data.precision),
+        end: r.data.end ? partialDate(r.data.end, r.data.precision) : null,
         location: r.data.location,
         founding: r.data.founding,
         teamSize: r.data.teamSize ?? null,

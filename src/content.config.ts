@@ -50,6 +50,8 @@ const experience = defineCollection({
       start: z.coerce.date(),
       end: z.coerce.date().nullable(),
       period: z.string(),
+      /** How precisely start/end are known; machine outputs never claim more. */
+      precision: z.enum(['month', 'year']).default('year'),
       location: z.string(),
       url: z.url().optional(),
       summary: z.string().max(200),

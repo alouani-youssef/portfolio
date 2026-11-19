@@ -40,7 +40,8 @@ const frameBox = frame && {
 const sideRow = side && rows[side.layer];
 ---
 <figure class="diagram my-8">
-  <svg role="img" aria-labelledby={`${id}-t ${id}-d`} viewBox={`0 0 ${W} ${H}`} class="h-auto w-full">
+  <div class="diagram-scroll overflow-x-auto">
+  <svg role="img" aria-labelledby={`${id}-t ${id}-d`} viewBox={`0 0 ${W} ${H}`} class="h-auto w-full min-w-[560px]">
     <title id={`${id}-t`}>{title}</title>
     <desc id={`${id}-d`}>{desc}</desc>
     <defs>
@@ -78,6 +79,7 @@ const sideRow = side && rows[side.layer];
       </g>
     )}
   </svg>
+  </div>
   <slot />
 </figure>
 

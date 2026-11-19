@@ -12,7 +12,9 @@ const draftSlugs = readdirSync('src/content/blog/en')
 
 export default defineConfig({
   site: 'https://youssefalouani.com',
-  trailingSlash: 'ignore',
+  trailingSlash: 'never',
+  // /about is served from about.html: no trailing-slash redirects on Cloudflare Pages.
+  build: { format: 'file' },
   i18n: {
     locales: ['en', 'fr'],
     defaultLocale: 'en',
