@@ -66,9 +66,16 @@ it('open-source case studies link their repositories and the open-source page li
   expect(oss.querySelector('#archio a[href="/projects/archio"]')).not.toBeNull();
 });
 
-it('archio separates what ships today from what is next', () => {
-  const h3 = readHtml('/projects/archio').querySelectorAll('main h3').map((h) => h.text.trim());
-  expect(h3.some((h) => /^What.s next$/.test(h))).toBe(true);
+it('archio presents the HA cluster and Docling semantic search as built, matching its open-source card', () => {
+  const doc = readHtml('/projects/archio');
+  const h3 = doc.querySelectorAll('main h3').map((h) => h.text.trim());
+  expect(h3.some((h) => /^What.s next$/.test(h))).toBe(false);
+  const text = doc.querySelector('main')!.text;
+  expect(text).toMatch(/multi-node/i);
+  expect(text).toMatch(/Docling/);
+  const svg = doc.querySelector('svg[role="img"]')!.text;
+  expect(svg).toMatch(/Docling/);
+  expect(svg).toMatch(/Cluster/i);
 });
 
 it('marks Arabic text with lang="ar" and dir="rtl" (Review Focus 3)', () => {

@@ -3,11 +3,12 @@ import LayerDiagram from './LayerDiagram.astro';
 ---
 <LayerDiagram
   title="archio object storage"
-  desc="Clients call a Go JSON REST API. Admin endpoints use HTTP Basic auth; every other endpoint uses a group-scoped API key, except public read URLs for a single object version. Object bytes go to the storage path; metadata, versions and keys live in PostgreSQL with pgvector enabled; Redis is connected and health-checked, reserved for caching; RabbitMQ receives object.version.created events."
+  desc="Clients call a Go JSON REST API running on a multi-node, high-availability cluster. Admin endpoints use HTTP Basic auth; every other endpoint uses a group-scoped API key, except public read URLs for a single object version. Object bytes go to the storage path; metadata, versions and keys live in PostgreSQL with pgvector enabled; Redis is connected and health-checked, reserved for caching; RabbitMQ receives object.version.created events, which drive Docling text extraction; embeddings are stored with pgvector for semantic search."
   layers={[
     { caption: 'Clients', nodes: [{ label: 'Admin', sub: 'HTTP Basic' }, { label: 'Apps', sub: 'group API keys' }, { label: 'Public read URLs', sub: 'one version each' }] },
     { caption: 'API', nodes: [{ label: 'Go REST API', sub: 'buckets · immutable versions', accent: true }] },
-    { caption: 'Storage', nodes: [{ label: 'Object bytes', sub: 'STORAGE_PATH' }, { label: 'PostgreSQL', sub: 'Ent · pgvector' }, { label: 'Redis' }] },
+    { caption: 'Cluster', nodes: [{ label: 'Node 1', sub: 'object bytes' }, { label: 'Node 2', sub: 'replica' }, { label: 'Node n', sub: 'replica' }] },
+    { caption: 'Data and search', nodes: [{ label: 'PostgreSQL', sub: 'Ent · pgvector' }, { label: 'Docling', sub: 'extraction · embeddings', accent: true }, { label: 'Redis' }] },
   ]}
   side={{ label: 'RabbitMQ', sub: 'object.version.created', layer: 1 }}
 >
