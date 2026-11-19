@@ -1,0 +1,13 @@
+---
+import BaseLayout, { type Props as BaseProps } from './BaseLayout.astro';
+type Props = BaseProps;
+const props = Astro.props;
+---
+<BaseLayout {...props}>
+  <slot name="head" slot="head" />
+  <article class="container-page py-12 sm:py-16">
+    <div class="prose-col">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

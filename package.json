@@ -8,10 +8,26 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:preview": "PUBLIC_PREVIEW=true astro build",
     "preview": "astro preview",
+    "check": "astro check",
+    "test:unit": "vitest run --project unit",
+    "test:dist": "vitest run --project dist",
     "astro": "astro"
   },
   "dependencies": {
     "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/mdx": "^8.1.6",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.6",
+    "@tailwindcss/vite": "^4.3.5",
+    "node-html-parser": "^9.0.7",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.1",
+    "yaml": "^2.9.1"
   }
 }
