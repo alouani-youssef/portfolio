@@ -73,6 +73,19 @@ describe('experience', () => {
     }
   });
 
+  for (const [slug] of ROLES) {
+    it(`/experience/${slug} shows its screenshots`, () => {
+      const imgs = readHtml(`/experience/${slug}`).querySelectorAll('main section[aria-label="Screenshots"] img');
+      expect(imgs.length, slug).toBeGreaterThan(0);
+    });
+  }
+
+  it('lists King Saud Medical City under Axelerated (Sowtek), not Qalqul', () => {
+    const tiles = (slug: string) => readHtml(`/experience/${slug}`).querySelectorAll('.client-tile').map((t) => t.text);
+    expect(tiles('axelerated').some((t) => t.includes('King Saud Medical City'))).toBe(true);
+    expect(tiles('qalqul').some((t) => t.includes('King Saud Medical City'))).toBe(false);
+  });
+
   it('osoul names its clients by parent group', () => {
     const t = text('/experience/osoul');
     expect(t).toContain('Barceló Group');
