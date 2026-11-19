@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { mdxToMarkdown, twinHref } from '../../src/lib/markdown';
+import { mdxToMarkdown, twinHref, splitHeadline } from '../../src/lib/markdown';
+
+describe('splitHeadline', () => {
+  it('splits at the first sentence end', () => expect(splitHeadline('A b. C d. E')).toEqual(['A b.', 'C d. E']));
+  it('keeps a single sentence whole', () => expect(splitHeadline('Only one.')).toEqual(['Only one.', '']));
+});
 
 const SAMPLE = [
   "import Figure from '../../components/Figure.astro';",

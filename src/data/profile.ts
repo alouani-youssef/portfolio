@@ -13,8 +13,8 @@ export const profileSchema = z.object({
   links: z.object({
     github: z.url(),
     linkedin: z.url(),
-    mediumA: z.url(),
-    mediumB: z.url(),
+    /** Current Medium account; the older one (alouani-youssef.medium.com) was lost but stays in sameAs. */
+    medium: z.url(),
     osoul: z.url(),
   }),
   sameAs: z.array(z.url()),
@@ -30,11 +30,11 @@ export type Profile = z.infer<typeof profileSchema>;
 
 export const profile: Profile = {
   name: 'Youssef Alouani',
-  jobTitle: 'Lead Backend & AI Engineer',
-  headline: 'Lead Backend & AI Engineer, founder of Osoul. I build multi-tenant platforms and the AI systems that run on them.',
-  oneLiner: 'Casablanca-based backend and AI engineer, founder of Osoul. NestJS, Go, Python; RAG, MCP servers, speech-to-text, and secure multi-tenant SaaS.',
+  jobTitle: 'AI Systems Engineer',
+  headline: 'AI Systems Engineer with a backend foundation. I build NLP, speech, recommendation and agentic systems, and the platforms they run on.',
+  oneLiner: 'Casablanca-based AI systems engineer and founder of Osoul: NLP/NLU, speech, recommendations, ETL and agentic systems on a solid backend.',
   shortBio:
-    'Youssef Alouani is a senior backend and AI engineer in Casablanca and the technical founder of Osoul, a Revenue-as-a-Service (RaaS) growth engine for fine-dining restaurants. He has spent five years building backends, conversational AI and data pipelines at Qalqul, Finamaze and Axelerated Solutions, with a focus on security, privacy and systems that hold up in production.',
+    'Youssef Alouani is an AI systems engineer in Casablanca with five years of backend experience, and the technical founder of Osoul, a Revenue-as-a-Service (RaaS) growth engine for fine-dining restaurants. He has built backends, NLP/NLU engines, speech-to-text, recommendation systems and data pipelines at Qalqul, Finamaze and Axelerated Solutions, with a focus on security, privacy and systems that hold up in production.',
   longBio: [
     "I'm a backend engineer who ended up deep in AI because the interesting problems kept landing there. I started at Qalqul Engine working on Botpress v12 core, NLP/NLU engines on language servers and Duckling, and no-code workflow systems, while shipping portals, Kotlin SDKs and React chat widgets. At Finamaze I worked on reconciliation and on KYC with document and visual verification, alongside AI for a robo-advisor. At Axelerated Solutions I was a founding engineer and the backend lead in a team of nine. I fine-tuned Whisper large-v3 for Saudi-dialect call transcription, built RAG on Milvus, coding agents, and the Customer Voice RAG pipeline with an MCP server as its retriever, plus an MCP server over our backend APIs validated through Keycloak, where I owned the auth flow and the privacy and data-retention layer.",
     "Since June 2026 I've been building Osoul, a Revenue-as-a-Service (RaaS) growth engine for fine dining: a SaaS built around specific revenue KPIs, with management tools built in. It uses mature technologies to capture the data restaurants usually lose and turn it into better KPIs. Under the hood: NFC/QR table ordering, reservations, recommendation systems, ad signal infrastructure and a privacy-aware AI assistant for restaurants, on NestJS, PostgreSQL, Redis and Keycloak. I've also worked on platform migrations and hybrid deployments for banking and government institutions. I care about fundamentals, clean architecture, and AI that respects user data.",
@@ -49,8 +49,7 @@ export const profile: Profile = {
   links: {
     github: 'https://github.com/alouani-youssef',
     linkedin: 'https://www.linkedin.com/in/alouani-youssef',
-    mediumA: 'https://alouani-youssef.medium.com',
-    mediumB: 'https://medium.com/@alouaniyoussef',
+    medium: 'https://medium.com/@alouaniyoussef',
     osoul: 'https://osoul.io',
   },
   sameAs: [
@@ -94,7 +93,7 @@ export const profile: Profile = {
   faq: [
     {
       q: 'What does Youssef Alouani do now?',
-      a: 'He is the technical founder of Osoul, a Revenue-as-a-Service growth engine for fine-dining restaurants, and the founder of 10xJobs, a job-matching pipeline for software engineers. Before that he was Lead Backend Engineer and a founding engineer at Axelerated Solutions.',
+      a: 'He is the technical founder of Osoul, a Revenue-as-a-Service growth engine for fine-dining restaurants, and runs 10xJobs, a job-matching pipeline for software engineers, as a side project. Before that he was Lead Backend Engineer and a founding engineer at Axelerated Solutions.',
     },
     {
       q: 'What is his main stack?',
@@ -114,7 +113,7 @@ export const profile: Profile = {
     },
     {
       q: 'Is he open to new roles?',
-      a: 'He is building Osoul full time and is open to conversations about senior backend and AI engineering roles.',
+      a: 'Yes. He is open to backend and AI engineering positions, remote or in Casablanca.',
     },
     {
       q: 'How can I reach him?',
@@ -130,5 +129,5 @@ export const profile: Profile = {
       'Writing about fine-tuning Whisper large-v3 for Saudi dialect.',
     ],
   },
-  knowsAbout: ['NestJS', 'Go', 'Python', 'RAG', 'Model Context Protocol', 'Whisper fine-tuning', 'Multi-tenant SaaS', 'Keycloak'],
+  knowsAbout: ['AI systems', 'NLP/NLU', 'Whisper fine-tuning', 'Recommendation systems', 'ETL pipelines', 'Agentic systems', 'RAG', 'Model Context Protocol', 'NestJS', 'Python', 'Multi-tenant SaaS'],
 };

@@ -1,4 +1,10 @@
 /** Route → its Markdown twin URL. */
+/** Splits a headline into its first sentence and the rest. */
+export function splitHeadline(h: string): [lead: string, rest: string] {
+  const i = h.indexOf('. ');
+  return i === -1 ? [h, ''] : [h.slice(0, i + 1), h.slice(i + 2)];
+}
+
 export function twinHref(path: string): string {
   return path === '/' ? '/index.md' : `${path.replace(/\/$/, '')}.md`;
 }

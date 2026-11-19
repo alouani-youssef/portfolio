@@ -12,7 +12,8 @@ const main = (route: string) => readHtml(route).querySelector('main')!;
 describe('home', () => {
   const doc = readHtml('/');
   it('leads with the headline', () => {
-    expect(doc.querySelector('h1')!.text.trim()).toBe('Lead Backend & AI Engineer, founder of Osoul.');
+    expect(doc.querySelector('h1')!.text.trim()).toBe('AI Systems Engineer with a backend foundation.');
+    expect(doc.querySelector('title')!.text).toBe('Youssef Alouani · AI Systems Engineer');
   });
   it('shows four expertise cards', () => {
     expect(doc.querySelectorAll('.expertise-card')).toHaveLength(4);
@@ -116,6 +117,12 @@ describe('about', () => {
 describe('now and contact', () => {
   it('/now shows an updated date', () => {
     expect(main('/now').querySelector('time')?.getAttribute('datetime')).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+  it('/contact leads with backend and AI positions', () => {
+    const m = main('/contact');
+    expect(m.text).toContain('Open to backend & AI positions');
+    expect(m.text).not.toContain('senior backend & AI conversations');
+    expect(m.querySelector('#services h3')!.text.trim()).toBe('Backend & AI positions');
   });
   it('/contact shows the public email', () => {
     expect(main('/contact').querySelector('a[href="mailto:hello@youssefalouani.com"]')).not.toBeNull();

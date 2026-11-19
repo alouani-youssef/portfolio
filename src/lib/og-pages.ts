@@ -17,7 +17,7 @@ export async function getOgPages(): Promise<OgPage[]> {
   const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
   const clip = (s: string) => (s.length > 140 ? `${s.slice(0, 137)}…` : s);
   return [
-    { slug: 'index', title: 'Lead Backend & AI Engineer, founder of Osoul.', subtitle: 'I build multi-tenant platforms and the AI systems that run on them.' },
+    { slug: 'index', title: 'AI Systems Engineer with a backend foundation.', subtitle: 'I build NLP, speech, recommendation and agentic systems, and the platforms they run on.' },
     { slug: 'about', title: 'About', subtitle: clip(profile.oneLiner) },
     { slug: 'experience', title: 'Experience', subtitle: 'Four roles and a side project over five years, each with an AI thread.' },
     { slug: 'projects', title: 'Projects', subtitle: 'Case studies at the architecture level.' },

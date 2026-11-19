@@ -34,6 +34,9 @@ describe('diagrams stay legible on phones', () => {
 describe('machine dates match the displayed periods', () => {
   const api = JSON.parse(readText('api/experience.json')) as Array<{ id: string; start: string; end: string | null }>;
   const resume = JSON.parse(readText('resume.json'));
+  it('resume.json links the current Medium account', () => {
+    expect(resume.basics.profiles.find((p: any) => p.network === 'Medium').url).toBe('https://medium.com/@alouaniyoussef');
+  });
   it('resume.json carries the bachelor degree', () => {
     expect(resume.education[0]).toMatchObject({ studyType: "Bachelor's degree", area: 'Computer Science', startDate: '2017', endDate: '2021' });
   });

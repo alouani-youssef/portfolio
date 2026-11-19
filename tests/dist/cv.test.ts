@@ -8,7 +8,8 @@ describe('/cv', () => {
 
   it('is headed by the name and headline', () => {
     expect(doc.querySelector('h1')!.text.trim()).toBe('Youssef Alouani');
-    expect(text).toContain('Lead Backend & AI Engineer, founder of Osoul.');
+    expect(text).toContain('AI Systems Engineer with a backend foundation.');
+    expect(text).not.toContain('Lead Backend & AI Engineer');
   });
   it('lists the five roles with their periods', () => {
     for (const s of ['10xJobs', 'Oct 2026 – now', 'Osoul', 'Jun 2026 – now', 'Axelerated Solutions', 'Feb 2024 – May 2026', 'Finamaze', 'Jul 2023 – Jan 2024', 'Qalqul Engine', '2021 – 2023']) {

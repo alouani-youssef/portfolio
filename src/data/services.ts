@@ -16,6 +16,22 @@ const sign = '\n\nThanks,\n[Your name]\n[Company / role]';
 
 export const services: Service[] = [
   {
+    id: 'role',
+    title: 'Backend & AI positions',
+    icon: 'lucide:briefcase',
+    summary: 'Open to backend and AI engineering positions, remote or in Casablanca.',
+    points: ['AI systems / backend engineer', 'Lead or founding engineer', 'Remote or Casablanca-based'],
+    template: {
+      subject: 'Role: [title] at [company]',
+      body:
+        'Hi Youssef,\n\nI am reaching out about a [title] role at [company].\n\n' +
+        'Team and product: [short description]\n' +
+        'Location / remote: [details]\n' +
+        'Compensation range: [range]\n' +
+        'Link to the job description: [URL]' + sign,
+    },
+  },
+  {
     id: 'backend',
     title: 'Backend & multi-tenant SaaS',
     icon: 'lucide:server',
@@ -76,22 +92,6 @@ export const services: Service[] = [
         'Goal: [what should change]\n' +
         'Regulatory context: [banking, government, GDPR, none]\n' +
         'Timeline: [dates]' + sign,
-    },
-  },
-  {
-    id: 'role',
-    title: 'Senior or lead roles',
-    icon: 'lucide:briefcase',
-    summary: 'Open to conversations about senior backend and AI engineering roles.',
-    points: ['Backend / AI lead', 'Founding engineer', 'Remote or Casablanca-based'],
-    template: {
-      subject: 'Role: [title] at [company]',
-      body:
-        'Hi Youssef,\n\nI am reaching out about a [title] role at [company].\n\n' +
-        'Team and product: [short description]\n' +
-        'Location / remote: [details]\n' +
-        'Compensation range: [range]\n' +
-        'Link to the job description: [URL]' + sign,
     },
   },
 ];

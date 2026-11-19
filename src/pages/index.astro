@@ -9,6 +9,7 @@ import Recommendation from '../components/Recommendation.astro';
 import { initials, avatarHue } from '../lib/recommendations';
 import { profile } from '../data/profile';
 import { entrySlug } from '../lib/i18n';
+import { splitHeadline } from '../lib/markdown';
 import { getPosts } from '../lib/post-queries';
 import { profilePageJsonLd } from '../lib/jsonld';
 import { getOss } from '../lib/oss';
@@ -16,7 +17,7 @@ import { getProjectGroups } from '../lib/projects';
 import ProjectCard from '../components/ProjectCard.astro';
 import headshot from '../assets/media/headshot.png';
 
-const [lead, rest] = profile.headline.split(/(?<=Osoul\.)\s/);
+const [lead, rest] = splitHeadline(profile.headline);
 const recs = await getCollection('recommendations');
 const pull = recs.find((r) => r.id === 'mohammad-al-ahmad')!;
 const others = recs.filter((r) => r !== pull).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -28,10 +29,10 @@ const posts = (await getPosts(false))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
 ---
-<BaseLayout title="Youssef Alouani · Lead Backend & AI Engineer" description={profile.oneLiner} path="/" jsonLd={[profilePageJsonLd(profile, Astro.site!.origin)]}>
+<BaseLayout title="Youssef Alouani · AI Systems Engineer" description={profile.oneLiner} path="/" jsonLd={[profilePageJsonLd(profile, Astro.site!.origin)]}>
   <section class="container-page grid items-center gap-10 py-16 sm:py-24 md:grid-cols-[1fr_auto]">
     <div>
-      <p class="eyebrow">Casablanca · Backend &amp; AI</p>
+      <p class="eyebrow">Casablanca · AI systems &amp; backend</p>
       <h1 class="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">{lead}</h1>
       <p class="mt-4 max-w-[48ch] text-lg text-muted sm:text-xl">{rest}</p>
       <div class="mt-8 flex flex-wrap gap-3">

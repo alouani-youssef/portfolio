@@ -28,7 +28,7 @@ export function buildResume(
       profiles: [
         { network: 'GitHub', username: 'alouani-youssef', url: profile.links.github },
         { network: 'LinkedIn', username: 'alouani-youssef', url: profile.links.linkedin },
-        { network: 'Medium', url: profile.links.mediumA },
+        { network: 'Medium', url: profile.links.medium },
       ],
     },
     work: roles.map((r) => ({
