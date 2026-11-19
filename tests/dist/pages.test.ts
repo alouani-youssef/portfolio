@@ -17,9 +17,21 @@ describe('home', () => {
   it('shows four expertise cards', () => {
     expect(doc.querySelectorAll('.expertise-card')).toHaveLength(4);
   });
-  it('shows client groups in order', () => {
-    const labels = doc.querySelectorAll('.client-groups h3').map((h) => h.text.trim());
-    expect(labels).toEqual(GROUP_ORDER.map((g) => GROUP_LABELS[g]));
+  it('offers an All filter plus one per group, in order, with counts', () => {
+    const buttons = doc.querySelectorAll('.client-filter button');
+    expect(buttons.map((b) => b.getAttribute('data-filter'))).toEqual(['all', ...GROUP_ORDER]);
+    expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual(['true', 'false', 'false', 'false', 'false']);
+    expect(buttons[0].text).toContain('12');
+    expect(buttons[1].text).toContain('2');
+    for (const [i, g] of GROUP_ORDER.entries()) expect(buttons[i + 1].getAttribute('title')).toBe(GROUP_LABELS[g]);
+  });
+  it('hides the filter until its script runs, so the full list shows without JavaScript', () => {
+    expect(doc.querySelector('.client-filter')!.hasAttribute('hidden')).toBe(true);
+  });
+  it('tags every tile with its group', () => {
+    const groups = doc.querySelectorAll('.client-groups li[data-group]').map((li) => li.getAttribute('data-group'));
+    expect(groups).toHaveLength(12);
+    expect(new Set(groups)).toEqual(new Set(GROUP_ORDER));
   });
   it('shows every client as a logo tile, linking out where a site is known', () => {
     const tiles = doc.querySelectorAll('.client-groups .client-tile');

@@ -9,6 +9,14 @@ export const GROUP_LABELS: Record<ClientGroup, string> = {
   growth: 'Growth and technology companies',
 };
 
+/** Short labels for the filter buttons; the full label stays available as a tooltip. */
+export const GROUP_SHORT_LABELS: Record<ClientGroup, string> = {
+  government: 'Government',
+  'banks-insurers': 'Banks and insurers',
+  groups: 'Hospitality and international',
+  growth: 'Growth and tech',
+};
+
 export function groupClients<T extends { group: ClientGroup; order: number }>(
   clients: T[],
 ): Array<{ group: ClientGroup; label: string; clients: T[] }> {
