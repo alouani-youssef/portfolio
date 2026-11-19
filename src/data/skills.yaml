@@ -1,79 +1,79 @@
-- { id: typescript, name: "TypeScript", category: language, level: daily, evidence: [osoul, axelerated, qalqul, archio, tracker], icon: "si:typescript", core: 11 }
-- { id: go, name: "Go", category: language, level: daily, evidence: [osoul, axelerated, qalqul, archio, tracker], icon: "si:go", core: 10 }
-- { id: python, name: "Python", category: language, level: daily, evidence: [osoul, axelerated, qalqul, archio, tracker], icon: "si:python", core: 7 }
-- { id: kotlin, name: "Kotlin", category: language, level: production, evidence: [osoul, axelerated, qalqul, archio, tracker], icon: "si:kotlin" }
-- { id: sql, name: "SQL", category: language, level: daily, evidence: [osoul, axelerated, qalqul, archio, tracker], icon: "lucide:table" }
-- { id: nestjs, name: "NestJS", category: backend, level: daily, evidence: [osoul, customer-voice, tracker], icon: "si:nestjs", core: 9 }
-- { id: nodejs, name: "Node.js", category: backend, level: daily, evidence: [osoul, customer-voice, tracker], icon: "si:nodedotjs" }
-- { id: fastapi, name: "FastAPI", category: backend, level: daily, evidence: [osoul, customer-voice, tracker], icon: "si:fastapi", core: 8 }
-- { id: gin, name: "Gin", category: backend, level: production, evidence: [osoul, customer-voice, tracker], icon: "si:gin" }
-- { id: typeorm, name: "TypeORM", category: backend, level: daily, evidence: [osoul, customer-voice, tracker], icon: "si:typeorm" }
-- { id: postgresql, name: "PostgreSQL", category: databases, level: daily, evidence: [osoul, customer-voice], icon: "si:postgresql", core: 12 }
-- { id: redis, name: "Redis", category: databases, level: daily, evidence: [osoul, customer-voice], icon: "si:redis", core: 13 }
-- { id: milvus, name: "Milvus", category: databases, level: production, evidence: [osoul, customer-voice], icon: "si:milvus" }
-- { id: neo4j, name: "Neo4j", category: databases, level: familiar, evidence: [osoul, customer-voice], icon: "si:neo4j" }
-- { id: pgvector, name: "pgvector", category: databases, level: production, evidence: [osoul, customer-voice], icon: "lucide:arrows-up-from-line" }
-- { id: grpc, name: "gRPC", category: messaging, level: production, evidence: [osoul, customer-voice, tracker], icon: "lucide:waypoints" }
-- { id: kafka, name: "Kafka", category: messaging, level: production, evidence: [osoul, customer-voice], icon: "si:apachekafka", core: 14 }
-- { id: rabbitmq, name: "RabbitMQ", category: messaging, level: production, evidence: [osoul, customer-voice], icon: "si:rabbitmq" }
-- { id: websockets, name: "WebSockets", category: messaging, level: production, evidence: [qalqul, osoul], icon: "lucide:cable" }
-- { id: sse, name: "SSE", category: messaging, level: production, evidence: [qalqul, osoul], icon: "lucide:activity" }
-- { id: push-notifications, name: "Push notifications", category: messaging, level: production, evidence: [qalqul, osoul], icon: "lucide:bell" }
-- { id: semantic-search, name: "Semantic search", category: llm, level: production, evidence: [osoul, customer-voice], icon: "lucide:file-search" }
-- { id: rag, name: "RAG", category: llm, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:brain-circuit", core: 1 }
-- { id: mcp, name: "MCP", category: llm, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:plug", core: 2 }
-- { id: langchain, name: "LangChain", category: llm, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "si:langchain", core: 4 }
-- { id: langgraph, name: "LangGraph", category: llm, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "si:langgraph", core: 3 }
-- { id: ollama, name: "Ollama", category: llm, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "si:ollama", core: 5 }
-- { id: embeddings, name: "Embeddings", category: llm, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:binary" }
-- { id: claude-harnesses, name: "Claude agent harnesses", category: llm, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "si:claude" }
-- { id: whisper, name: "Whisper", category: ml, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:mic" }
-- { id: nllb-200, name: "NLLB-200", category: ml, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "si:huggingface" }
-- { id: fine-tuning, name: "Fine-tuning", category: ml, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:sliders-horizontal", core: 6 }
-- { id: zero-shot-classification, name: "Zero-shot classification", category: ml, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:tags" }
+- { id: typescript, name: "TypeScript", category: language, level: expert, evidence: [10xjobs, finamaze, qalqul, 10xjobs-ingestion, 10xjobs-search, finamaze-keycloak, finamaze-kyc, finamaze-migration, osoul-server-side-tracking, qalqul-botpress, qalqul-nlu, qalqul-realtime, sowtek-flowbuilder, sowtek-omnichannel-chat, tracking-kit], icon: "si:typescript", core: 11 }
+- { id: go, name: "Go", category: language, level: production, evidence: [archio, osoul-server-side-tracking, tracking-kit], icon: "si:go", core: 10 }
+- { id: python, name: "Python", category: language, level: expert, evidence: [axelerated, customer-voice, qalqul-nlu, saudi-stt, sowtek-voip, translator, pg-inspector], icon: "si:python", core: 7 }
+- { id: kotlin, name: "Kotlin", category: language, level: production, evidence: [qalqul], icon: "si:kotlin" }
+- { id: sql, name: "SQL", category: language, level: expert, evidence: [], icon: "lucide:table" }
+- { id: nestjs, name: "NestJS", category: backend, level: expert, evidence: [axelerated, osoul, customer-voice, osoul-ai-assistant, osoul-multi-tenancy, osoul-recommendations, osoul-table-sessions, sowtek-flowbuilder, sowtek-omnichannel-chat, sowtek-voip], icon: "si:nestjs", core: 9 }
+- { id: nodejs, name: "Node.js", category: backend, level: production, evidence: [10xjobs, finamaze, qalqul, 10xjobs-ingestion, finamaze-keycloak, finamaze-kyc, finamaze-migration, qalqul-botpress, qalqul-nlu, qalqul-realtime], icon: "si:nodedotjs" }
+- { id: fastapi, name: "FastAPI", category: backend, level: expert, evidence: [axelerated, saudi-stt, sowtek-voip, translator], icon: "si:fastapi", core: 8 }
+- { id: gin, name: "Gin", category: backend, level: production, evidence: [osoul-server-side-tracking, tracking-kit], icon: "si:gin" }
+- { id: typeorm, name: "TypeORM", category: backend, level: production, evidence: [osoul, osoul-multi-tenancy, osoul-recommendations], icon: "si:typeorm" }
+- { id: postgresql, name: "PostgreSQL", category: databases, level: expert, evidence: [10xjobs, finamaze, osoul, 10xjobs-ingestion, 10xjobs-search, archio, finamaze-kyc, finamaze-migration, osoul-multi-tenancy, osoul-recommendations, sowtek-omnichannel-chat, pg-inspector, translator], icon: "si:postgresql", core: 12 }
+- { id: redis, name: "Redis", category: databases, level: expert, evidence: [osoul, archio, osoul-multi-tenancy, qalqul-realtime, sowtek-omnichannel-chat], icon: "si:redis", core: 13 }
+- { id: milvus, name: "Milvus", category: databases, level: production, evidence: [axelerated, customer-voice], icon: "si:milvus" }
+- { id: neo4j, name: "Neo4j", category: databases, level: familiar, evidence: [], icon: "si:neo4j" }
+- { id: pgvector, name: "pgvector", category: databases, level: production, evidence: [archio, translator], icon: "lucide:arrows-up-from-line" }
+- { id: grpc, name: "gRPC", category: messaging, level: production, evidence: [axelerated, customer-voice], icon: "lucide:waypoints" }
+- { id: kafka, name: "Kafka", category: messaging, level: production, evidence: [sowtek-omnichannel-chat], icon: "si:apachekafka", core: 14 }
+- { id: rabbitmq, name: "RabbitMQ", category: messaging, level: production, evidence: [archio, qalqul-realtime], icon: "si:rabbitmq" }
+- { id: websockets, name: "WebSockets", category: messaging, level: production, evidence: [qalqul, qalqul-botpress, qalqul-realtime, sowtek-omnichannel-chat, sowtek-voip], icon: "lucide:cable" }
+- { id: sse, name: "SSE", category: messaging, level: production, evidence: [], icon: "lucide:activity" }
+- { id: push-notifications, name: "Push notifications", category: messaging, level: production, evidence: [], icon: "lucide:bell" }
+- { id: semantic-search, name: "Semantic search", category: llm, level: production, evidence: [10xjobs, archio, translator], icon: "lucide:file-search" }
+- { id: rag, name: "RAG", category: llm, level: expert, evidence: [axelerated, customer-voice, saudi-stt], icon: "lucide:brain-circuit", core: 1 }
+- { id: mcp, name: "MCP", category: llm, level: expert, evidence: [axelerated, ai-stones, customer-voice, pg-inspector], icon: "lucide:plug", core: 2 }
+- { id: langchain, name: "LangChain", category: llm, level: expert, evidence: [osoul, osoul-ai-assistant], icon: "si:langchain", core: 4 }
+- { id: langgraph, name: "LangGraph", category: llm, level: production, evidence: [], icon: "si:langgraph", core: 3 }
+- { id: ollama, name: "Ollama", category: llm, level: familiar, evidence: [translator], icon: "si:ollama" }
+- { id: embeddings, name: "Embeddings", category: llm, level: production, evidence: [10xjobs, 10xjobs-ingestion, customer-voice], icon: "lucide:binary" }
+- { id: claude-harnesses, name: "Claude agent harnesses", category: llm, level: production, evidence: [ai-stones], icon: "si:claude" }
+- { id: whisper, name: "Whisper", category: ml, level: expert, evidence: [axelerated, saudi-stt, sowtek-voip], icon: "lucide:mic", core: 5 }
+- { id: nllb-200, name: "NLLB-200", category: ml, level: production, evidence: [translator], icon: "si:huggingface" }
+- { id: fine-tuning, name: "Fine-tuning", category: ml, level: production, evidence: [axelerated, saudi-stt], icon: "lucide:sliders-horizontal", core: 6 }
+- { id: zero-shot-classification, name: "Zero-shot classification", category: ml, level: production, evidence: [axelerated, sowtek-voip], icon: "lucide:tags" }
 - { id: huggingface-transformers, name: "Hugging Face Transformers", category: ml, level: production, evidence: [], icon: "si:huggingface" }
-- { id: duckling, name: "Duckling", category: ml, level: production, evidence: [], icon: "lucide:calendar-clock" }
-- { id: recommendation-systems, name: "Recommendation systems", category: ml, level: production, evidence: [], icon: "lucide:thumbs-up" }
-- { id: docling, name: "Docling", category: etl, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:file-text" }
-- { id: data-pipelines, name: "Data pipelines (ETL)", category: etl, level: production, evidence: [], icon: "lucide:workflow" }
-- { id: clickhouse, name: "ClickHouse", category: etl, level: production, evidence: [], icon: "si:clickhouse" }
-- { id: pii-redaction, name: "PII redaction", category: security, level: production, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:eye-off" }
-- { id: keycloak, name: "Keycloak", category: security, level: production, evidence: [osoul, customer-voice, tracker], icon: "si:keycloak" }
-- { id: oauth2-oidc, name: "OAuth2/OIDC", category: security, level: production, evidence: [osoul, customer-voice, tracker], icon: "si:openid" }
-- { id: hmac-signing, name: "HMAC request signing", category: security, level: production, evidence: [osoul, customer-voice, tracker], icon: "lucide:key-round" }
-- { id: token-session-design, name: "Token and session design", category: security, level: production, evidence: [osoul, customer-voice, tracker], icon: "lucide:fingerprint" }
-- { id: privacy-retention, name: "Data privacy and retention", category: security, level: production, evidence: [osoul, customer-voice, tracker], icon: "lucide:user-lock" }
+- { id: duckling, name: "Duckling", category: ml, level: production, evidence: [qalqul, qalqul-nlu], icon: "lucide:calendar-clock" }
+- { id: recommendation-systems, name: "Recommendation systems", category: ml, level: expert, evidence: [osoul-recommendations], icon: "lucide:thumbs-up" }
+- { id: docling, name: "Docling", category: etl, level: production, evidence: [axelerated, archio], icon: "lucide:file-text" }
+- { id: data-pipelines, name: "Data pipelines (ETL)", category: etl, level: production, evidence: [10xjobs-ingestion, 10xjobs-search], icon: "lucide:workflow" }
+- { id: clickhouse, name: "ClickHouse", category: etl, level: familiar, evidence: [], icon: "si:clickhouse" }
+- { id: pii-redaction, name: "PII redaction", category: security, level: production, evidence: [osoul, osoul-ai-assistant], icon: "lucide:eye-off" }
+- { id: keycloak, name: "Keycloak", category: security, level: production, evidence: [axelerated, osoul, customer-voice, finamaze-keycloak, finamaze-migration, osoul-multi-tenancy], icon: "si:keycloak" }
+- { id: oauth2-oidc, name: "OAuth2/OIDC", category: security, level: production, evidence: [finamaze-keycloak, osoul-multi-tenancy], icon: "si:openid" }
+- { id: hmac-signing, name: "HMAC request signing", category: security, level: production, evidence: [osoul-server-side-tracking, tracking-kit], icon: "lucide:key-round" }
+- { id: token-session-design, name: "Token and session design", category: security, level: production, evidence: [finamaze-keycloak, osoul-ai-assistant, osoul-multi-tenancy, osoul-table-sessions, osoul], icon: "lucide:fingerprint" }
+- { id: privacy-retention, name: "Data privacy and retention", category: security, level: production, evidence: [customer-voice, osoul-server-side-tracking], icon: "lucide:user-lock" }
 - { id: cloudflare, name: "Cloudflare", category: security, level: production, evidence: [], icon: "si:cloudflare" }
-- { id: kubernetes, name: "Kubernetes", category: infra, level: production, evidence: [axelerated, archio], icon: "si:kubernetes" }
-- { id: docker-compose, name: "Docker Compose", category: infra, level: daily, evidence: [axelerated, archio], icon: "si:docker" }
-- { id: hybrid-deployments, name: "Hybrid deployments", category: infra, level: production, evidence: [axelerated, archio], icon: "lucide:network" }
-- { id: object-storage, name: "Object storage", category: infra, level: production, evidence: [axelerated, archio], icon: "lucide:hard-drive" }
-- { id: ansible, name: "Ansible", category: ops, level: production, evidence: [axelerated, archio], icon: "si:ansible" }
-- { id: argocd, name: "Argo CD", category: ops, level: production, evidence: [], icon: "si:argo" }
+- { id: kubernetes, name: "Kubernetes", category: infra, level: production, evidence: [axelerated], icon: "si:kubernetes" }
+- { id: docker-compose, name: "Docker Compose", category: infra, level: production, evidence: [archio, qalqul-realtime], icon: "si:docker" }
+- { id: hybrid-deployments, name: "Hybrid deployments", category: infra, level: production, evidence: [], icon: "lucide:network" }
+- { id: object-storage, name: "Object storage", category: infra, level: production, evidence: [archio], icon: "lucide:hard-drive" }
+- { id: ansible, name: "Ansible", category: ops, level: production, evidence: [axelerated], icon: "si:ansible" }
+- { id: argocd, name: "Argo CD", category: ops, level: familiar, evidence: [], icon: "si:argo" }
 - { id: github-actions, name: "GitHub Actions", category: ops, level: production, evidence: [], icon: "si:githubactions" }
 - { id: gitlab-ci, name: "GitLab CI", category: ops, level: production, evidence: [], icon: "si:gitlab" }
-- { id: terraform, name: "Terraform", category: ops, level: production, evidence: [], icon: "si:terraform" }
-- { id: prometheus, name: "Prometheus", category: ops, level: production, evidence: [], icon: "si:prometheus" }
-- { id: grafana, name: "Grafana", category: ops, level: production, evidence: [], icon: "si:grafana" }
-- { id: nginx, name: "Nginx", category: ops, level: production, evidence: [], icon: "si:nginx" }
-- { id: hetzner, name: "Hetzner", category: cloud, level: familiar, evidence: [axelerated, archio], icon: "si:hetzner" }
+- { id: terraform, name: "Terraform", category: ops, level: familiar, evidence: [], icon: "si:terraform" }
+- { id: prometheus, name: "Prometheus", category: ops, level: familiar, evidence: [], icon: "si:prometheus" }
+- { id: grafana, name: "Grafana", category: ops, level: familiar, evidence: [], icon: "si:grafana" }
+- { id: nginx, name: "Nginx", category: ops, level: production, evidence: [qalqul-realtime], icon: "si:nginx" }
+- { id: hetzner, name: "Hetzner", category: cloud, level: familiar, evidence: [], icon: "si:hetzner" }
 - { id: gcp, name: "GCP", category: cloud, level: familiar, evidence: [], icon: "si:googlecloud" }
 - { id: private-data-centers, name: "Hybrid / private data centers", category: cloud, level: production, evidence: [], icon: "lucide:warehouse" }
-- { id: deepeval, name: "DeepEval", category: testing, level: familiar, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:flask-conical" }
-- { id: giskard, name: "Giskard", category: testing, level: familiar, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:shield-alert" }
+- { id: deepeval, name: "DeepEval", category: testing, level: familiar, evidence: [], icon: "lucide:flask-conical" }
+- { id: giskard, name: "Giskard", category: testing, level: familiar, evidence: [], icon: "lucide:shield-alert" }
 - { id: unit-tests, name: "Unit tests", category: testing, level: production, evidence: [], icon: "lucide:check-check" }
 - { id: jest, name: "Jest", category: testing, level: production, evidence: [], icon: "si:jest" }
 - { id: pytest, name: "Pytest", category: testing, level: production, evidence: [], icon: "si:pytest" }
 - { id: testcontainers, name: "Testcontainers", category: testing, level: production, evidence: [], icon: "lucide:container" }
-- { id: robot-framework, name: "Robot Framework", category: testing, level: production, evidence: [], icon: "si:robotframework" }
-- { id: clean-architecture, name: "Clean architecture", category: patterns, level: production, evidence: [], icon: "lucide:layers" }
-- { id: event-driven, name: "Event-driven", category: patterns, level: production, evidence: [], icon: "lucide:zap" }
-- { id: microservices, name: "Microservices", category: patterns, level: production, evidence: [], icon: "lucide:boxes" }
-- { id: n8n, name: "n8n", category: lowcode, level: production, evidence: [], icon: "si:n8n" }
-- { id: botpress, name: "Botpress", category: lowcode, level: production, evidence: [], icon: "lucide:bot" }
-- { id: react, name: "React", category: frontend, level: production, evidence: [osoul, finamaze, axelerated], icon: "si:react" }
-- { id: nextjs, name: "Next.js", category: frontend, level: production, evidence: [osoul, finamaze, axelerated], icon: "si:nextdotjs" }
-- { id: astro, name: "Astro", category: frontend, level: production, evidence: [osoul, finamaze, axelerated], icon: "si:astro" }
-- { id: tailwind, name: "Tailwind", category: frontend, level: production, evidence: [osoul, finamaze, axelerated], icon: "si:tailwindcss" }
-- { id: react-native, name: "React Native", category: frontend, level: production, evidence: [osoul, finamaze, axelerated], icon: "si:react" }
-- { id: chat-widgets, name: "Chat widgets", category: frontend, level: production, evidence: [qalqul, osoul], icon: "lucide:message-circle" }
+- { id: robot-framework, name: "Robot Framework", category: testing, level: familiar, evidence: [], icon: "si:robotframework" }
+- { id: clean-architecture, name: "Clean architecture", category: patterns, level: production, evidence: [finamaze-migration], icon: "lucide:layers" }
+- { id: event-driven, name: "Event-driven", category: patterns, level: production, evidence: [osoul-recommendations, osoul-server-side-tracking, sowtek-flowbuilder, sowtek-omnichannel-chat, sowtek-voip], icon: "lucide:zap" }
+- { id: microservices, name: "Microservices", category: patterns, level: production, evidence: [finamaze-migration], icon: "lucide:boxes" }
+- { id: n8n, name: "n8n", category: lowcode, level: production, evidence: [qalqul, sowtek-flowbuilder], icon: "si:n8n" }
+- { id: botpress, name: "Botpress", category: lowcode, level: production, evidence: [qalqul, qalqul-botpress], icon: "lucide:bot" }
+- { id: react, name: "React", category: frontend, level: production, evidence: [finamaze, qalqul, finamaze-kyc], icon: "si:react" }
+- { id: nextjs, name: "Next.js", category: frontend, level: production, evidence: [finamaze, osoul, finamaze-kyc], icon: "si:nextdotjs" }
+- { id: astro, name: "Astro", category: frontend, level: production, evidence: [], icon: "si:astro" }
+- { id: tailwind, name: "Tailwind", category: frontend, level: production, evidence: [], icon: "si:tailwindcss" }
+- { id: react-native, name: "React Native", category: frontend, level: production, evidence: [osoul, osoul-table-sessions], icon: "si:react" }
+- { id: chat-widgets, name: "Chat widgets", category: frontend, level: production, evidence: [qalqul, qalqul-botpress], icon: "lucide:message-circle" }

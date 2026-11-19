@@ -11,7 +11,7 @@ const skills = defineCollection({
     id: z.string(),
     name: z.string(),
     category: z.enum(SKILL_CATEGORIES.map((c) => c.id) as [Category, ...Category[]]),
-    level: z.enum(['daily', 'production', 'familiar']),
+    level: z.enum(['expert', 'production', 'familiar']),
     evidence: z.array(z.string()).default([]),
     icon: z.string().refine((ref) => { try { resolveIcon(ref); return true; } catch { return false; } }, { message: 'Unknown skill icon (use si:<slug> or lucide:<name>)' }),
     core: z.number().int().positive().optional(),

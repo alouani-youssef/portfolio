@@ -51,7 +51,7 @@ export const apiSkills = z.array(z.object({
   ...item,
   name: z.string(),
   category: z.string(),
-  level: z.enum(['daily', 'production', 'familiar']),
+  level: z.enum(['expert', 'production', 'familiar']),
   evidence: z.array(z.string()),
 }));
 

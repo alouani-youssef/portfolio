@@ -60,7 +60,7 @@ describe('home', () => {
     const section = doc.querySelector('section[aria-labelledby="core-stack-h"]')!;
     expect(section.querySelector('h2')!.text.trim()).toBe('Core stack');
     const items = section.querySelectorAll('.core-stack li');
-    expect(items.map((li) => li.text.trim())).toEqual(['RAG', 'MCP', 'LangGraph', 'LangChain', 'Ollama', 'Fine-tuning', 'Python', 'FastAPI', 'NestJS', 'Go', 'TypeScript', 'PostgreSQL', 'Redis', 'Kafka']);
+    expect(items.map((li) => li.text.trim())).toEqual(['RAG', 'MCP', 'LangGraph', 'LangChain', 'Whisper', 'Fine-tuning', 'Python', 'FastAPI', 'NestJS', 'Go', 'TypeScript', 'PostgreSQL', 'Redis', 'Kafka']);
     for (const li of items) expect(li.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
     expect(section.querySelector('a[href="/about#skills"]')).not.toBeNull();
   });

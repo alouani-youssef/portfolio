@@ -24,7 +24,7 @@ export const SKILL_CATEGORIES: ReadonlyArray<{ id: Category; label: string; icon
   { id: 'frontend', label: 'Front end', icon: 'lucide:layout-template' },
 ];
 
-export const LEVEL_LABELS = { daily: 'daily', production: 'shipped in production', familiar: 'familiar' } as const;
+export const LEVEL_LABELS = { expert: 'expert', production: 'shipped in production', familiar: 'familiar' } as const;
 
 /** Hover colour per theme: the brand hex, or `var(--accent)` when the hex has under 3:1 contrast on that theme's background. */
 export interface BrandHover { light: string; dark: string }

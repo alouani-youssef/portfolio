@@ -1,9 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { parse } from 'yaml';
 import { resolveIcon, SKILL_CATEGORIES } from '../../src/lib/skill-icons';
 
-const skills = parse(readFileSync('src/data/skills.yaml', 'utf8')) as Array<{ id: string; category: string; level: string; icon?: string; core?: number }>;
+const skills = parse(readFileSync('src/data/skills.yaml', 'utf8')) as Array<{ id: string; category: string; level: string; icon?: string; core?: number; evidence?: string[] }>;
+const slugs = (dir: string) => readdirSync(dir).filter((f) => f.endsWith('.mdx')).map((f) => f.replace(/\.mdx$/, ''));
+const ossIds = (parse(readFileSync('src/data/oss.yaml', 'utf8')) as Array<{ id: string }>).map((o) => o.id);
+const KNOWN = new Set([...slugs('src/content/projects/en'), ...slugs('src/content/experience/en'), ...ossIds]);
+const level = (id: string) => skills.find((s) => s.id === id)!.level;
 
 describe('skills.yaml', () => {
   it('gives every skill a resolvable icon', () => {
@@ -17,7 +21,7 @@ describe('skills.yaml', () => {
     const core = skills.filter((s) => s.core !== undefined).sort((a, b) => a.core! - b.core!);
     expect(core.map((s) => s.core)).toEqual(core.map((_, i) => i + 1));
     expect(core.map((s) => s.id)).toEqual([
-      'rag', 'mcp', 'langgraph', 'langchain', 'ollama', 'fine-tuning', 'python', 'fastapi', 'nestjs', 'go', 'typescript', 'postgresql', 'redis', 'kafka',
+      'rag', 'mcp', 'langgraph', 'langchain', 'whisper', 'fine-tuning', 'python', 'fastapi', 'nestjs', 'go', 'typescript', 'postgresql', 'redis', 'kafka',
     ]);
   });
 
@@ -60,7 +64,22 @@ describe('skills.yaml', () => {
     expect(inCat('frontend')).toContain('chat-widgets');
   });
 
-  it('marks FastAPI as daily', () => {
-    expect(skills.find((s) => s.id === 'fastapi')!.level).toBe('daily');
+  it('marks at most 12 skills as expert, FastAPI among them', () => {
+    expect(skills.filter((s) => s.level === 'expert').length).toBeLessThanOrEqual(12);
+    expect(level('fastapi')).toBe('expert');
+    expect(skills.filter((s) => s.level === 'daily')).toEqual([]);
+  });
+
+  it('marks tools used lightly as familiar', () => {
+    for (const id of ['terraform', 'prometheus', 'grafana', 'gcp', 'robot-framework', 'neo4j', 'deepeval', 'giskard', 'argocd', 'ollama', 'clickhouse']) expect(level(id), id).toBe('familiar');
+  });
+
+  it('points every evidence id at a real project, role or open-source entry', () => {
+    for (const s of skills) for (const e of s.evidence ?? []) expect(KNOWN.has(e), `${s.id}: ${e}`).toBe(true);
+  });
+
+  it('uses evidence that matches the work, not a copied list', () => {
+    expect(skills.find((s) => s.id === 'nllb-200')!.evidence).toEqual(['translator']);
+    for (const id of ['duckling', 'botpress']) expect(skills.find((s) => s.id === id)!.evidence, id).toContain('qalqul');
   });
 });
