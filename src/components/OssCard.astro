@@ -17,5 +17,6 @@ const d = entry.data;
   <ul class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm">
     {d.repos.map((r) => <li><a href={r.url}>{d.repos.length > 1 ? `${r.label} on GitHub` : 'Repository on GitHub'}</a></li>)}
     {d.links.map((l) => <li><a href={l.url}>{l.label}</a></li>)}
+    {d.related && <li><a href={`/projects/${d.related.id.replace(/^en\//, '')}`}>Case study</a></li>}
   </ul>
 </article>

@@ -1,6 +1,7 @@
 - id: ai-stones
   name: AI Stones
   order: 1
+  related: en/ai-stones
   pitch: "A Node.js CLI that detects a project's stack and conventions, then generates a tailored Claude Code setup."
   languages: [JavaScript, Node.js]
   license: MIT
@@ -13,6 +14,7 @@
 - id: archio
   name: archio
   order: 2
+  related: en/archio
   pitch: "Object storage in Go with a multi-node, high-availability cluster and semantic search over stored files, built on Docling."
   languages: [Go]
   license: Apache-2.0

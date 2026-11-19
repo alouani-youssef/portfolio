@@ -2,11 +2,11 @@ import { describe, it, expect } from 'vitest';
 import type { HTMLElement, Node } from 'node-html-parser';
 import { readHtml, listHtmlPages } from './helpers';
 
-const CASES = ['osoul', 'saudi-stt', 'customer-voice'] as const;
+const CASES = ['osoul', 'saudi-stt', 'customer-voice', 'ai-stones', 'archio', 'finamaze-kyc'] as const;
 const H2 = ['Problem', 'Constraints', 'Architecture', 'Key decisions', 'Results', 'Stack and links'];
 
 describe('projects index', () => {
-  it('links the three case studies with Osoul first as flagship', () => {
+  it('links every case study with Osoul first as flagship', () => {
     const doc = readHtml('/projects');
     const hrefs = [...new Set(doc.querySelectorAll('main a[href^="/projects/"]').map((a) => a.getAttribute('href')))];
     expect(hrefs).toEqual(CASES.map((c) => `/projects/${c}`));
@@ -36,7 +36,7 @@ describe.each(CASES)('/projects/%s', (slug) => {
   });
   it('marks placeholder metrics as samples in preview', () => {
     for (const m of doc.querySelectorAll('.metric')) {
-      const isConfirmed = m.text.includes('Venues live');
+      const isConfirmed = ['Venues live', 'Latest version on npm'].some((l) => m.text.includes(l));
       expect(m.querySelector('.badge') === null, m.text).toBe(isConfirmed);
     }
   });
@@ -53,6 +53,22 @@ it('image counts match the media plan', () => {
   expect(count('osoul')).toBe(4);
   expect(count('saudi-stt')).toBe(1);
   expect(count('customer-voice')).toBe(0);
+  expect(count('ai-stones')).toBe(0);
+  expect(count('archio')).toBe(0);
+  expect(count('finamaze-kyc')).toBe(2);
+});
+
+it('open-source case studies link their repositories and the open-source page links back', () => {
+  expect(readHtml('/projects/ai-stones').querySelector('a[href="https://github.com/alouani-youssef/stones"]')).not.toBeNull();
+  expect(readHtml('/projects/archio').querySelector('a[href="https://github.com/alouani-youssef/archio"]')).not.toBeNull();
+  const oss = readHtml('/open-source');
+  expect(oss.querySelector('#ai-stones a[href="/projects/ai-stones"]')).not.toBeNull();
+  expect(oss.querySelector('#archio a[href="/projects/archio"]')).not.toBeNull();
+});
+
+it('archio separates what ships today from what is next', () => {
+  const h3 = readHtml('/projects/archio').querySelectorAll('main h3').map((h) => h.text.trim());
+  expect(h3.some((h) => /^What.s next$/.test(h))).toBe(true);
 });
 
 it('marks Arabic text with lang="ar" and dir="rtl" (Review Focus 3)', () => {

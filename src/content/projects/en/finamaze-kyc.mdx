@@ -1,0 +1,61 @@
+---
+title: "Finamaze: KYC and reconciliation"
+summary: Identity checks with document and visual verification for a robo-advisor's investor onboarding, and reconciliation that keeps the platform's ledger in step with the bank.
+area: backend
+kind: employer
+company: en/finamaze
+status: shipped
+featured: false
+confidentiality: architecture-only
+order: 6
+skills: [nodejs, typescript, postgresql, react, nextjs]
+metrics:
+  - { label: "Manual review time per file", value: "−40%", placeholder: true }
+media:
+  - { src: ../../../assets/projects/finamaze-kyc/onboarding.png, alt: "FinaMaze sign-up page with email, phone, country and city of residence, password and referral fields next to an investing illustration", caption: "Sign-up, the first step of investor onboarding before identity checks.", device: desktop }
+  - { src: ../../../assets/projects/finamaze-kyc/mobile-apps.png, alt: "Five FinaMaze app-store screens: AI-tailored portfolios, account balance, Smartfolios positions, investment analysis and the invest flow", caption: "The robo-advisor investors reach once their identity is verified.", device: desktop }
+updatedAt: 2026-11-19
+---
+import Gallery from '../../../components/Gallery.astro';
+import FinamazeKycDiagram from '../../../components/diagrams/FinamazeKycDiagram.astro';
+
+## Problem
+
+Finamaze runs a robo-advisor that builds AI-tailored portfolios for each investor's risk profile. Before anyone can invest, the platform has to know who they are, and once money moves, its own ledger has to agree with the bank's records to the cent. Both jobs used to depend on people checking documents and spreadsheets by hand. {/* CHECK: confirm the manual starting point */}
+
+## Constraints
+
+- **Regulated onboarding**: identity checks are a precondition for investing, for a platform serving Saudi National Bank. {/* CHECK: confirm regulatory framing */}
+- **Two kinds of evidence**: the document itself and the person presenting it both need verifying.
+- **Money must reconcile**: any difference between the platform's records and the bank's has to surface quickly, not at month end.
+- **Privacy**: identity documents are among the most sensitive data a fintech holds.
+
+## Architecture
+
+<FinamazeKycDiagram>
+
+<details>
+<summary>Diagram source (Mermaid)</summary>
+
+```mermaid
+flowchart TB
+  signup[Sign-up · web and mobile] --> docs[Documents · selfie]
+  docs --> dv[Document verification]
+  docs --> vv[Visual verification]
+  dv & vv --> ok[Approved]
+  dv & vv --> review[Review queue · unclear cases]
+  ok --> account[Investing account]
+  account --> recon[Reconciliation · ledger vs bank records]
+```
+
+</details>
+
+</FinamazeKycDiagram>
+
+<Gallery items={props.media} />
+
+## Key decisions
+
+1. **Document and visual verification as separate checks.** A valid document says nothing about who is holding it. Verifying the document and matching the person to it are separate steps with separate outcomes, so a failure says which one failed. {/* CHECK: confirm how the two checks were combined */}
+2. **A review queue for unclear cases instead of automatic rejection.** Rejecting every borderline case loses real investors; approving them loses compliance. Unclear results go to a person with the evidence attached. {/* CHECK */}
+3. **Reconciliation as a continuous job, not a month-end report.** Matching the platform's ledger against bank records on a schedule surfaces breaks while they are still small and explainable. {/* CHECK: confirm cadence and sources */}
