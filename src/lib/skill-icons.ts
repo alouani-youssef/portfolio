@@ -17,7 +17,13 @@ export const SKILL_CATEGORIES: ReadonlyArray<{ id: Category; label: string; icon
 
 export const LEVEL_LABELS = { daily: 'daily', production: 'shipped in production', familiar: 'familiar' } as const;
 
-export interface ResolvedIcon { svg: string; brand: boolean; brandHover: string | null }
+/** Hover colour per theme: the brand hex, or `var(--accent)` when the hex has under 3:1 contrast on that theme's background. */
+export interface BrandHover { light: string; dark: string }
+export interface ResolvedIcon { svg: string; brand: boolean; brandHover: BrandHover | null }
+
+/** Page backgrounds, kept in sync with --bg in src/styles/global.css. */
+const THEME_BG = { light: 'fafaf9', dark: '0e0f11' } as const;
+const MIN_HOVER_CONTRAST = 3;
 
 type SimpleIcon = { slug: string; hex: string; path: string };
 const BRANDS = new Map<string, SimpleIcon>(
@@ -38,14 +44,22 @@ function luminance(hex: string): number {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
+function contrast(a: string, b: string): number {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+function hoverFor(hex: string, bg: string): string {
+  return contrast(hex, bg) >= MIN_HOVER_CONTRAST ? `#${hex}` : 'var(--accent)';
+}
+
 function brandIcon(slug: string): ResolvedIcon | null {
   const icon = BRANDS.get(slug);
   if (!icon) return null;
-  const l = luminance(icon.hex);
   return {
     svg: `<svg viewBox="0 0 24 24" fill="currentColor" ${A11Y}><path d="${icon.path}"/></svg>`,
     brand: true,
-    brandHover: l < 0.05 || l > 0.85 ? null : `#${icon.hex}`,
+    brandHover: { light: hoverFor(icon.hex, THEME_BG.light), dark: hoverFor(icon.hex, THEME_BG.dark) },
   };
 }
 

@@ -5,16 +5,19 @@ describe('resolveIcon', () => {
   it('inlines a simple-icons brand as a currentColor svg without a title', () => {
     const r = resolveIcon('si:redis');
     expect(r.brand).toBe(true);
-    expect(r.brandHover).toBe('#FF4438');
+    expect(r.brandHover).toEqual({ light: '#FF4438', dark: '#FF4438' });
     expect(r.svg).toContain('viewBox="0 0 24 24"');
     expect(r.svg).toContain('aria-hidden="true"');
     expect(r.svg).toContain('fill="currentColor"');
     expect(r.svg).not.toContain('<title');
   });
 
-  it('drops the hover brand colour for near-black brands', () => {
-    expect(resolveIcon('si:nextdotjs').brandHover).toBeNull();
-    expect(resolveIcon('si:ollama').brandHover).toBeNull();
+  it('falls back to accent per theme when the brand colour has under 3:1 contrast', () => {
+    expect(resolveIcon('si:nextdotjs').brandHover).toEqual({ light: '#000000', dark: 'var(--accent)' });
+    expect(resolveIcon('si:huggingface').brandHover).toEqual({ light: 'var(--accent)', dark: '#FFD21E' });
+    expect(resolveIcon('si:react').brandHover!.light).toBe('var(--accent)');
+    expect(resolveIcon('si:langgraph').brandHover!.light).toBe('var(--accent)');
+    expect(resolveIcon('si:keycloak').brandHover!.dark).toBe('var(--accent)');
   });
 
   it('inlines a lucide icon as a stroked svg without size or comment', () => {

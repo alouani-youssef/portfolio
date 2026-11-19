@@ -6,6 +6,6 @@ const { svg, brand, brandHover } = resolveIcon(icon);
 ---
 <span
   class:list={['skill-icon', brand ? 'skill-icon--brand' : 'skill-icon--concept', className]}
-  style={brandHover ? `--brand: ${brandHover}` : undefined}
+  style={brandHover ? `--brand-light: ${brandHover.light}; --brand-dark: ${brandHover.dark}` : undefined}
   set:html={svg}
 />
