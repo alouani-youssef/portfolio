@@ -121,7 +121,7 @@ export const profile: Profile = {
     items: [
       'Building Osoul: recommendation systems, reservations with deposits and the privacy-aware AI assistant for fine-dining restaurants.',
       'Running 10xJobs, a cost-tuned pipeline on Apify actors that matches new job posts to each user’s published profile.',
-      'Maintaining AI Stones, an npx CLI that generates a tailored Claude Code setup for any project.',
+      'Maintaining AI Stones, an AI harness of skills, guardrail hooks and settings that protects and improves how Claude Code operates in a project.',
       'Writing about fine-tuning Whisper large-v3 for Saudi dialect.',
     ],
   },

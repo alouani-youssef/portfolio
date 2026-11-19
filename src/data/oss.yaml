@@ -2,15 +2,15 @@
   name: AI Stones
   order: 1
   related: en/ai-stones
-  pitch: "A Node.js CLI that detects a project's stack and conventions, then generates a tailored Claude Code setup."
-  languages: [JavaScript, Node.js]
+  pitch: "An AI harness for Claude Code: Markdown skills, guardrail hooks and JSON settings that protect and improve how the model operates."
+  languages: [Markdown, JSON, Hook scripts]
   license: MIT
   repos: [{ label: GitHub, url: "https://github.com/alouani-youssef/stones" }]
   links: [{ label: npm, url: "https://www.npmjs.com/package/ai-stones" }]
   highlights:
-    - "Run it with npx ai-stones init in any repository."
-    - "Generates .claude/ hooks, skills and MCP server config, plus AGENT.md and ROADMAP.md."
-    - "Published on npm under MIT, with CI."
+    - "Guardrail hooks: access guard, blocked rm, atomic commits, and a gate that holds merges and publishes until local CI passes."
+    - "24 skills that load only when a task needs them, from test-first development to system prompts and golden sets."
+    - "Installed per project with npx ai-stones init, tailored to the detected stack; MIT on npm."
 - id: archio
   name: archio
   order: 2

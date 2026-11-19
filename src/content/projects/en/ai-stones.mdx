@@ -1,13 +1,13 @@
 ---
-title: "AI Stones: a project-aware Claude Code setup"
-summary: An npx CLI that detects a project's stack and conventions, asks what it can't infer, and installs a tailored Claude Code setup that is safe to re-run.
+title: "AI Stones: an AI harness for Claude Code"
+summary: Markdown skills, guardrail hooks and JSON settings that protect and improve how Claude Code operates in a project, installed per project and safe to re-run.
 area: ai
 kind: open-source
 status: live
 featured: false
 confidentiality: public
 order: 4
-skills: [nodejs, claude-harnesses, mcp]
+skills: [claude-harnesses, mcp]
 links: { repo: "https://github.com/alouani-youssef/stones", demo: "https://www.npmjs.com/package/ai-stones" }
 metrics:
   - { label: "Latest version on npm", value: "3.2.0", placeholder: false }
@@ -17,14 +17,15 @@ import AiStonesDiagram from '../../../components/diagrams/AiStonesDiagram.astro'
 
 ## Problem
 
-Coding agents are only as good as the context they get. Most projects start Claude Code with no brief, generic permissions and none of the project's own commands, so every session rediscovers how to build, test and lint, and every team copies the same `.claude/` files by hand. AI Stones turns that setup into one command: `npx ai-stones init`.
+A coding agent working in a real repository has two operational problems. It can do damage: delete files, touch what it shouldn't, commit half-finished work, merge or publish code that never passed CI. And it works below its best: without the project's commands, conventions and guidance, every session rediscovers how to build and test, and drifts from how the team writes code. AI Stones is a harness around the model that handles both: hooks that protect, skills and settings that improve, installed per project with one command, `npx ai-stones init`.
 
 ## Constraints
 
 - **Any stack**: it has to read what the project already is (languages, frameworks, package manager, monorepo tooling, test, lint, typecheck and build commands, formatters, commit style), not assume one.
 - **Never clobber people's work**: teams edit generated files; a re-run must not overwrite them silently.
 - **Small context**: everything loaded on every prompt costs tokens, so most guidance has to load only when a task needs it.
-- **Zero install**: it runs with `npx` on Node.js 22.13 or newer, with no registry token.
+- **Guardrails without friction**: protections must stop real damage without blocking normal work, or people turn them off.
+- **Zero install**: the installer runs with `npx`, with no registry token.
 
 ## Architecture
 
@@ -35,18 +36,21 @@ Coding agents are only as good as the context they get. Most projects start Clau
 
 ```mermaid
 flowchart TB
-  repo[Your repository] --> detect[Stack detection]
-  repo --> conv[Conventions]
-  detect & conv --> ask[Project interview · detected values become defaults]
-  ask --> brief[AGENT.md · CLAUDE.md]
-  ask --> claude[.claude/ · hooks, skills, tools]
-  ask --> mcp[.mcp.json]
-  ask -.-> state[stones.json · answers and file hashes]
+  session[Claude Code session] --> protect[Protection hooks · access guard, rm, atomic commits, CI gate]
+  session --> quality[Quality hooks · complexity, naming, format]
+  session --> memory[Memory hooks · history, code graph]
+  session --> skills[Skills · 24 Markdown guides]
+  session --> settings[Settings · JSON permissions, MCP]
+  session --> brief[AGENT.md · project brief]
+  init[npx ai-stones init] --> protect & quality & memory & skills & settings & brief
+  init -.-> state[stones.json · answers and file hashes]
 ```
 
 </details>
 
 </AiStonesDiagram>
+
+The harness is mostly text and configuration: 24 skills written in Markdown, JSON settings and permissions, and 13 small hook scripts that Claude Code runs around its tool calls. The hooks fall into three groups. **Protection**: an access guard, a block on `rm`, atomic-commit protection, and a workflows gate. **Quality**: complexity, naming and formatting checks. **Memory**: session history and a code graph.
 
 `init` detects the stack first (`npx ai-stones detect` prints it as JSON), asks only for what it cannot infer, such as purpose, architecture, security conventions, branching and TDD preferences, and which hooks, skills, plugins and MCP servers to include, then installs only what was selected: a short `AGENT.md` brief imported by `CLAUDE.md`, `.mcp.json`, and `.claude/` with settings, hooks, skills, slash commands such as `/roadmap`, and project tools.
 

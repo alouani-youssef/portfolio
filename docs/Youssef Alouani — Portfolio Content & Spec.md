@@ -116,7 +116,7 @@ Launch with six case studies (Osoul, AI Stones, Saudi-dialect speech-to-text, Cu
 | Project | Kind | Stack | Visibility |
 | --- | --- | --- | --- |
 | Osoul platform | Founder, flagship | NestJS, TypeORM, PostgreSQL, Redis, Keycloak, LangChain, Next.js, React Native | Public product, private code |
-| AI Stones | Open source (npm, MIT) | Node.js CLI (npx ai-stones) that detects a project's stack and conventions, then generates a tailored Claude Code setup: .claude/ hooks, skills, MCP servers, AGENT.md and ROADMAP.md | [npm package](https://www.npmjs.com/package/ai-stones) |
+| AI Stones | Open source (npm, MIT) | AI harness for Claude Code that protects and improves how the model operates: Markdown skills, guardrail hooks (access guard, blocked rm, atomic commits, CI gate) and JSON settings, installed per project with npx ai-stones init | [npm package](https://www.npmjs.com/package/ai-stones) |
 | Customer Voice: RAG pipeline with an MCP retriever | Axelerated | Ingests structured and unstructured sources and customer interactions; MCP server as the pipeline's main retriever; gRPC retrieval module; ai-llm module (tokens, cost, privacy); auth, privacy and retention layer | Write-up plus diagram |
 | Saudi-dialect speech-to-text | Axelerated | Whisper large-v3 fine-tune, WhatsApp and Asterisk audio pipeline | Write-up, no data |
 | MCP server over backend APIs | Axelerated | MCP tools on top of existing backend APIs, every request validated through Keycloak | Write-up |
@@ -190,7 +190,7 @@ This is the weakest section today: [your GitHub](https://github.com/alouani-yous
 
 | Repo | Language | Action |
 | --- | --- | --- |
-| [ai-stones](https://www.npmjs.com/package/ai-stones) (Claude Code setup generator, on npm) | JavaScript (Node.js) | Pin first. Already on npm under MIT with CI; add a 30-second demo of npx ai-stones init to the README. Your most recent and most shareable project. |
+| [ai-stones](https://www.npmjs.com/package/ai-stones) (AI harness for Claude Code, on npm) | Markdown skills, hook scripts, JSON | Pin first. Already on npm under MIT with CI; add a 30-second demo of npx ai-stones init to the README. Your most recent and most shareable project. |
 | archio (object storage with semantic search, built on Docling) | Go | Pin first. Add a README with an architecture diagram, a quick-start, a semantic-search demo over sample PDFs and a benchmark. This is your best OSS story. |
 | translator (hybrid NLLB-200 + LLM translation service) | Python | Pin. Put the routing diagram from docs/architecture.md at the top of the README, plus one table of cost and latency for NLLB versus LLM requests. |
 | pg\_inspector (MCP server for PostgreSQL inspection) | Python | Pin. Add a license (none is stated), a short demo in Claude Desktop, and submit it to MCP server directories. |

@@ -82,3 +82,21 @@ describe('open source in agent outputs and the CV', () => {
     }
   });
 });
+
+describe('AI Stones is presented as an AI harness, not a Node.js app', () => {
+  it('open-source card', () => {
+    const card = readHtml('/open-source').querySelector('#ai-stones')!;
+    const chips = card.querySelectorAll('.chip').map((c) => c.text.trim());
+    expect(chips).not.toContain('JavaScript');
+    expect(chips).not.toContain('Node.js');
+    expect(chips).toContain('Markdown');
+    expect(card.text).toMatch(/AI harness/);
+  });
+  it('case study and agent outputs', () => {
+    expect(readHtml('/projects/ai-stones').querySelector('h1')!.text).toMatch(/AI harness/);
+    for (const f of ['open-source.md', 'projects/ai-stones.md', 'llms.txt', 'api/oss.json', 'index.md']) {
+      expect(readText(f), f).not.toMatch(/Node\.js CLI|npx CLI/);
+    }
+    expect(readText('now.md')).not.toMatch(/npx CLI/);
+  });
+});

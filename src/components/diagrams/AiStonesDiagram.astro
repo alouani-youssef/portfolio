@@ -2,13 +2,13 @@
 import LayerDiagram from './LayerDiagram.astro';
 ---
 <LayerDiagram
-  title="AI Stones: from project to Claude Code setup"
-  desc="ai-stones init detects the stack (languages, frameworks, package manager, commands, conventions), asks for the context it cannot infer, then installs only the selected setup: AGENT.md and CLAUDE.md, .mcp.json, and .claude/ with settings, hooks, skills, commands and tools. stones.json records answers and file hashes so re-runs update unedited files and preserve edited ones."
+  title="AI Stones: an AI harness for Claude Code"
+  desc="Claude Code runs inside a harness of hooks (protection: access guard, blocked rm, atomic commits, workflows gate; quality: complexity, naming, format; memory: history and code graph), Markdown skills and JSON settings. ai-stones init detects the stack (languages, frameworks, package manager, commands, conventions), asks for the context it cannot infer, then installs only the selected setup: AGENT.md and CLAUDE.md, .mcp.json, and .claude/ with settings, hooks, skills, commands and tools. stones.json records answers and file hashes so re-runs update unedited files and preserve edited ones."
   layers={[
-    { caption: 'Input', nodes: [{ label: 'Your repository', sub: 'manifests · configs · git history' }] },
-    { caption: 'Detect', nodes: [{ label: 'Stack detection', sub: 'languages · frameworks · commands', accent: true }, { label: 'Conventions', sub: 'formatters · commit style' }] },
-    { caption: 'Ask', nodes: [{ label: 'Project interview', sub: 'detected values become defaults' }] },
-    { caption: 'Install', nodes: [{ label: 'AGENT.md', sub: 'imported by CLAUDE.md' }, { label: '.claude/', sub: 'hooks · skills · tools' }, { label: '.mcp.json' }] },
+    { caption: 'Model', nodes: [{ label: 'Claude Code session', sub: 'tool calls · edits · commands' }] },
+    { caption: 'Hooks', nodes: [{ label: 'Protection', sub: 'access · rm · CI gate', accent: true }, { label: 'Quality', sub: 'complexity · naming' }, { label: 'Memory', sub: 'history · code graph' }] },
+    { caption: 'Knowledge', nodes: [{ label: 'Skills', sub: '24 Markdown guides' }, { label: 'Settings', sub: 'JSON permissions · MCP' }, { label: 'AGENT.md', sub: 'project brief' }] },
+    { caption: 'Install', nodes: [{ label: 'npx ai-stones init', sub: 'detect stack · ask · install selected', accent: true }] },
   ]}
   side={{ label: 'stones.json', sub: 'answers · file hashes', layer: 3 }}
 >
