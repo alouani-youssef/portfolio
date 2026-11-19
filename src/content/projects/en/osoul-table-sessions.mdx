@@ -9,9 +9,9 @@ status: live
 featured: false
 confidentiality: public
 order: 13
-skills: [token-session-design, keycloak, nestjs, redis, react-native]
+skills: [token-session-design, nestjs, react-native]
 media:
-  - { src: ../../../assets/projects/osoul/waiter-floors.png, alt: "Osoul Waiter App floor view: Main Room and Jardin tabs, a table map with the waiter's section outlined, and all tables sorted by urgency with a seated walk-in guest", caption: "The Waiter App sees each table's session: seated, for how long, and whose section it is in.", device: phone }
+  - { src: ../../../assets/projects/osoul/waiter-floors.png, alt: "Osoul Waiter App floor view: Main Room and Jardin tabs, a table map with the waiter's section outlined, and all tables sorted by urgency with a seated walk-in guest", caption: "The Waiter App sees each table's session: seated, for how long, and whose section it is in.", device: phone } # CHECK: shared session inferred
 updatedAt: 2026-11-19
 ---
 import Gallery from '../../../components/Gallery.astro';
@@ -32,7 +32,7 @@ Diners order from their phone after tapping the table, without an account. That 
 
 ## Architecture
 
-<OsoulTableSessionsDiagram>
+<OsoulTableSessionsDiagram> {/* CHECK: diagram lifecycle details are inferred */}
 
 <details>
 <summary>Diagram source (Mermaid)</summary>
@@ -55,4 +55,4 @@ flowchart TB
 
 1. **A session per visit, not a permanent table URL.** A permanent link would work forever for anyone who saved it. The tap exchanges the tag's credential for a short-lived session token bound to that table and that visit. {/* CHECK: confirm token format and lifetime */}
 2. **Sessions close with the table.** When staff clear the table, the session ends, so a link from lunch cannot order at dinner. {/* CHECK: confirm the closing trigger */}
-3. **One session, two views.** The Guest App and the Waiter App read the same session, so the floor view shows who is seated and for how long without staff entering it twice.
+3. **One session, two views.** The Guest App and the Waiter App read the same session, so the floor view shows who is seated and for how long without staff entering it twice. {/* CHECK: inferred */}

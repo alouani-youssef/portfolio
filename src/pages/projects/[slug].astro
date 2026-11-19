@@ -29,7 +29,7 @@ const children = (await getProjects()).filter((p) => p.data.parent?.id === proje
   <article class="container-page py-12 sm:py-16">
     {parent ? <a href={`/projects/${entrySlug(parent.id)}`} class="text-sm">← {parent.data.title}</a> : <a href="/projects" class="text-sm">← Projects</a>}
     <header class="mt-6 max-w-[70ch]">
-      <p class="eyebrow">{d.kind === 'founder' ? 'Flagship · ' : ''}{company ? company.data.company : 'Independent'} · {d.status}</p>
+      <p class="eyebrow">{parent ? 'Deep dive · ' : d.kind === 'founder' ? 'Flagship · ' : ''}{company ? company.data.company : 'Independent'} · {d.status}</p>
       <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{d.title}</h1>
       <p class="mt-4 text-lg text-muted">{d.summary}</p>
     </header>

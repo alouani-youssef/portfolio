@@ -8,8 +8,15 @@ describe.each(DIVES)('/projects/%s', (slug) => {
   const doc = readHtml(`/projects/${slug}`);
   it('follows the case-study template and links back to Osoul', () => {
     expect(doc.querySelectorAll('main h2').map((h) => h.text.trim())).toEqual(H2);
-    expect(doc.querySelector('main a[href="/projects/osoul"]')).not.toBeNull();
+    const back = doc.querySelector('main article > a');
+    expect(back?.getAttribute('href')).toBe('/projects/osoul');
+    expect(back?.text.trim()).toBe('← Osoul platform');
     expect(doc.querySelector('svg[role="img"] title')?.text.trim()).toBeTruthy();
+  });
+  it('is labelled as a deep dive, not the flagship', () => {
+    const eyebrow = doc.querySelector('main header .eyebrow')!.text;
+    expect(eyebrow).not.toContain('Flagship');
+    expect(eyebrow).toContain('Deep dive');
   });
   it('has alt text on every screenshot', () => {
     const imgs = doc.querySelectorAll('main img');

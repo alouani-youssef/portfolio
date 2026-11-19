@@ -21,12 +21,21 @@ const FLAGGED: Record<string, string[]> = {
   'src/components/diagrams/FinamazeKycDiagram.astro': [
     'import LayerDiagram',
   ],
+  'src/components/diagrams/OsoulAssistantDiagram.astro': ['import LayerDiagram'],
+  'src/components/diagrams/OsoulRecommendationsDiagram.astro': ['import LayerDiagram'],
+  'src/components/diagrams/OsoulTableSessionsDiagram.astro': ['import LayerDiagram'],
+  'src/content/projects/en/osoul-ai-assistant.mdx': ['<OsoulAssistantDiagram>'],
+  'src/content/projects/en/osoul-recommendations.mdx': ['<OsoulRecommendationsDiagram>', 'and so does part of the ticket'],
+  'src/content/projects/en/osoul-table-sessions.mdx': ['<OsoulTableSessionsDiagram>', 'One session, two views', "sees each table's session"],
 };
 
 // Claims the public code contradicts must not ship at all.
 const FORBIDDEN: Record<string, string[]> = {
   'src/components/diagrams/ArchioDiagram.astro': ['hot path'],
   'src/components/diagrams/FinamazeKycDiagram.astro': ['custodian'],
+  'src/content/projects/en/osoul-ai-assistant.mdx': ['keycloak', 'the draft expires after 31 minutes'],
+  'src/content/projects/en/osoul-table-sessions.mdx': ['redis', 'keycloak'],
+  'src/content/projects/en/osoul-recommendations.mdx': ['embeddings'],
 };
 
 describe('claims contradicted by the source are absent', () => {

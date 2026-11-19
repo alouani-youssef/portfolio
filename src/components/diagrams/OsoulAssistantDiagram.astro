@@ -1,9 +1,9 @@
 ---
-import LayerDiagram from './LayerDiagram.astro';
+import LayerDiagram from './LayerDiagram.astro'; // CHECK: shared NestJS services and read/write split are inferred
 ---
 <LayerDiagram
   title="Osoul AI assistant"
-  desc="A staff member asks the assistant in the Osoul Portal. The LangChain agent redacts personal data before the model sees it and calls tools with the user's own Keycloak token. Read tools such as floors and guest search run directly; write tools such as creating a reservation return a pending action that the user must confirm before it expires. Every tool call goes to the same NestJS services, which enforce the user's permissions."
+  desc="A staff member asks the assistant in the Osoul Portal. The LangChain agent redacts personal data before the model sees it and calls tools with the user's own auth. Read tools such as floors and guest search run directly; write tools such as creating a reservation return a pending action that the user must confirm before it expires. Every tool call goes to the same NestJS services, which enforce the user's permissions."
   layers={[
     { caption: 'User', nodes: [{ label: 'Staff in Osoul Portal', sub: 'question in plain language' }] },
     { caption: 'Agent', nodes: [{ label: 'LangChain agent', sub: 'plans tool calls', accent: true }, { label: 'PII redaction', sub: 'before the model' }] },
