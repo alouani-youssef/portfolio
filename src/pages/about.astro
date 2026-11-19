@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SkillsMatrix from '../components/SkillsMatrix.astro';
+import SkillsGrid from '../components/SkillsGrid.astro';
 import Recommendation from '../components/Recommendation.astro';
 import { profile } from '../data/profile';
 import { profilePageJsonLd, faqPageJsonLd } from '../lib/jsonld';
@@ -34,7 +34,7 @@ const e = profile.education;
     <section id="skills" class="mt-16" aria-labelledby="skills-h">
       <h2 id="skills-h" class="text-xl font-semibold">Skills</h2>
       <p class="mt-2 text-muted">Grouped by what I build. Each one is backed by a role or project.</p>
-      <div class="mt-6"><SkillsMatrix /></div>
+      <div class="mt-6"><SkillsGrid /></div>
     </section>
 
     <section class="mt-16" aria-labelledby="recs-h">

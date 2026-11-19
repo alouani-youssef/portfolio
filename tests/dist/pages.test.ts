@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { readHtml, listHtmlPages } from './helpers';
 import { GROUP_LABELS, GROUP_ORDER } from '../../src/lib/clients';
+import { SKILL_CATEGORIES, LEVEL_LABELS } from '../../src/lib/skill-icons';
+import { readFileSync } from 'node:fs';
+import { parse as parseYaml } from 'yaml';
+
+const skillCount = (parseYaml(readFileSync('src/data/skills.yaml', 'utf8')) as unknown[]).length;
 
 const main = (route: string) => readHtml(route).querySelector('main')!;
 
@@ -41,8 +46,25 @@ describe('about', () => {
     expect(items.length).toBeGreaterThanOrEqual(6);
     expect(items.length).toBeLessThanOrEqual(8);
   });
-  it('has the skills matrix', () => {
-    expect(doc.querySelector('#skills table')).not.toBeNull();
+  it('groups skills into one card per category, in order', () => {
+    const groups = doc.querySelectorAll('#skills .skill-group');
+    expect(groups).toHaveLength(SKILL_CATEGORIES.length);
+    expect(groups.map((g) => g.querySelector('h3')!.text.trim())).toEqual(SKILL_CATEGORIES.map((c) => c.label));
+    expect(doc.querySelector('#skills table')).toBeNull();
+  });
+  it('shows every skill with an anchor, a hidden icon and a spoken level (Review Focus 2, 3)', () => {
+    const items = doc.querySelectorAll('#skills li[id^="skill-"]');
+    expect(items).toHaveLength(skillCount);
+    const spoken = Object.values(LEVEL_LABELS).map((l) => `(${l})`);
+    for (const li of items) {
+      expect(li.querySelector('svg[aria-hidden="true"]'), li.id).not.toBeNull();
+      expect(li.querySelector('svg title'), li.id).toBeNull();
+      expect(spoken, li.id).toContain(li.querySelector('.sr-only')?.text.trim());
+    }
+  });
+  it('explains the level markers in a legend', () => {
+    const legend = doc.querySelector('#skills .skill-legend')!.text;
+    for (const l of Object.values(LEVEL_LABELS)) expect(legend).toContain(l);
   });
 });
 
