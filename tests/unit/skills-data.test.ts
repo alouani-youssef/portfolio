@@ -17,7 +17,7 @@ describe('skills.yaml', () => {
     const core = skills.filter((s) => s.core !== undefined).sort((a, b) => a.core! - b.core!);
     expect(core.map((s) => s.core)).toEqual(core.map((_, i) => i + 1));
     expect(core.map((s) => s.id)).toEqual([
-      'typescript', 'go', 'python', 'nestjs', 'postgresql', 'redis', 'kafka', 'langgraph', 'ollama', 'kubernetes',
+      'rag', 'mcp', 'langgraph', 'langchain', 'ollama', 'fine-tuning', 'python', 'fastapi', 'nestjs', 'go', 'typescript', 'postgresql', 'redis', 'kafka',
     ]);
   });
 
