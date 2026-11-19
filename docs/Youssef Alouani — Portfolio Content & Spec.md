@@ -37,7 +37,7 @@ Five roles over five years, each with a clear AI thread; the site shows them as 
 | Period | Company | Role | What to highlight |
 | --- | --- | --- | --- |
 | Nov 2026 – now | 10xJobs | Founder | Multi-user SaaS built on Apify actors: a pipeline tuned for cost, efficiency and performance that finds jobs and matches them to each registered user's published profile |
-| Jun 2026 – now | [Osoul](https://osoul.io) | Technical Founder | Revenue-as-a-Service (RaaS): a SaaS growth engine for fine dining built around specific revenue KPIs, with management tools built in, that turns lost data into KPI gains. Multi-tenant platform with NFC/QR ordering, reservations with deposits and bots, recommendation systems, ad signal infrastructure (CAPI ad-audience optimisation), AI assistant (LangChain, PII redaction, user auth propagation), POS/PMS integrations, identity merging, event-based dynamic pricing; front ends: Osoul Portal, Osoul Guest App, Osoul Waiter App (React Native); customers: Casa Harris, Shanzoo (Tangier) |
+| Jun 2026 – now | [Osoul](https://osoul.io) | Technical Founder | Revenue-as-a-Service (RaaS): a SaaS growth engine for fine dining built around specific revenue KPIs, with management tools built in, that turns lost data into KPI gains. Multi-tenant platform with NFC/QR ordering, reservations with deposits and bots, recommendation systems, ad signal infrastructure (CAPI ad-audience optimisation), AI assistant (LangChain, PII redaction, user auth propagation), POS/PMS integrations, identity merging, event-based dynamic pricing; front ends: Osoul Portal, Osoul Guest App, Osoul Waiter App (React Native); customers: Barceló Group, Atlas Group |
 | 2024 – 2026 | Axelerated Solutions (Sowtek AXS) | Lead Backend Engineer, founding engineer (team of 9) | Whisper large-v3 fine-tuned for Saudi dialect (WhatsApp and Asterisk audio pipeline), RAG on Milvus, coding agents, tool-using chatbots, Customer Voice RAG pipeline with an MCP server as its main retriever (architecture, auth, privacy and retention), an MCP server over backend APIs with Keycloak request validation, knowledge-base search on Docling and zero-shot classification; migrations and hybrid deployments (see below); clients: HRSD, Tahreez |
 | 2023 – 2024 | Finamaze | Backend Engineer | Reconciliation; KYC with document and visual verification; AI for robo-advisory; React/Next.js front ends; client: SNB |
 | 2021 – 2023 | Qalqul Engine | Software Engineer | NLP/NLU engines built on language servers and Duckling, Botpress v12 core, no-code workflows and n8n, portals, browser SDKs in TypeScript, Kotlin SDKs, React chat widgets; clients: King Saud Medical City, Hertz, CDM, SANLAM, AtlantaSanad, CityClub, YouCan |
@@ -54,22 +54,24 @@ Assisted as Lead Backend Engineer at Axelerated Solutions. Shown as its own bloc
 
 **Clients (end customers you may name)**
 
-Twelve named clients across banking, insurance, government, healthcare, retail and hospitality back up the hybrid-deployment and privacy claims. Show them as plain names under "Clients I have worked for" on Home and the relevant role pages: no links, no logos, no project details.
+Twelve named clients back up the hybrid-deployment and privacy claims. They are always shown **grouped by the kind and size of organisation**, never as one flat or random list, because a government ministry, a national bank and a growth company each say something different about the work. Hospitality clients are named by their parent group, not the venue. Show them as plain names under "Clients I have worked for" on Home and the relevant role pages: no links, no logos, no project details.
 
-| Client | Role | Market | Sector |
+| Group | Client | Role | Market |
 | --- | --- | --- | --- |
-| Casa Harris | Osoul | Morocco | Hospitality (restaurant-lounge) |
-| Shanzoo (Tangier) | Osoul | Morocco | Hospitality (restaurant) |
-| HRSD (Ministry of Human Resources and Social Development) | Axelerated Solutions | Saudi Arabia | Government |
-| Tahreez | Axelerated Solutions | Saudi Arabia | Security and technology integration |
-| Saudi National Bank (SNB) | Finamaze | Saudi Arabia | Banking |
-| King Saud Medical City | Qalqul Engine | Saudi Arabia | Healthcare |
-| Hertz | Qalqul Engine | International | Car rental |
-| Crédit du Maroc (CDM) | Qalqul Engine | Morocco | Banking |
-| SANLAM | Qalqul Engine | Morocco | Insurance |
-| AtlantaSanad (spelling to confirm) | Qalqul Engine | Morocco | Insurance |
-| CityClub | Qalqul Engine | Morocco | Fitness clubs |
-| YouCan | Qalqul Engine | Morocco | E-commerce platform |
+| Government and public institutions | HRSD (Ministry of Human Resources and Social Development) | Axelerated Solutions | Saudi Arabia |
+| Government and public institutions | King Saud Medical City | Qalqul Engine | Saudi Arabia |
+| Banks and insurers | Saudi National Bank (SNB) | Finamaze | Saudi Arabia |
+| Banks and insurers | Crédit du Maroc (CDM) | Qalqul Engine | Morocco |
+| Banks and insurers | SANLAM | Qalqul Engine | Morocco |
+| Banks and insurers | AtlantaSanad (spelling to confirm) | Qalqul Engine | Morocco |
+| International and hospitality groups | Hertz | Qalqul Engine | International |
+| International and hospitality groups | Barceló Group (parent of Casa Harris) | Osoul | Morocco |
+| International and hospitality groups | Atlas Group (parent of Shanzoo, Tangier) | Osoul | Morocco |
+| Growth and technology companies | YouCan | Qalqul Engine | Morocco |
+| Growth and technology companies | CityClub | Qalqul Engine | Morocco |
+| Growth and technology companies | Tahreez | Axelerated Solutions | Saudi Arabia |
+
+Groups appear in this order (largest and most regulated first), and clients inside a group in the order above. The `clients` data file carries the `group` field so every output (Home, role pages, `/api/profile.json`, llms-full.txt) uses the same grouping.
 
 **Per-role page template**
 
@@ -170,7 +172,7 @@ These figures are illustrative, so layouts can be built and reviewed with realis
 
 | Case study | Metric | Placeholder |
 | --- | --- | --- |
-| Osoul | Tenants live | 2 (Casa Harris, Shanzoo), real figure |
+| Osoul | Tenants live | 2 (venues of Barceló Group and Atlas Group), real figure |
 | Osoul | Average ticket from meal-completion promos | +8% |
 | Osoul | Reservation no-shows after reminders and deposits | −30% |
 | Saudi-dialect speech-to-text | Word error rate, base Whisper large-v3 → fine-tuned | 38% → 19% |
@@ -182,7 +184,7 @@ These figures are illustrative, so layouts can be built and reviewed with realis
 
 ## Open source contributions
 
-This is the weakest section today: [your GitHub](https://github.com/alouani-youssef) shows 8 repositories, 0 followers and no pinned work, but archio, translator, pg\_inspector and the tracking kit are strong enough to lead it once they are pinned and documented; RabbitMQ and Centrifugo contributions get listed once their links are found. The page itself should be generated at build time from the GitHub API (your repos, plus merged PRs to other people's repos), so it fills up as you contribute.
+This is the weakest section today: [your GitHub](https://github.com/alouani-youssef) shows 8 repositories, 0 followers and no pinned work, but archio, translator, pg\_inspector and the tracking kit are strong enough to lead it once they are pinned and documented. The page itself should be generated at build time from the GitHub API (your repos, plus merged PRs to other people's repos), so it fills up as you contribute.
 
 **What is public now, and what to do with it**
 
@@ -197,12 +199,7 @@ This is the weakest section today: [your GitHub](https://github.com/alouani-yous
 
 **Upstream contributions**
 
-Contributions to widely used infrastructure projects carry more weight than personal repos; list each with its PR link and one line on what it changed. Hidden on the site until the links are found.
-
-| Project | What it is | Your contribution |
-| --- | --- | --- |
-| [RabbitMQ](https://github.com/rabbitmq) | Message broker | PR links and one-line summary to supply |
-| [Centrifugo](https://github.com/centrifugal/centrifugo) | Real-time messaging server (WebSocket, SSE) | PR links and one-line summary to supply |
+None yet. Contributions to widely used infrastructure projects carry more weight than personal repos; once there are merged PRs, list each with its link and one line on what it changed. The `/open-source` page picks them up automatically from the GitHub API.
 
 **New OSS worth extracting from work you have already done (no client code)**
 
@@ -270,7 +267,6 @@ External posts appear in your blog index with an "on Medium" badge and `canonica
 - [ ] An open-source tracking kit: HMAC-signed browser events into a Go/Gin service
 - [ ] 10xJobs: a cost-aware pipeline for matching jobs to user profiles
 - [ ] Exposing existing backend APIs over MCP, with Keycloak validating every request
-- [ ] What I learned contributing to RabbitMQ and Centrifugo
 
 Cadence: two posts a month is enough. Each post needs one diagram and one concrete number or code sample.
 
@@ -304,7 +300,7 @@ Experience, Projects and Blog each have detail pages generated from content coll
 - Command palette (Ctrl/Cmd+K) and site search with Pagefind, both static.
 - Accessibility: semantic landmarks, one `h1` per page, visible focus, AA contrast, reduced-motion respected.
 - Performance budget: Lighthouse 95+ on all four scores, under 50 KB of JavaScript per page, images through Astro's image pipeline.
-- English and French at launch (French under `/fr/`); no Arabic version, though Arabic is listed among the languages you speak.
+- English at launch, French in v1.1 (under `/fr/`); no Arabic version, though Arabic is listed among the languages you speak.
 - Host on Cloudflare Pages or Vercel; Cloudflare also gives you AI-crawler analytics.
 - An Open Graph image per page, generated at build time from the title and the page's diagram, so links shared on LinkedIn and X preview well.
 - Privacy-friendly analytics (Cloudflare Web Analytics or Plausible): no cookies, no consent banner, which fits a privacy-focused engineer's site.
@@ -542,8 +538,8 @@ Ship a small v1, then add a case study a week: a live site with three strong cas
 
 | Release | Includes |
 | --- | --- |
-| v1 | Home, About with FAQ, Experience, /now, Contact, /cv; case studies for Osoul, Saudi-dialect speech-to-text and Customer Voice (RAG + MCP); one new post; the full agent layer; English and French |
-| v1.1 | AI Stones, archio and Finamaze KYC case studies; Osoul sub-cases; the two rewritten Medium posts |
+| v1 | Home, About with FAQ, Experience, /now, Contact, /cv; case studies for Osoul, Saudi-dialect speech-to-text and Customer Voice (RAG + MCP); one new post; the full agent layer; English only |
+| v1.1 | French version under `/fr/`; AI Stones, archio and Finamaze KYC case studies; Osoul sub-cases; the two rewritten Medium posts |
 | v1.2 | Open source page from the GitHub API, remaining case studies |
 
 ## Open questions
@@ -554,22 +550,20 @@ These are the facts the site still needs from you. Each one turns a vague claim 
 - [ ] **Metrics per role**: one number each, such as WER improvement on Saudi dialect, tenants or tables live on Osoul, MCP server users, reconciliation time saved at Finamaze. Placeholder figures stand in until then (see Projects).
 - [x] **Confidentiality**: what Axelerated and Finamaze work can be named publicly, and at what level of detail.
 - [ ] **Hidden repos**: GitHub reports 8 repositories but only 6 are visible; are the other two worth showing?
-- [ ] **Upstream contributions**: any merged PRs to other projects (Botpress, n8n, Duckling or others) that should be listed?
 - [x] **Availability line**: should the site say you're open to Senior Backend / AI roles, or keep the founder framing only?
 - [x] **Languages**: English and French at launch, or English first? Arabic too?
 - [x] **Talks, certificates, awards**: anything to add beyond your engineering diploma?
-- [ ] **Photo and visual style (photos coming)**: a current headshot, plus any brand colours you want to reuse from Osoul or keep separate.
+- [x] **Photo and visual style**: headshot provided (`docs/media/alouani_youssef.png`); style is clean, high-contrast and minimalist with a restrained palette, kept separate from Osoul's colours.
 
 **From the latest additions**
 
 - [x] **AI Stones**: published; still needed: its URL and one line on what it does day to day (tools, memory, workflows).
 - [x] **Migrations and hybrid deployments**: which company or companies were these at, so they attach to the right role?
-- [ ] **Front ends (you'll provide)**: screenshots of Osoul Portal, Guest App and Waiter App, and of a Qalqul chat widget, if you can share them.
+- [x] **Front ends**: screenshots provided for Osoul Portal, Guest App and Waiter App, Qalqul, Finamaze, Sowtek and 10xJobs (`docs/<company>/`). Still to do: crop the nav bar from the Qalqul screenshots.
 - [x] **10xJobs**: founder since 1 Nov 2026, live at 10xjobs.vercel.app; still needed: does "apiactors" mean Apify actors? One number on cost per match or match quality would anchor the case study.
-- [ ] **Upstream PRs**: none found yet; RabbitMQ and Centrifugo stay off the site until their links turn up.
 
 * [x] **Osoul's RaaS model**: what does RaaS stand for in your pitch, which KPIs does Osoul move, and which "lost data" does it recover? One before/after number per KPI makes the flagship page.
 * [x] **Social proof**: 2–3 LinkedIn recommendations you can quote with permission, plus any talks or press mentions.
-* [x] **Naming clients**: twelve clients are listed under Experience, including Casa Harris and Shanzoo (Tangier), Osoul's customers so far.
+* [x] **Naming clients**: twelve clients are listed under Experience, grouped by organisation type and size; Osoul's customers are named by parent group (Barceló Group, Atlas Group).
 
 **Sources**: [GitHub profile](https://github.com/alouani-youssef) and [Medium feed](https://alouani-youssef.medium.com/feed)s (two accounts), checked 19 Nov 2026.
