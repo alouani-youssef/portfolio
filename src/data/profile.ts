@@ -60,10 +60,10 @@ export const profile: Profile = {
     'https://medium.com/@alouaniyoussef',
   ],
   education: {
-    degree: "Diplôme d'Ingénieur d'État in Computer Science",
+    degree: "Bachelor's degree in Computer Science",
     school: 'Hassan First University, FST Settat',
-    start: 2019,
-    end: 2022,
+    start: 2017,
+    end: 2021,
   },
   expertise: [
     {

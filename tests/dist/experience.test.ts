@@ -48,7 +48,7 @@ describe('experience', () => {
   });
 
   it('timeline shows the education line', () => {
-    expect(text('/experience')).toContain("Diplôme d'Ingénieur d'État in Computer Science, Hassan First University, FST Settat, 2019–2022");
+    expect(text('/experience')).toContain("Bachelor's degree in Computer Science, Hassan First University, FST Settat, 2017–2021");
   });
 
   for (const [slug, company] of ROLES) {

@@ -11,13 +11,14 @@ describe('/cv', () => {
     expect(text).toContain('Lead Backend & AI Engineer, founder of Osoul.');
   });
   it('lists the five roles with their periods', () => {
-    for (const s of ['10xJobs', 'Nov 2026 – now', 'Osoul', 'Jun 2026 – now', 'Axelerated Solutions', '2024 – 2026', 'Finamaze', '2023 – 2024', 'Qalqul Engine', '2021 – 2023']) {
+    for (const s of ['10xJobs', 'Oct 2026 – now', 'Osoul', 'Jun 2026 – now', 'Axelerated Solutions', 'Feb 2024 – May 2026', 'Finamaze', 'Jul 2023 – Jan 2024', 'Qalqul Engine', '2021 – 2023']) {
       expect(text).toContain(s);
     }
     expect(doc.querySelectorAll('.cv-role')).toHaveLength(5);
   });
   it('has education, grouped skills and contact details', () => {
-    expect(text).toContain("Diplôme d'Ingénieur d'État in Computer Science");
+    expect(text).toContain("Bachelor's degree in Computer Science, Hassan First University, FST Settat, 2017–2021");
+    expect(text).not.toContain('Ingénieur');
     expect(doc.querySelectorAll('.cv-skills dt').map((d) => d.text.trim())).toEqual(SKILL_CATEGORIES.map((c) => c.label));
     expect(text).toContain('hello@youssefalouani.com');
     expect(text).toContain('youssefalouani.com');

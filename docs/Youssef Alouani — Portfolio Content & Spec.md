@@ -36,11 +36,11 @@ Five roles over five years, each with a clear AI thread; the site shows them as 
 
 | Period | Company | Role | What to highlight |
 | --- | --- | --- | --- |
-| Nov 2026 – now | 10xJobs | Founder | Multi-user SaaS built on Apify actors: a pipeline tuned for cost, efficiency and performance that finds jobs and matches them to each registered user's published profile |
+| Oct 2026 – now | 10xJobs | Side project | Multi-user SaaS built on Apify actors: a pipeline tuned for cost, efficiency and performance that finds jobs and matches them to each registered user's published profile |
 | Jun 2026 – now | [Osoul](https://osoul.io) | Technical Founder | Revenue-as-a-Service (RaaS): a SaaS growth engine for fine dining built around specific revenue KPIs, with management tools built in, that turns lost data into KPI gains. Multi-tenant platform with NFC/QR ordering, reservations with deposits and bots, recommendation systems, ad signal infrastructure (CAPI ad-audience optimisation), AI assistant (LangChain, PII redaction, user auth propagation), POS/PMS integrations, identity merging, event-based dynamic pricing; front ends: Osoul Portal, Osoul Guest App, Osoul Waiter App (React Native); customers: Barceló Group, Atlas Group |
-| 2024 – 2026 | Axelerated Solutions (Sowtek AXS) | Lead Backend Engineer, founding engineer (team of 9) | Whisper large-v3 fine-tuned for Saudi dialect (WhatsApp and Asterisk audio pipeline), RAG on Milvus, coding agents, tool-using chatbots, Customer Voice RAG pipeline with an MCP server as its main retriever (architecture, auth, privacy and retention), an MCP server over backend APIs with Keycloak request validation, knowledge-base search on Docling and zero-shot classification; migrations and hybrid deployments (see below); clients: HRSD, Tahreez |
-| 2023 – 2024 | Finamaze | Backend Engineer | Reconciliation; KYC with document and visual verification; AI for robo-advisory; React/Next.js front ends; client: SNB |
-| 2021 – 2023 | Qalqul Engine | Software Engineer | NLP/NLU engines built on language servers and Duckling, Botpress v12 core, no-code workflows and n8n, portals, browser SDKs in TypeScript, Kotlin SDKs, React chat widgets; clients: King Saud Medical City, Hertz, CDM, SANLAM, AtlantaSanad, CityClub, YouCan |
+| Feb 2024 – May 2026 | Axelerated Solutions (Sowtek AXS) | Lead Backend Engineer, founding engineer (team of 9) | Whisper large-v3 fine-tuned for Saudi dialect (WhatsApp and Asterisk audio pipeline), RAG on Milvus, coding agents, tool-using chatbots, Customer Voice RAG pipeline with an MCP server as its main retriever (architecture, auth, privacy and retention), an MCP server over backend APIs with Keycloak request validation, knowledge-base search on Docling and zero-shot classification; migrations and hybrid deployments (see below); clients: HRSD, Tahreez |
+| Jul 2023 – Jan 2024 | Finamaze | Backend Engineer | Reconciliation; KYC with document and visual verification; AI for robo-advisory; React/Next.js front ends; client: SNB |
+| 2021 – 2023 | Qalqul Engine | Software Engineer | NLP/NLU engines built on language servers and Duckling, Botpress v12 core, no-code workflows and n8n, portals, browser SDKs in TypeScript, Kotlin SDKs, React chat widgets; clients: King Saud Medical City, Hertz Morocco, CDM, SANLAM, AtlantaSanad, CityClub, YouCan |
 
 **Migrations and deployments**
 
@@ -64,7 +64,7 @@ Twelve named clients back up the hybrid-deployment and privacy claims. They are 
 | Banks and insurers | Crédit du Maroc (CDM) | Qalqul Engine | Morocco |
 | Banks and insurers | SANLAM | Qalqul Engine | Morocco |
 | Banks and insurers | AtlantaSanad (spelling to confirm) | Qalqul Engine | Morocco |
-| International and hospitality groups | Hertz | Qalqul Engine | International |
+| International and hospitality groups | Hertz Morocco | Qalqul Engine | Morocco |
 | International and hospitality groups | Barceló Group (parent of Casa Harris) | Osoul | Morocco |
 | International and hospitality groups | Atlas Group (parent of Shanzoo, Tangier) | Osoul | Morocco |
 | Growth and technology companies | YouCan | Qalqul Engine | Morocco |
@@ -81,7 +81,7 @@ Groups appear in this order (largest and most regulated first), and clients insi
 4. Outcome: one number or one before/after (to supply, see Open questions).
 5. What I'd do differently: one honest line. Recruiters and agents both treat this as a seniority signal.
 
-Education sits under the timeline: Diplôme d'Ingénieur d'État in Computer Science, Hassan First University, FST Settat, 2019–2022.
+Education sits under the timeline: Bachelor's degree in Computer Science, Hassan First University, FST Settat, 2017–2021.
 
 ## Technical expertise and skills
 
@@ -128,7 +128,7 @@ Launch with six case studies (Osoul, AI Stones, Saudi-dialect speech-to-text, Cu
 | Hybrid translation system ([translator](https://github.com/alouani-youssef/translator)) | Open source | FastAPI; NLLB-200 3.3B for simple text and an LLM (Gemini, Ollama or OpenRouter) above a complexity threshold; exact, normalized and semantic cache on PostgreSQL/pgvector; semantic search exposed to the LLM as a tool that fetches validated translation examples, lifting domain-specific accuracy even with local LLMs; multilingual-e5 quality scoring; S3/MinIO JSON documents | Public repo |
 | [pg\_inspector](https://github.com/alouani-youssef/pg_inspector) | Open source | Python, uv; MCP server over streamable HTTP (API key) and stdio; read-only SQL, schema inspection, EXPLAIN plans, a health snapshot and 5 guided prompts | Public repo |
 | Tracking kit ([tracker](https://github.com/alouani-youssef/tracker) + [tracking-sdk](https://github.com/alouani-youssef/tracking-sdk)) | Open source | Go/Gin tracking service for user recognition, plus a TypeScript wrapper for browser-based tracking; events signed with HMAC so the server only accepts requests from trusted clients | Public repos |
-| 10xJobs | Founder, since Nov 2026 | Job-search automation for software engineers. Built on Apify actors; a full pipeline that finds jobs and matches them to each registered user's published profile, tuned for cost, efficiency and performance | [Live](https://10xjobs.vercel.app/) |
+| 10xJobs | Side project, since Oct 2026 | Job-search automation for software engineers. Built on Apify actors; a full pipeline that finds jobs and matches them to each registered user's published profile, tuned for cost, efficiency and performance | [Live](https://10xjobs.vercel.app/) |
 
 **Three RAG pipelines, one pattern.** Worth a short cross-link block on each case study, since agents and recruiters search for "RAG" directly:
 

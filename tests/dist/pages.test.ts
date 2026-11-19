@@ -40,12 +40,12 @@ describe('home', () => {
     const tiles = doc.querySelectorAll('.client-groups .client-tile');
     expect(tiles).toHaveLength(12);
     const byName = (n: string) => tiles.find((t) => t.text.includes(n))!;
-    const hertz = byName('Hertz');
+    const hertz = byName('Hertz Morocco');
     expect(hertz.tagName).toBe('A');
     expect(hertz.getAttribute('href')).toBe('https://www.hertz.com');
     expect(hertz.getAttribute('target')).toBe('_blank');
     expect(hertz.getAttribute('rel')).toContain('noopener');
-    expect(hertz.querySelector('img[alt="Hertz logo"]')).not.toBeNull();
+    expect(hertz.querySelector('img[alt="Hertz Morocco logo"]')).not.toBeNull();
     expect(byName('CityClub').tagName).not.toBe('A');
     expect(byName('Saudi National Bank').querySelector('img[alt="Saudi National Bank logo"]')).not.toBeNull();
     expect(byName('Atlas Group').classList.contains('client-tile--dark')).toBe(true);

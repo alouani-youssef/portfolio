@@ -29,7 +29,7 @@ describe('clients.yaml', () => {
   it('matches the content spec grouping', () => {
     expect(names('government')).toEqual(['HRSD (Ministry of Human Resources and Social Development)', 'King Saud Medical City']);
     expect(names('banks-insurers')).toEqual(['Saudi National Bank (SNB)', 'Crédit du Maroc (CDM)', 'SanlamAllianz', 'AtlantaSanad']);
-    expect(names('groups')).toEqual(['Hertz', 'Barceló Group', 'Atlas Group']);
+    expect(names('groups')).toEqual(['Hertz Morocco', 'Barceló Group', 'Atlas Group']);
     expect(names('growth')).toEqual(['YouCan', 'CityClub', 'Tahreez']);
   });
 

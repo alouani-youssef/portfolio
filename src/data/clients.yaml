@@ -4,7 +4,7 @@
 - { id: cdm, name: "Crédit du Maroc (CDM)", group: banks-insurers, order: 2, experience: en/qalqul, market: Morocco, url: "https://www.creditdumaroc.ma", logo: "../assets/clients/cdm.svg" }
 - { id: sanlam, name: "SanlamAllianz", group: banks-insurers, order: 3, experience: en/qalqul, market: Morocco, url: "https://sanlamallianz.ma", logo: "../assets/clients/sanlamallianz.svg" }
 - { id: atlantasanad, name: "AtlantaSanad", group: banks-insurers, order: 4, experience: en/qalqul, market: Morocco, url: "https://www.atlantasanad.ma", logo: "../assets/clients/atlantasanad.svg" }
-- { id: hertz, name: "Hertz", group: groups, order: 1, experience: en/qalqul, market: International, url: "https://www.hertz.com", logo: "../assets/clients/hertz.svg" }
+- { id: hertz, name: "Hertz Morocco", group: groups, order: 1, experience: en/qalqul, market: Morocco, url: "https://www.hertz.com", logo: "../assets/clients/hertz.svg" }
 - { id: barcelo-group, name: "Barceló Group", group: groups, order: 2, experience: en/osoul, market: Morocco, url: "https://www.barcelo.com", logo: "../assets/clients/barcelo-group.svg" }
 - { id: atlas-group, name: "Atlas Group", group: groups, order: 3, experience: en/osoul, market: Morocco, url: "https://atlashospitality.com", logo: "../assets/clients/atlas-group.svg", logoBg: dark }
 - { id: youcan, name: "YouCan", group: growth, order: 1, experience: en/qalqul, market: Morocco, url: "https://youcan.shop", logo: "../assets/clients/youcan.svg" }

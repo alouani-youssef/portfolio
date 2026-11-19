@@ -43,7 +43,7 @@ export function buildResume(
     education: [{
       institution: profile.education.school,
       area: 'Computer Science',
-      studyType: "Diplôme d'Ingénieur d'État",
+      studyType: profile.education.degree.replace(/ in .*$/, ''),
       startDate: String(profile.education.start),
       endDate: String(profile.education.end),
     }],
