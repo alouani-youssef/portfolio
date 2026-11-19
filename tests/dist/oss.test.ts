@@ -5,8 +5,8 @@ const ENTRIES = [
   ['ai-stones', 'AI Stones', 'MIT'],
   ['archio', 'archio', 'Apache-2.0'],
   ['translator', 'translator', 'Apache-2.0'],
-  ['pg-inspector', 'pg_inspector', 'Apache-2.0'],
   ['tracking-kit', 'Tracking kit', 'Apache-2.0'],
+  ['pg-inspector', 'pg_inspector', 'Apache-2.0'],
 ] as const;
 
 describe('/open-source', () => {
@@ -28,8 +28,8 @@ describe('/open-source', () => {
 
   it('links AI Stones to npm and the tracking kit to both repos', () => {
     expect(cards[0].querySelector('a[href="https://www.npmjs.com/package/ai-stones"]')).not.toBeNull();
-    expect(cards[4].querySelector('a[href="https://github.com/alouani-youssef/tracker"]')).not.toBeNull();
-    expect(cards[4].querySelector('a[href="https://github.com/alouani-youssef/tracking-sdk"]')).not.toBeNull();
+    expect(cards[3].querySelector('a[href="https://github.com/alouani-youssef/tracker"]')).not.toBeNull();
+    expect(cards[3].querySelector('a[href="https://github.com/alouani-youssef/tracking-sdk"]')).not.toBeNull();
   });
 });
 
@@ -53,7 +53,7 @@ describe('open source elsewhere', () => {
 import { readText, exists } from './helpers';
 
 describe('open source in agent outputs and the CV', () => {
-  const names = ['AI Stones', 'archio', 'translator', 'pg_inspector', 'Tracking kit'];
+  const names = ['AI Stones', 'archio', 'translator', 'Tracking kit', 'pg_inspector'];
   it('has a markdown twin and an llms.txt section', () => {
     expect(exists('open-source.md')).toBe(true);
     const md = readText('open-source.md');

@@ -35,7 +35,7 @@
     - "multilingual-e5 quality scoring; S3/MinIO JSON documents."
 - id: pg-inspector
   name: pg_inspector
-  order: 4
+  order: 5
   pitch: "An MCP server that gives AI assistants safe, read-only access to PostgreSQL."
   languages: [Python]
   license: Apache-2.0
@@ -46,7 +46,7 @@
     - "Five guided prompts for common investigations."
 - id: tracking-kit
   name: Tracking kit
-  order: 5
+  order: 4
   pitch: "A Go/Gin user-recognition service and a TypeScript browser SDK, with every event HMAC-signed."
   languages: [Go (Gin), TypeScript]
   license: Apache-2.0
