@@ -1,0 +1,78 @@
+import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
+import * as simpleIcons from 'simple-icons';
+
+export type Category = 'language' | 'backend' | 'data' | 'ai' | 'security' | 'infra' | 'frontend' | 'realtime';
+
+export const SKILL_CATEGORIES: ReadonlyArray<{ id: Category; label: string; icon: string }> = [
+  { id: 'language', label: 'Languages', icon: 'lucide:code-xml' },
+  { id: 'backend', label: 'Backend', icon: 'lucide:server' },
+  { id: 'data', label: 'Data', icon: 'lucide:database' },
+  { id: 'ai', label: 'AI / LLM', icon: 'lucide:sparkles' },
+  { id: 'security', label: 'Identity and security', icon: 'lucide:shield-check' },
+  { id: 'infra', label: 'Infra', icon: 'lucide:cloud' },
+  { id: 'frontend', label: 'Front end', icon: 'lucide:layout-template' },
+  { id: 'realtime', label: 'Real-time', icon: 'lucide:radio' },
+];
+
+export const LEVEL_LABELS = { daily: 'daily', production: 'shipped in production', familiar: 'familiar' } as const;
+
+export interface ResolvedIcon { svg: string; brand: boolean; brandHover: string | null }
+
+type SimpleIcon = { slug: string; hex: string; path: string };
+const BRANDS = new Map<string, SimpleIcon>(
+  (Object.values(simpleIcons) as unknown[])
+    .filter((v): v is SimpleIcon => typeof v === 'object' && v !== null && 'slug' in v && 'path' in v)
+    .map((i) => [i.slug, i]),
+);
+const require = createRequire(import.meta.url);
+const cache = new Map<string, ResolvedIcon>();
+const A11Y = 'aria-hidden="true" focusable="false"';
+
+/** WCAG relative luminance of a 6-digit hex colour. */
+function luminance(hex: string): number {
+  const [r, g, b] = [0, 2, 4].map((i) => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function brandIcon(slug: string): ResolvedIcon | null {
+  const icon = BRANDS.get(slug);
+  if (!icon) return null;
+  const l = luminance(icon.hex);
+  return {
+    svg: `<svg viewBox="0 0 24 24" fill="currentColor" ${A11Y}><path d="${icon.path}"/></svg>`,
+    brand: true,
+    brandHover: l < 0.05 || l > 0.85 ? null : `#${icon.hex}`,
+  };
+}
+
+function lucideIcon(name: string): ResolvedIcon | null {
+  if (!/^[a-z0-9-]+$/.test(name)) return null;
+  let raw: string;
+  try {
+    raw = readFileSync(require.resolve(`lucide-static/icons/${name}.svg`), 'utf8');
+  } catch {
+    return null;
+  }
+  const svg = raw
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/\s(class|width|height)="[^"]*"/g, '')
+    .replace('<svg', `<svg ${A11Y}`)
+    .replace(/\s+/g, ' ')
+    .trim();
+  return { svg, brand: false, brandHover: null };
+}
+
+/** Resolve `si:<slug>` or `lucide:<name>` to inline SVG. Throws for anything unknown. */
+export function resolveIcon(ref: string): ResolvedIcon {
+  const hit = cache.get(ref);
+  if (hit) return hit;
+  const [prefix, name = ''] = ref.split(':', 2);
+  const icon = prefix === 'si' ? brandIcon(name) : prefix === 'lucide' ? lucideIcon(name) : null;
+  if (!icon) throw new Error(`Unknown skill icon: ${ref}`);
+  cache.set(ref, icon);
+  return icon;
+}
