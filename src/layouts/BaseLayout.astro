@@ -4,6 +4,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { twinHref } from '../lib/markdown';
+import { ogSlug } from '../lib/og-pages';
+import CommandPalette from '../components/CommandPalette.astro';
 
 export interface Props {
   title: string;
@@ -17,6 +19,8 @@ export interface Props {
 }
 const { title, description, path, jsonLd = [], noindex = false, ogImage, twin = true } = Astro.props;
 const site = Astro.site!.origin;
+const og = ogImage ?? `/og/${ogSlug(path)}.png`;
+const cfToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 const canonical = `${site}${path === '/' ? '/' : path}`;
 const fullTitle = path === '/' ? title : `${title} · Youssef Alouani`;
 const themeScript = `(function(){try{var t=localStorage.getItem('theme');}catch(e){}var d=t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.dataset.theme=d?'dark':'light';})();`;
@@ -39,7 +43,9 @@ const themeScript = `(function(){try{var t=localStorage.getItem('theme');}catch(
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    {ogImage && <meta property="og:image" content={`${site}${ogImage}`} />}
+    <meta property="og:image" content={`${site}${og}`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <Font cssVariable="--font-inter" preload />
     <Font cssVariable="--font-jetbrains" />
@@ -48,10 +54,11 @@ const themeScript = `(function(){try{var t=localStorage.getItem('theme');}catch(
   </head>
   <body class="flex min-h-screen flex-col antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-bg focus:px-3 focus:py-2">Skip to content</a>
-    <Header path={path} />
-    <main id="main" class="flex-1">
+    <Header path={path}><CommandPalette slot="actions" /></Header>
+    <main id="main" class="flex-1" data-pagefind-body={noindex || !twin ? undefined : true}>
       <slot />
     </main>
     <Footer />
+    {cfToken && <script defer is:inline src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: cfToken })}></script>}
   </body>
 </html>

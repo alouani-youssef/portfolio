@@ -1,0 +1,95 @@
+---
+const links = [
+  ['Home', '/'], ['Experience', '/experience'], ['Projects', '/projects'], ['Osoul case study', '/projects/osoul'],
+  ['Blog', '/blog'], ['About', '/about'], ['Now', '/now'], ['Contact', '/contact'], ['CV', '/cv'],
+];
+---
+<button type="button" id="palette-open" class="hidden h-9 items-center gap-2 rounded-md border border-border px-3 text-sm text-muted hover:border-accent sm:inline-flex" aria-haspopup="dialog" aria-controls="palette">
+  Search <kbd class="font-mono text-xs">⌘K</kbd>
+</button>
+<dialog id="palette" aria-label="Search and navigate" class="m-auto mt-[12vh] w-[min(36rem,calc(100vw-2rem))] rounded-xl border border-border bg-bg p-0 text-fg backdrop:bg-black/40">
+  <form method="dialog" class="flex items-center border-b border-border px-4">
+    <label for="palette-input" class="sr-only">Search the site</label>
+    <input id="palette-input" type="search" autocomplete="off" placeholder="Search projects, roles and posts…" class="h-12 w-full bg-transparent outline-none placeholder:text-muted" />
+    <kbd class="font-mono text-xs text-muted">Esc</kbd>
+  </form>
+  <ul id="palette-results" class="max-h-[60vh] overflow-y-auto p-2" role="listbox" aria-label="Results">
+    {links.map(([label, href]) => (
+      <li><a href={href} class="block rounded-md px-3 py-2 text-fg no-underline hover:bg-subtle focus:bg-subtle">{label}</a></li>
+    ))}
+  </ul>
+</dialog>
+<script>
+  type PagefindResult = { data: () => Promise<{ url: string; meta: { title?: string }; excerpt: string }> };
+  type Pagefind = { search: (q: string) => Promise<{ results: PagefindResult[] }> };
+
+  const dialog = document.getElementById('palette') as HTMLDialogElement;
+  const input = document.getElementById('palette-input') as HTMLInputElement;
+  const list = document.getElementById('palette-results') as HTMLUListElement;
+  const trigger = document.getElementById('palette-open');
+  const defaults = list.innerHTML;
+  let pagefind: Pagefind | undefined;
+  let lastFocus: Element | null = null;
+
+  async function load(): Promise<Pagefind | undefined> {
+    if (pagefind) return pagefind;
+    try {
+      const path = '/pagefind/pagefind.js';
+      pagefind = (await import(/* @vite-ignore */ path)) as Pagefind;
+    } catch {
+      pagefind = undefined; // index only exists after a full build
+    }
+    return pagefind;
+  }
+
+  function open() {
+    lastFocus = document.activeElement;
+    dialog.showModal();
+    input.focus();
+    void load();
+  }
+
+  dialog.addEventListener('close', () => {
+    input.value = '';
+    list.innerHTML = defaults;
+    (lastFocus as HTMLElement | null)?.focus?.();
+  });
+
+  trigger?.addEventListener('click', open);
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      dialog.open ? dialog.close() : open();
+    } else if (e.key === 'Escape' && dialog.open) {
+      dialog.close();
+    }
+  });
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+
+  let seq = 0;
+  input.addEventListener('input', async () => {
+    const q = input.value.trim();
+    const mine = ++seq;
+    if (!q) { list.innerHTML = defaults; return; }
+    const pf = await load();
+    if (!pf || mine !== seq) return;
+    const { results } = await pf.search(q);
+    const data = await Promise.all(results.slice(0, 8).map((r) => r.data()));
+    if (mine !== seq) return;
+    list.replaceChildren(...(data.length ? data.map((d) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = d.url;
+      a.className = 'block rounded-md px-3 py-2 text-fg no-underline hover:bg-subtle focus:bg-subtle';
+      const t = document.createElement('span');
+      t.className = 'block font-medium';
+      t.textContent = d.meta.title ?? d.url;
+      const x = document.createElement('span');
+      x.className = 'block text-sm text-muted';
+      x.textContent = d.excerpt.replace(/<[^>]+>/g, '');
+      a.append(t, x);
+      li.append(a);
+      return li;
+    }) : [Object.assign(document.createElement('li'), { className: 'px-3 py-2 text-muted', textContent: 'No results' })]));
+  });
+</script>
