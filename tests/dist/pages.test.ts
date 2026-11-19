@@ -24,6 +24,17 @@ describe('home', () => {
   it('shows exactly one recommendation pull quote', () => {
     expect(doc.querySelectorAll('main blockquote')).toHaveLength(1);
   });
+  it('shows the core stack strip with icons, linking to all skills', () => {
+    const section = doc.querySelector('section[aria-labelledby="core-stack-h"]')!;
+    expect(section.querySelector('h2')!.text.trim()).toBe('Core stack');
+    const items = section.querySelectorAll('.core-stack li');
+    expect(items.map((li) => li.text.trim())).toEqual(['TypeScript', 'Go', 'Python', 'NestJS', 'PostgreSQL', 'Redis', 'Kafka', 'LangGraph', 'Ollama', 'Kubernetes']);
+    for (const li of items) expect(li.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
+    expect(section.querySelector('a[href="/about#skills"]')).not.toBeNull();
+  });
+  it('does not emit skill anchors (Review Focus 4)', () => {
+    expect(doc.querySelectorAll('[id^="skill-"]')).toHaveLength(0);
+  });
   it('links to contact and cv', () => {
     const hrefs = doc.querySelectorAll('main a').map((a) => a.getAttribute('href'));
     expect(hrefs).toContain('/contact');

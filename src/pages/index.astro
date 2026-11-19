@@ -4,6 +4,7 @@ import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExpertiseCards from '../components/ExpertiseCards.astro';
 import ClientGroups from '../components/ClientGroups.astro';
+import CoreStack from '../components/CoreStack.astro';
 import Recommendation from '../components/Recommendation.astro';
 import { profile } from '../data/profile';
 import { entrySlug } from '../lib/i18n';
@@ -39,6 +40,8 @@ const posts = (await getPosts(false))
     <h2 id="expertise" class="text-xl font-semibold">What I build</h2>
     <div class="mt-6"><ExpertiseCards /></div>
   </section>
+
+  <CoreStack />
 
   {featured.length > 0 && (
     <section class="container-page py-10" aria-labelledby="featured">

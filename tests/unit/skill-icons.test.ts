@@ -27,6 +27,12 @@ describe('resolveIcon', () => {
     expect(r.svg).not.toContain('width="24"');
   });
 
+  it('keeps the size attributes of shapes inside a lucide icon', () => {
+    const { svg } = resolveIcon('lucide:server');
+    expect(svg).toMatch(/<rect[^>]*width="20"[^>]*height="8"/);
+    expect(svg).not.toMatch(/<svg[^>]*\swidth=/);
+  });
+
   it.each(['si:nope', 'lucide:nope', 'foo:bar', 'lucide:../x'])('throws for unknown icon %s', (ref) => {
     expect(() => resolveIcon(ref)).toThrow(/Unknown skill icon/);
   });

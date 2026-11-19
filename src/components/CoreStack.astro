@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import SkillIcon from './SkillIcon.astro';
+const core = (await getCollection('skills', (s) => s.data.core !== undefined)).sort((a, b) => a.data.core! - b.data.core!);
+---
+<section class="container-page py-10" aria-labelledby="core-stack-h">
+  <div class="flex items-baseline justify-between">
+    <h2 id="core-stack-h" class="text-xl font-semibold">Core stack</h2>
+    <a href="/about#skills" class="text-sm">All skills →</a>
+  </div>
+  <ul class="core-stack mt-6 flex flex-wrap gap-2">
+    {core.map((s) => (
+      <li>
+        <a class="chip inline-flex items-center gap-1.5 !px-3 !py-1 text-sm" href={`/about#skill-${s.id}`}>
+          <SkillIcon icon={s.data.icon} />
+          {s.data.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

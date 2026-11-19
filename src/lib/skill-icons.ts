@@ -59,8 +59,7 @@ function lucideIcon(name: string): ResolvedIcon | null {
   }
   const svg = raw
     .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/\s(class|width|height)="[^"]*"/g, '')
-    .replace('<svg', `<svg ${A11Y}`)
+    .replace(/<svg[^>]*>/, (tag) => tag.replace(/\s(class|width|height)="[^"]*"/g, '').replace('<svg', `<svg ${A11Y}`))
     .replace(/\s+/g, ' ')
     .trim();
   return { svg, brand: false, brandHover: null };
