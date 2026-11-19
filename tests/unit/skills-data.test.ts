@@ -49,8 +49,8 @@ describe('skills.yaml', () => {
   });
 
   it('lists Hetzner and GCP as familiar cloud providers and drops Oracle', () => {
-    expect(inCat('cloud')).toEqual(['gcp', 'hetzner']);
-    for (const s of skills.filter((x) => x.category === 'cloud')) expect(s.level, s.id).toBe('familiar');
+    expect(inCat('cloud')).toEqual(['gcp', 'hetzner', 'private-data-centers']);
+    for (const id of ['gcp', 'hetzner']) expect(skills.find((s) => s.id === id)!.level, id).toBe('familiar');
     expect(skills.find((s) => s.id === 'oracle-cloud')).toBeUndefined();
   });
 

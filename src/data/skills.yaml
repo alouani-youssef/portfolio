@@ -58,6 +58,7 @@
 - { id: nginx, name: "Nginx", category: ops, level: production, evidence: [], icon: "si:nginx" }
 - { id: hetzner, name: "Hetzner", category: cloud, level: familiar, evidence: [axelerated, archio], icon: "si:hetzner" }
 - { id: gcp, name: "GCP", category: cloud, level: familiar, evidence: [], icon: "si:googlecloud" }
+- { id: private-data-centers, name: "Hybrid / private data centers", category: cloud, level: production, evidence: [], icon: "lucide:warehouse" }
 - { id: deepeval, name: "DeepEval", category: testing, level: familiar, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:flask-conical" }
 - { id: giskard, name: "Giskard", category: testing, level: familiar, evidence: [axelerated, saudi-stt, customer-voice, osoul, ai-stones, translator, pg_inspector, 10xjobs], icon: "lucide:shield-alert" }
 - { id: unit-tests, name: "Unit tests", category: testing, level: production, evidence: [], icon: "lucide:check-check" }
