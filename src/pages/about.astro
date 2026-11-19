@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SkillsMatrix from '../components/SkillsMatrix.astro';
+import Recommendation from '../components/Recommendation.astro';
+import { profile } from '../data/profile';
+import headshot from '../assets/media/headshot.png';
+const recs = (await getCollection('recommendations')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const e = profile.education;
+---
+<BaseLayout title="About" description={profile.shortBio.slice(0, 158) + '…'} path="/about">
+  <div class="container-page py-12 sm:py-16">
+    <div class="flex flex-col gap-8 sm:flex-row sm:items-start">
+      <Picture src={headshot} alt="Portrait of Youssef Alouani" widths={[128, 256]} sizes="128px" formats={['avif', 'webp']} class="h-32 w-32 rounded-full border border-border object-cover" />
+      <div class="max-w-[70ch]">
+        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">About</h1>
+        <div class="mt-6 space-y-4">{profile.longBio.map((p) => <p>{p}</p>)}</div>
+      </div>
+    </div>
+
+    <section class="mt-16 grid gap-8 sm:grid-cols-2" aria-label="Education and languages">
+      <div>
+        <h2 class="eyebrow">Education</h2>
+        <p class="mt-2">{e.degree}, {e.school}, {e.start}–{e.end}</p>
+      </div>
+      <div>
+        <h2 class="eyebrow">Languages</h2>
+        <p class="mt-2">{profile.languages.map((l) => l.name).join(', ')}</p>
+      </div>
+    </section>
+
+    <section id="skills" class="mt-16" aria-labelledby="skills-h">
+      <h2 id="skills-h" class="text-xl font-semibold">Skills</h2>
+      <p class="mt-2 text-muted">Grouped by what I build. Each one is backed by a role or project.</p>
+      <div class="mt-6"><SkillsMatrix /></div>
+    </section>
+
+    <section class="mt-16" aria-labelledby="recs-h">
+      <h2 id="recs-h" class="text-xl font-semibold">Recommendations</h2>
+      <div class="mt-6 space-y-10 max-w-[70ch]">{recs.map((r) => <Recommendation rec={r} />)}</div>
+    </section>
+
+    <section id="faq" class="mt-16 max-w-[70ch]" aria-labelledby="faq-h">
+      <h2 id="faq-h" class="text-xl font-semibold">FAQ</h2>
+      <div class="mt-6 divide-y divide-border border-y border-border">
+        {profile.faq.map((f) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer font-medium">{f.q}</summary>
+            <p class="mt-2 text-muted">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

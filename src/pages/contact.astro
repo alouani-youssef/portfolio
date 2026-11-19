@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile } from '../data/profile';
+const items = [
+  { label: 'Email', href: `mailto:${profile.email}`, text: profile.email },
+  { label: 'LinkedIn', href: profile.links.linkedin, text: 'linkedin.com/in/alouani-youssef' },
+  { label: 'GitHub', href: profile.links.github, text: 'github.com/alouani-youssef' },
+  { label: 'CV', href: '/cv', text: 'Printable CV (save as PDF)' },
+];
+---
+<BaseLayout title="Contact" description="How to reach Youssef Alouani: email, LinkedIn, GitHub and CV." path="/contact">
+  <div class="container-page py-12 sm:py-16">
+    <div class="max-w-[70ch]">
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Contact</h1>
+      <p class="mt-4 text-lg text-muted">The fastest way to reach me is email. I write in English, French and Arabic.</p>
+      <dl class="mt-10 divide-y divide-border border-y border-border">
+        {items.map((i) => (
+          <div class="grid gap-1 py-4 sm:grid-cols-[8rem_1fr]">
+            <dt class="eyebrow pt-1">{i.label}</dt>
+            <dd><a href={i.href}>{i.text}</a></dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+const skills = await getCollection('skills');
+const CATS = [
+  ['language', 'Languages'], ['backend', 'Backend'], ['data', 'Data'], ['ai', 'AI / LLM'],
+  ['security', 'Identity and security'], ['infra', 'Infra'], ['frontend', 'Front end'], ['realtime', 'Real-time'],
+] as const;
+const LEVEL = { daily: 'daily', production: 'shipped in production', familiar: 'familiar' } as const;
+---
+<div class="table-scroll">
+  <table>
+    <thead><tr><th scope="col">Area</th><th scope="col">Skills</th></tr></thead>
+    <tbody>
+      {CATS.map(([cat, label]) => (
+        <tr>
+          <th scope="row" class="whitespace-nowrap">{label}</th>
+          <td>
+            <ul class="flex flex-wrap gap-x-4 gap-y-1">
+              {skills.filter((s) => s.data.category === cat).map((s) => (
+                <li id={`skill-${s.id}`}>{s.data.name} <span class="text-xs text-muted">({LEVEL[s.data.level]})</span></li>
+              ))}
+            </ul>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

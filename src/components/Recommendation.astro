@@ -1,0 +1,16 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { rec: CollectionEntry<'recommendations'>; size?: 'lg' | 'md' }
+const { rec, size = 'md' } = Astro.props;
+const d = rec.data;
+const date = d.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+<figure class="border-l-2 border-accent pl-5">
+  <blockquote class:list={[size === 'lg' ? 'text-xl sm:text-2xl' : 'text-lg', 'leading-snug']}>
+    <p>“{d.quote}”</p>
+  </blockquote>
+  <figcaption class="mt-3 text-sm text-muted">
+    <span class="font-medium text-fg">{d.author}</span>, {d.title} · {d.relationship} · <time datetime={d.date.toISOString().slice(0, 10)}>{date}</time> ·
+    <a href={d.url}>Full recommendation on LinkedIn</a>
+  </figcaption>
+</figure>
