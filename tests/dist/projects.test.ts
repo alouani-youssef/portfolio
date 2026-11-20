@@ -61,14 +61,23 @@ describe('finamaze migration', () => {
   });
 });
 
-const AREAS = [
-  ['agentic', ['customer-voice', 'osoul-ai-assistant', 'ai-stones']],
-  ['nlp', ['chatbots', 'qalqul-nlu']],
-  ['ml', ['saudi-stt']],
-  ['recsys', ['osoul-recommendations']],
-  ['etl', ['osoul-server-side-tracking', '10xjobs-ingestion']],
-  ['backend', ['osoul', 'sowtek-omnichannel-chat', 'finamaze-migration']],
+/** Top-level case studies in grid order (featured first, then `order`), with their focus areas, main one first. */
+const TOP = [
+  ['osoul', ['backend']],
+  ['saudi-stt', ['ml']],
+  ['customer-voice', ['agentic', 'etl']],
+  ['archio', ['backend']],
+  ['osoul-ai-assistant', ['agentic']],
+  ['osoul-recommendations', ['recsys']],
+  ['ai-stones', ['agentic']],
+  ['osoul-server-side-tracking', ['etl', 'backend']],
+  ['sowtek-omnichannel-chat', ['backend']],
+  ['finamaze-migration', ['backend']],
+  ['chatbots', ['nlp']],
+  ['qalqul-nlu', ['nlp']],
+  ['10xjobs-ingestion', ['etl']],
 ] as const;
+const AREA_ORDER = ['agentic', 'nlp', 'ml', 'recsys', 'etl', 'backend'] as const;
 const CHILDREN: Record<string, string> = {
   'qalqul-botpress': 'chatbots', 'qalqul-realtime': 'qalqul-nlu', 'sowtek-voip': 'saudi-stt', '10xjobs-search': '10xjobs-ingestion',
   'osoul-multi-tenancy': 'osoul', 'osoul-table-sessions': 'osoul', 'sowtek-flowbuilder': 'sowtek-omnichannel-chat',
@@ -77,15 +86,24 @@ const CHILDREN: Record<string, string> = {
 
 describe('projects index', () => {
   const doc = readHtml('/projects');
-  it('has one section per focus area, in order', () => {
-    expect(doc.querySelectorAll('main section[data-focus]').map((s) => s.getAttribute('data-focus'))).toEqual(AREAS.map(([id]) => id));
-  });
-  it('shows the 11 top-level case studies as cards, in their area, Osoul marked flagship', () => {
-    for (const [area, slugs] of AREAS) {
-      const cards = doc.querySelectorAll(`section[data-focus="${area}"] .project-card`);
-      expect(cards.map((c) => (c.tagName === 'A' ? c : c.querySelector('a'))!.getAttribute('href')), area).toEqual(slugs.map((s) => `/projects/${s}`));
+  it('has an All chip, then one filter chip per focus area in order, each with its count', () => {
+    const chips = doc.querySelectorAll('nav[aria-label="Filter by area"] .area-filter');
+    expect(chips.map((c) => c.getAttribute('data-filter'))).toEqual(['all', ...AREA_ORDER]);
+    expect(chips[0].getAttribute('aria-current')).toBe('page');
+    const count = (c: HTMLElement) => Number(c.querySelector('.tag-chip__count')!.text);
+    expect(count(chips[0])).toBe(TOP.length);
+    for (const c of chips.slice(1)) {
+      const area = c.getAttribute('data-filter')!;
+      expect(count(c), area).toBe(TOP.filter(([, f]) => (f as readonly string[]).includes(area)).length);
+      expect(c.getAttribute('href'), area).toBe(`/projects?area=${area}`);
     }
-    expect(doc.querySelectorAll('main .project-card')).toHaveLength(12);
+  });
+  it('shows the 13 top-level case studies as cards, featured first, tagged with their areas, Osoul marked flagship', () => {
+    const items = doc.querySelectorAll('main li[data-focus]');
+    const href = (li: HTMLElement) => { const c = li.querySelector('.project-card')!; return (c.tagName === 'A' ? c : c.querySelector('a'))!.getAttribute('href'); };
+    expect(items.map(href)).toEqual(TOP.map(([s]) => `/projects/${s}`));
+    expect(items.map((li) => li.getAttribute('data-focus'))).toEqual(TOP.map(([, f]) => f.join(' ')));
+    expect(doc.querySelectorAll('main .project-card')).toHaveLength(TOP.length);
     expect(doc.querySelector('main a[href="/projects/osoul"]')!.text).toContain('Flagship');
   });
   it('lists every deep dive under its parent card', () => {
@@ -95,7 +113,7 @@ describe('projects index', () => {
   });
   it('gives every project card its own cover with alt text', () => {
     const imgs = doc.querySelectorAll('main .project-card img');
-    expect(imgs.length).toBe(12);
+    expect(imgs.length).toBe(TOP.length);
     const names = imgs.map((i) => i.getAttribute('src')!.split('/').pop()!.split('.')[0]);
     expect(new Set(names).size, names.join(', ')).toBe(imgs.length);
     for (const img of imgs) expect(img.getAttribute('alt')?.trim()).toBeTruthy();
