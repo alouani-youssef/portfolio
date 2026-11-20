@@ -129,7 +129,7 @@ describe('now and contact', () => {
     const m = main('/contact');
     expect(m.text).toContain('Open to backend & AI positions');
     expect(m.text).not.toContain('senior backend & AI conversations');
-    expect(m.querySelector('#services h3')!.text.trim()).toBe('Backend & AI positions');
+    expect(m.querySelector('#services h3')!.text.trim()).toBe('AI assistants');
   });
   it('/contact shows the public email', () => {
     expect(main('/contact').querySelector('a[href="mailto:hello@youssefalouani.com"]')).not.toBeNull();

@@ -16,19 +16,19 @@ const sign = '\n\nThanks,\n[Your name]\n[Company / role]';
 
 export const services: Service[] = [
   {
-    id: 'role',
-    title: 'Backend & AI positions',
-    icon: 'lucide:briefcase',
-    summary: 'Open to backend and AI engineering positions, remote or in Casablanca.',
-    points: ['AI systems / backend engineer', 'Lead or founding engineer', 'Remote or Casablanca-based'],
+    id: 'assistants',
+    title: 'AI assistants',
+    icon: 'lucide:bot',
+    summary: 'Chatbots and assistants for your website, app or team that answer from your data and act with the user\'s own permissions.',
+    points: ['LLM assistants and Botpress or Rasa chatbots', 'Chat widgets and channel integrations', 'Arabic, French and English, PII-safe'],
     template: {
-      subject: 'Role: [title] at [company]',
+      subject: 'AI assistant: [use case]',
       body:
-        'Hi Youssef,\n\nI am reaching out about a [title] role at [company].\n\n' +
-        'Team and product: [short description]\n' +
-        'Location / remote: [details]\n' +
-        'Compensation range: [range]\n' +
-        'Link to the job description: [URL]' + sign,
+        'Hi Youssef,\n\nWe would like an assistant that [answers customers / supports our team / takes actions] on [website / app / WhatsApp / internal tool].\n\n' +
+        'What it should know: [documents, databases, APIs]\n' +
+        'Languages: [Arabic / Darija / French / English]\n' +
+        'Where we are: [idea / existing bot / in production]\n' +
+        'Timeline: [dates]' + sign,
     },
   },
   {
