@@ -53,6 +53,18 @@ describe('writing order and upcoming drafts', () => {
     expect(shown).not.toEqual(expect.arrayContaining(DRAFT_TITLES.slice(0, 1)));
     expect(shown.length).toBe(MEDIUM.length);
   });
+  it('shows Medium claps and comments on every published post, with the date they were counted', () => {
+    for (const li of doc.querySelectorAll('.post-grid > li')) {
+      const s = li.querySelector('.post-card__stats');
+      expect(s, li.text).not.toBeNull();
+      expect(s!.text).toMatch(/\d+ claps? · \d+ comments?/);
+      expect(s!.getAttribute('title')).toMatch(/^On Medium, as of \d{1,2} \w+ \d{4}$/);
+    }
+  });
+  it('orders published posts by claps, highest first', () => {
+    const claps = doc.querySelectorAll('.post-grid > li .post-card__stats').map((s) => Number(s.text.match(/(\d+) clap/)![1]));
+    expect(claps).toEqual([...claps].sort((a, b) => b - a));
+  });
   it('lists the drafts last as Coming soon, with no date and no link (Review Focus 3)', () => {
     const up = doc.querySelectorAll('[data-upcoming] .upcoming-grid > li');
     expect(up).toHaveLength(3);

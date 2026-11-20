@@ -1,10 +1,13 @@
-type PostLike = { id: string; data: { pubDate: Date; draft: boolean; views?: number; title?: string } };
+type Stats = { claps: number; comments: number; asOf: Date };
+type PostLike = { id: string; data: { pubDate: Date; draft: boolean; stats?: Stats; title?: string } };
 
-/** Most read first; posts without a view count follow, newest first. */
-export function byPopularity<T extends { data: { views?: number; pubDate: Date } }>(a: T, b: T): number {
-  const va = a.data.views ?? -1;
-  const vb = b.data.views ?? -1;
-  return vb - va || b.data.pubDate.getTime() - a.data.pubDate.getTime();
+/** Most clapped first, then most commented; posts without stats follow, newest first. */
+export function byPopularity<T extends { data: { stats?: Stats; pubDate: Date } }>(a: T, b: T): number {
+  const ca = a.data.stats?.claps ?? -1;
+  const cb = b.data.stats?.claps ?? -1;
+  const ka = a.data.stats?.comments ?? -1;
+  const kb = b.data.stats?.comments ?? -1;
+  return cb - ca || kb - ka || b.data.pubDate.getTime() - a.data.pubDate.getTime();
 }
 
 /**

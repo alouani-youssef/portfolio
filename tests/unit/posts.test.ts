@@ -1,16 +1,22 @@
 import { describe, it, expect } from 'vitest';
 import { publishedPosts, upcomingPosts, byPopularity } from '../../src/lib/posts';
 
-type P = { id: string; data: { pubDate: Date; draft: boolean; views?: number; title: string } };
-const post = (id: string, date: string, opts: { draft?: boolean; views?: number } = {}): P => ({ id, data: { pubDate: new Date(date), draft: opts.draft ?? false, views: opts.views, title: id } });
+type P = { id: string; data: { pubDate: Date; draft: boolean; stats?: { claps: number; comments: number; asOf: Date }; title: string } };
+const post = (id: string, date: string, opts: { draft?: boolean; views?: number; comments?: number } = {}): P => ({
+  id,
+  data: { pubDate: new Date(date), draft: opts.draft ?? false, title: id, stats: opts.views === undefined ? undefined : { claps: opts.views, comments: opts.comments ?? 0, asOf: new Date('2026-11-19') } },
+});
 const ids = (xs: Array<{ id: string }>) => xs.map((x) => x.id);
 
 describe('byPopularity', () => {
-  it('sorts by views, then posts without views newest first (Review Focus 2)', () => {
+  it('sorts by claps, then posts without stats newest first (Review Focus 2)', () => {
     const xs = [post('ten', '2022-01-01', { views: 10 }), post('fifty', '2021-01-01', { views: 50 }), post('none-2023', '2023-01-01'), post('none-2024', '2024-01-01')];
     expect(ids([...xs].sort(byPopularity))).toEqual(['fifty', 'ten', 'none-2024', 'none-2023']);
   });
-  it('breaks equal views by date', () => {
+  it('breaks equal claps by comments', () => {
+    expect(ids([post('quiet', '2023-01-01', { views: 5, comments: 0 }), post('talked', '2022-01-01', { views: 5, comments: 4 })].sort(byPopularity))).toEqual(['talked', 'quiet']);
+  });
+  it('breaks equal claps and comments by date', () => {
     expect(ids([post('old', '2022-01-01', { views: 5 }), post('new', '2023-01-01', { views: 5 })].sort(byPopularity))).toEqual(['new', 'old']);
   });
 });

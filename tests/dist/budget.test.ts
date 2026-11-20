@@ -19,6 +19,33 @@ describe('search, og images and budget', () => {
     }
   });
 
+  it('keeps every og image a palette PNG under 35 KB', () => {
+    for (const route of listHtmlPages()) {
+      const content = readHtml(route).querySelector('meta[property="og:image"]')!.getAttribute('content')!;
+      const buf = readFileSync(join(DIST, new URL(content).pathname));
+      expect(buf.length, route).toBeLessThan(35 * 1024);
+      expect(buf[25], `${route}: colour type`).toBe(3); // PNG colour type 3 = indexed palette
+    }
+  });
+
+  it('draws each repeated SVG icon once per page', () => {
+    for (const route of listHtmlPages()) {
+      const html = readFileSync(join(DIST, route === '/' ? 'index.html' : `${route.slice(1)}.html`), 'utf8');
+      const seen = new Map<string, number>();
+      for (const m of html.matchAll(/<svg\b[^>]*>([\s\S]*?)<\/svg>/g)) {
+        const inner = m[1].replace(/ data-astro-cid-[a-z0-9]+(="[^"]*")?/g, '');
+        if (inner.length < 200 || inner.includes('<use') || /\sid="/.test(inner)) continue;
+        seen.set(inner, (seen.get(inner) ?? 0) + 1);
+      }
+      const dupes = [...seen.values()].filter((n) => n > 1).length;
+      expect(dupes, route).toBe(0);
+    }
+  });
+
+  it('keeps the blog index HTML under 60 KB', () => {
+    expect(statSync(join(DIST, 'blog.html')).size).toBeLessThan(60 * 1024);
+  });
+
   it('keeps JavaScript under 50 KB per page', () => {
     for (const route of listHtmlPages()) {
       const doc = readHtml(route);

@@ -125,8 +125,8 @@ const blog = defineCollection({
     canonical: z.url().optional(),
     related: z.array(reference('projects')).default([]),
     draft: z.boolean().default(false),
-    /** Reads from Medium stats (or site analytics); orders the blog by popularity. */
-    views: z.number().int().nonnegative().optional(),
+    /** Public Medium counts, copied by hand on `asOf`; they order the blog by popularity. */
+    stats: z.object({ claps: z.number().int().nonnegative(), comments: z.number().int().nonnegative(), asOf: z.coerce.date() }).optional(),
   }),
 });
 
