@@ -12,7 +12,8 @@ const skills = defineCollection({
     name: z.string(),
     category: z.enum(SKILL_CATEGORIES.map((c) => c.id) as [Category, ...Category[]]),
     level: z.enum(['expert', 'production', 'familiar']),
-    evidence: z.array(z.string()).default([]),
+    /** Projects, roles or open-source entries that show the skill, strongest first. Required: a skill without evidence is not listed. */
+    evidence: z.array(z.string()).min(1),
     icon: z.string().refine((ref) => { try { resolveIcon(ref); return true; } catch { return false; } }, { message: 'Unknown skill icon (use si:<slug> or lucide:<name>)' }),
     core: z.number().int().positive().optional(),
   }),
@@ -100,7 +101,8 @@ const projects = defineCollection({
       confidentiality: z.enum(['public', 'architecture-only', 'private']).default('public'),
       skills: z.array(reference('skills')),
       links: z.object({ repo: z.url(), demo: z.url(), post: z.string() }).partial().default({}),
-      metrics: z.array(z.object({ label: z.string(), value: z.string(), placeholder: z.boolean().default(true) })).default([]),
+      /** `context` says how a figure was measured: where, over what period and against which baseline. */
+      metrics: z.array(z.object({ label: z.string(), value: z.string(), context: z.string().optional(), placeholder: z.boolean().default(true) })).default([]),
       media: z.array(z.object({ src: image(), alt: z.string().min(1), caption: z.string(), device: z.enum(['desktop', 'phone']).default('desktop') })).default([]),
       /** Card and header image, unique per project. */
       cover: image(),

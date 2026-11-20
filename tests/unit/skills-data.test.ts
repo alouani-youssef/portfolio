@@ -21,7 +21,7 @@ describe('skills.yaml', () => {
     const core = skills.filter((s) => s.core !== undefined).sort((a, b) => a.core! - b.core!);
     expect(core.map((s) => s.core)).toEqual(core.map((_, i) => i + 1));
     expect(core.map((s) => s.id)).toEqual([
-      'rag', 'mcp', 'langgraph', 'langchain', 'whisper', 'fine-tuning', 'python', 'fastapi', 'nestjs', 'go', 'typescript', 'postgresql', 'redis', 'kafka',
+      'rag', 'mcp', 'langchain', 'whisper', 'fine-tuning', 'python', 'fastapi', 'nestjs', 'go', 'typescript', 'postgresql', 'redis', 'kafka',
     ]);
   });
 
@@ -34,32 +34,23 @@ describe('skills.yaml', () => {
   });
 
   it('splits databases from brokers and protocols', () => {
-    expect(inCat('databases')).toEqual(['milvus', 'neo4j', 'pgvector', 'postgresql', 'redis']);
-    expect(inCat('messaging')).toEqual(['grpc', 'kafka', 'push-notifications', 'rabbitmq', 'sse', 'websockets']);
+    expect(inCat('databases')).toEqual(['milvus', 'pgvector', 'postgresql', 'redis']);
+    expect(inCat('messaging')).toEqual(['grpc', 'kafka', 'rabbitmq', 'websockets']);
   });
 
   it('splits LLMs from ML / DL / NLP / NLU', () => {
-    expect(inCat('llm')).toEqual(['claude-harnesses', 'embeddings', 'langchain', 'langgraph', 'mcp', 'ollama', 'rag', 'semantic-search']);
-    expect(inCat('ml')).toEqual(['duckling', 'fine-tuning', 'huggingface-transformers', 'nllb-200', 'rasa', 'recommendation-systems', 'whisper', 'zero-shot-classification']);
+    expect(inCat('llm')).toEqual(['claude-harnesses', 'embeddings', 'langchain', 'mcp', 'ollama', 'rag', 'semantic-search']);
+    expect(inCat('ml')).toEqual(['duckling', 'fine-tuning', 'nllb-200', 'rasa', 'recommendation-systems', 'whisper', 'zero-shot-classification']);
   });
 
-  it('has testing, design patterns, low-code, ETL, ops and infra sections', () => {
-    expect(inCat('testing')).toEqual(['deepeval', 'giskard', 'jest', 'pytest', 'robot-framework', 'testcontainers', 'unit-tests']);
+  it('has design patterns, low-code, ETL and infra-and-ops sections', () => {
     expect(inCat('patterns')).toEqual(['clean-architecture', 'event-driven', 'microservices']);
     expect(inCat('lowcode')).toEqual(['botpress', 'n8n']);
-    expect(inCat('etl')).toEqual(['clickhouse', 'data-pipelines', 'docling']);
-    expect(inCat('ops')).toEqual(['ansible', 'argocd', 'github-actions', 'gitlab-ci', 'grafana', 'nginx', 'prometheus', 'terraform']);
-    expect(inCat('infra')).toEqual(['docker-compose', 'hybrid-deployments', 'kubernetes', 'object-storage']);
+    expect(inCat('etl')).toEqual(['data-pipelines', 'docling']);
+    expect(inCat('infra')).toEqual(['ansible', 'docker-compose', 'hybrid-deployments', 'kubernetes', 'nginx', 'object-storage']);
   });
 
-  it('lists Hetzner and GCP as familiar cloud providers and drops Oracle', () => {
-    expect(inCat('cloud')).toEqual(['gcp', 'hetzner', 'private-data-centers']);
-    for (const id of ['gcp', 'hetzner']) expect(skills.find((s) => s.id === id)!.level, id).toBe('familiar');
-    expect(skills.find((s) => s.id === 'oracle-cloud')).toBeUndefined();
-  });
-
-  it('adds Cloudflare and PII redaction to security, chat widgets to front end', () => {
-    expect(inCat('security')).toContain('cloudflare');
+  it('adds PII redaction to security, chat widgets to front end', () => {
     expect(inCat('security')).toContain('pii-redaction');
     expect(inCat('frontend')).toContain('chat-widgets');
   });
@@ -71,7 +62,12 @@ describe('skills.yaml', () => {
   });
 
   it('marks tools used lightly as familiar', () => {
-    for (const id of ['terraform', 'prometheus', 'grafana', 'gcp', 'robot-framework', 'neo4j', 'deepeval', 'giskard', 'argocd', 'ollama', 'clickhouse']) expect(level(id), id).toBe('familiar');
+    expect(level('ollama')).toBe('familiar');
+  });
+
+  it('lists only skills backed by at least one project, role or open-source entry', () => {
+    for (const s of skills) expect(s.evidence?.length ?? 0, s.id).toBeGreaterThan(0);
+    for (const id of ['langgraph', 'terraform', 'gcp', 'deepeval', 'tailwind', 'sse']) expect(skills.find((s) => s.id === id), id).toBeUndefined();
   });
 
   it('points every evidence id at a real project, role or open-source entry', () => {

@@ -4,6 +4,7 @@ import { getRoles } from './experience';
 import { getProjects } from './projects';
 import { getPosts } from './post-queries';
 import { tagMeta } from './tags';
+import { splitHeadline } from './markdown';
 
 export interface OgPage { slug: string; title: string; subtitle?: string }
 
@@ -15,9 +16,10 @@ export function ogSlug(path: string): string {
 export async function getOgPages(): Promise<OgPage[]> {
   const posts = await getPosts(true);
   const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+  const [lead] = splitHeadline(profile.headline);
   const clip = (s: string) => (s.length > 140 ? `${s.slice(0, 137)}…` : s);
   return [
-    { slug: 'index', title: 'AI Systems Engineer with a backend foundation.', subtitle: 'I build NLP, speech, recommendation and agentic systems, and the platforms they run on.' },
+    { slug: 'index', title: lead, subtitle: 'AI engineer with a backend foundation: RAG and MCP over private data, speech and privacy-aware assistants.' },
     { slug: 'about', title: 'About', subtitle: clip(profile.oneLiner) },
     { slug: 'experience', title: 'Experience', subtitle: 'Four roles and a side project over five years, each with an AI thread.' },
     { slug: 'projects', title: 'Projects', subtitle: 'Case studies at the architecture level.' },

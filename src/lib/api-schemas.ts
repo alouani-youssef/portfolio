@@ -42,7 +42,7 @@ export const apiProjects = z.array(z.object({
   company: z.string().nullable(),
   skills: z.array(z.string()),
   links: z.record(z.string(), z.string()),
-  metrics: z.array(z.object({ label: z.string(), value: z.string(), confirmed: z.boolean() })),
+  metrics: z.array(z.object({ label: z.string(), value: z.string(), context: z.string().optional(), confirmed: z.boolean() })),
   markdown: z.url(),
 }));
 

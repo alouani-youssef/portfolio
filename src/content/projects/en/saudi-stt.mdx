@@ -11,7 +11,7 @@ confidentiality: architecture-only
 order: 2
 skills: [whisper, fine-tuning, python, fastapi, rag]
 metrics:
-  - { label: "Word error rate, base Whisper large-v3 → fine-tuned", value: "40% → 15%", placeholder: false }
+  - { label: "Word error rate, base Whisper large-v3 → fine-tuned", value: "40% → 15%", context: "Held-out evaluation set of Saudi-dialect calls and voice notes from callers not seen in training. An offline evaluation, not production traffic.", placeholder: false }
 media:
   - { src: ../../../assets/projects/saudi-stt/live-transcript.png, alt: "Live call screen in Arabic: an incoming-call panel and a real-time transcript where the customer says their order has not arrived, the assistant calls the track_order tool, and answers that the order is out with the courier", caption: "Live transcript of a Saudi-dialect call with a tool call in the middle (demo data).", device: desktop }
 cover: ../../../assets/projects/covers/saudi-stt.jpg

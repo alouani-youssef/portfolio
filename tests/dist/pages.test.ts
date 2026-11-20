@@ -14,13 +14,13 @@ const main = (route: string) => readHtml(route).querySelector('main')!;
 describe('home', () => {
   const doc = readHtml('/');
   it('leads with the headline', () => {
-    expect(doc.querySelector('h1')!.text.trim()).toBe('AI Systems Engineer with a backend foundation.');
-    expect(doc.querySelector('title')!.text).toBe('Youssef Alouani · AI Systems Engineer');
+    expect(doc.querySelector('h1')!.text.trim()).toBe('I build AI that works on real data in production, and keeps that data safe.');
+    expect(doc.querySelector('title')!.text).toBe('Youssef Alouani · AI Engineer');
   });
-  it('shows six focus-area expertise cards', () => {
-    expect(doc.querySelectorAll('.expertise-card')).toHaveLength(6);
+  it('shows the first three focus-area expertise cards', () => {
+    expect(doc.querySelectorAll('.expertise-card')).toHaveLength(3);
     const tops = doc.querySelectorAll('.expertise-card a.expertise-project').map((a) => a.getAttribute('href'));
-    expect(tops).toEqual(['/projects/customer-voice', '/projects/chatbots', '/projects/saudi-stt', '/projects/osoul-recommendations', '/projects/10xjobs-ingestion', '/projects/osoul']);
+    expect(tops).toEqual(['/projects/customer-voice', '/projects/chatbots', '/projects/saudi-stt']);
     expect(doc.querySelector('section[aria-labelledby="expertise"] a[href="/projects"]')).not.toBeNull();
   });
   it('offers an All filter plus one per group, in order, with counts', () => {
@@ -57,12 +57,24 @@ describe('home', () => {
     expect(doc.querySelectorAll('main blockquote')).toHaveLength(1);
     expect(doc.querySelector('main blockquote mark')!.text).toBe('thinks like an architect');
     expect(doc.querySelectorAll('.rec-others a[href="/about#recommendations"]')).toHaveLength(2);
+    expect(doc.querySelector('section[aria-labelledby="recs-h"] h2 + a')).toBeNull();
+  });
+  it('orders sections: what I build, clients, recommendations, case studies, public contributions', () => {
+    const ids = doc.querySelectorAll('main h2').map((h) => h.getAttribute('id'));
+    const at = (id: string) => ids.indexOf(id);
+    const order = ['expertise', 'recs-h', 'featured', 'oss-h'].map(at);
+    expect(order).toEqual([...order].sort((a, b) => a - b));
+    expect(order.every((i) => i >= 0)).toBe(true);
+    const html = doc.querySelector('main')!.innerHTML;
+    expect(html.indexOf('client-groups')).toBeGreaterThan(html.indexOf('id="expertise"'));
+    expect(html.indexOf('client-groups')).toBeLessThan(html.indexOf('id="recs-h"'));
+    expect(doc.querySelector('#oss-h')!.text.trim()).toBe('Public Contributions');
   });
   it('shows the core stack strip with icons, linking to all skills', () => {
     const section = doc.querySelector('section[aria-labelledby="core-stack-h"]')!;
     expect(section.querySelector('h2')!.text.trim()).toBe('Core stack');
     const items = section.querySelectorAll('.core-stack li');
-    expect(items.map((li) => li.text.trim())).toEqual(['RAG', 'MCP', 'LangGraph', 'LangChain', 'Whisper', 'Fine-tuning', 'Python', 'FastAPI', 'NestJS', 'Go', 'TypeScript', 'PostgreSQL', 'Redis', 'Kafka']);
+    expect(items.map((li) => li.text.trim())).toEqual(['RAG', 'MCP', 'LangChain', 'Whisper', 'Fine-tuning', 'Python', 'FastAPI', 'NestJS', 'Go', 'TypeScript', 'PostgreSQL', 'Redis', 'Kafka']);
     for (const li of items) expect(li.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
     expect(section.querySelector('a[href="/about#skills"]')).not.toBeNull();
   });
@@ -113,6 +125,7 @@ describe('about', () => {
       expect(li.querySelector('svg[aria-hidden="true"]'), li.id).not.toBeNull();
       expect(li.querySelector('svg title'), li.id).toBeNull();
       expect(spoken, li.id).toContain(li.querySelector('.sr-only')?.text.trim());
+      expect(li.querySelector('a')?.getAttribute('href'), li.id).toMatch(/^\/(projects|experience)\/[a-z0-9-]+$|^\/open-source#[a-z0-9-]+$/);
     }
   });
   it('explains the level markers in a legend', () => {

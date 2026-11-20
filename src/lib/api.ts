@@ -69,7 +69,7 @@ export async function buildApi(name: ApiName): Promise<unknown> {
           company: company?.data.company ?? null,
           skills: (await getEntries(p.data.skills)).map((s) => s.id),
           links: Object.fromEntries(Object.entries(p.data.links).filter(([, v]) => v)) as Record<string, string>,
-          metrics: p.data.metrics.map((m) => ({ label: m.label, value: m.value, confirmed: !m.placeholder })),
+          metrics: p.data.metrics.map((m) => ({ label: m.label, value: m.value, ...(m.context && { context: m.context }), confirmed: !m.placeholder })),
           markdown: `${SITE}${twinHref(`/projects/${slug}`)}`,
         };
       }));

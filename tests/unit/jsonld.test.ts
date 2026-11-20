@@ -11,7 +11,7 @@ describe('jsonld', () => {
     expect(ld['@type']).toBe('ProfilePage');
     expect(ld.mainEntity['@type']).toBe('Person');
     expect(ld.mainEntity.name).toBe('Youssef Alouani');
-    expect(ld.mainEntity.jobTitle).toBe('AI Systems Engineer');
+    expect(ld.mainEntity.jobTitle).toBe('AI Engineer');
     expect(ld.mainEntity.knowsLanguage).toEqual(['en', 'fr', 'ar']);
     expect(ld.mainEntity.worksFor).toEqual({ '@type': 'Organization', name: 'Osoul', url: 'https://osoul.io' });
     expect(ld.mainEntity.sameAs).toEqual(expect.arrayContaining([

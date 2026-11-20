@@ -4,7 +4,7 @@ import * as simpleIcons from 'simple-icons';
 
 export type Category =
   | 'language' | 'backend' | 'databases' | 'messaging' | 'llm' | 'ml' | 'etl' | 'security'
-  | 'infra' | 'ops' | 'cloud' | 'testing' | 'patterns' | 'lowcode' | 'frontend';
+  | 'infra' | 'patterns' | 'lowcode' | 'frontend';
 
 export const SKILL_CATEGORIES: ReadonlyArray<{ id: Category; label: string; icon: string }> = [
   { id: 'language', label: 'Languages', icon: 'lucide:code-xml' },
@@ -15,10 +15,7 @@ export const SKILL_CATEGORIES: ReadonlyArray<{ id: Category; label: string; icon
   { id: 'ml', label: 'ML / DL / NLP / NLU', icon: 'lucide:brain' },
   { id: 'etl', label: 'Data and ETL', icon: 'lucide:database-zap' },
   { id: 'security', label: 'Identity and security', icon: 'lucide:shield-check' },
-  { id: 'infra', label: 'Infra', icon: 'lucide:server-cog' },
-  { id: 'ops', label: 'Ops', icon: 'lucide:infinity' },
-  { id: 'cloud', label: 'Cloud providers', icon: 'lucide:cloud' },
-  { id: 'testing', label: 'Testing', icon: 'lucide:test-tube-diagonal' },
+  { id: 'infra', label: 'Infra and ops', icon: 'lucide:server-cog' },
   { id: 'patterns', label: 'Design patterns', icon: 'lucide:shapes' },
   { id: 'lowcode', label: 'Low-code', icon: 'lucide:blocks' },
   { id: 'frontend', label: 'Front end', icon: 'lucide:layout-template' },

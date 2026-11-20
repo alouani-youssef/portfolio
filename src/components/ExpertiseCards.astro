@@ -4,8 +4,10 @@ import { Picture } from 'astro:assets';
 import { profile } from '../data/profile';
 import { entrySlug } from '../lib/i18n';
 
+interface Props { limit?: number }
+const { limit } = Astro.props;
 const cards = await Promise.all(
-  profile.expertise.map(async (e) => {
+  profile.expertise.slice(0, limit).map(async (e) => {
     const project = await getEntry('projects', `en/${e.project}`);
     if (!project) throw new Error(`Expertise "${e.title}" points to unknown project "${e.project}"`);
     return { ...e, project, href: `/projects/${entrySlug(project.id)}` };

@@ -42,10 +42,10 @@ describe('resolveIcon', () => {
 });
 
 describe('SKILL_CATEGORIES', () => {
-  it('lists the fifteen sections in order, each with a resolvable icon', () => {
+  it('lists the twelve sections in order, each with a resolvable icon', () => {
     expect(SKILL_CATEGORIES.map((c) => c.id)).toEqual([
       'language', 'backend', 'databases', 'messaging', 'llm', 'ml', 'etl', 'security',
-      'infra', 'ops', 'cloud', 'testing', 'patterns', 'lowcode', 'frontend',
+      'infra', 'patterns', 'lowcode', 'frontend',
     ]);
     for (const c of SKILL_CATEGORIES) expect(() => resolveIcon(c.icon)).not.toThrow();
   });

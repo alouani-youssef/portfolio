@@ -4,8 +4,8 @@ import { FOCUS_AREAS } from '../../src/lib/focus';
 
 it('profile is valid and on-message', () => {
   expect(profileSchema.parse(profile)).toBeTruthy();
-  expect(profile.headline).toBe('AI Systems Engineer with a backend foundation. I build NLP, speech, recommendation and agentic systems, and the platforms they run on.');
-  expect(profile.jobTitle).toBe('AI Systems Engineer');
+  expect(profile.headline).toBe('I build AI that works on real data in production, and keeps that data safe. AI engineer with a backend foundation: RAG and MCP over private data, Saudi-dialect speech, recommendations and privacy-aware assistants, evaluated before they ship.');
+  expect(profile.jobTitle).toBe('AI Engineer');
   expect(profile.links.medium).toBe('https://medium.com/@alouaniyoussef');
   const faq = profile.faq.map((f) => f.a).join(' ');
   expect(faq).not.toContain('full time');

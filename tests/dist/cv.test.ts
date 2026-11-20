@@ -1,4 +1,6 @@
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { parse } from 'yaml';
 import { SKILL_CATEGORIES } from '../../src/lib/skill-icons';
 import { readHtml, readText } from './helpers';
 
@@ -8,7 +10,7 @@ describe('/cv', () => {
 
   it('is headed by the name and headline', () => {
     expect(doc.querySelector('h1')!.text.trim()).toBe('Youssef Alouani');
-    expect(text).toContain('AI Systems Engineer with a backend foundation.');
+    expect(text).toContain('I build AI that works on real data in production, and keeps that data safe.');
     expect(text).not.toContain('Lead Backend & AI Engineer');
   });
   it('lists the five roles with their periods', () => {
@@ -21,7 +23,11 @@ describe('/cv', () => {
     expect(text).not.toContain('Education');
     expect(text).not.toContain('Hassan First University');
     expect(text).not.toContain('Ingénieur');
-    expect(doc.querySelectorAll('.cv-skills dt').map((d) => d.text.trim())).toEqual(SKILL_CATEGORIES.map((c) => c.label));
+    const listed = (parse(readFileSync('src/data/skills.yaml', 'utf8')) as Array<{ name: string; category: string; level: string; core?: number }>).filter((s) => s.core !== undefined || s.level === 'expert');
+    expect(doc.querySelectorAll('.cv-skills dt').map((d) => d.text.trim())).toEqual(SKILL_CATEGORIES.filter((c) => listed.some((s) => s.category === c.id)).map((c) => c.label));
+    const cvSkills = doc.querySelector('.cv-skills')!.text;
+    for (const s of listed) expect(cvSkills, s.name).toContain(s.name);
+    for (const name of ['Ollama', 'Kotlin', 'Nginx']) expect(cvSkills, name).not.toContain(name);
     expect(text).toContain('hello@youssefalouani.com');
     expect(text).toContain('youssefalouani.com');
   });

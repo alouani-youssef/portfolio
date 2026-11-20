@@ -47,7 +47,7 @@ export async function buildTwins(): Promise<Twin[]> {
   ]));
 
   twins.push(page('/about', 'About', [
-    profile.longBio.join('\n\n'),
+    profile.longBio.map((b) => (typeof b === 'string' ? b : `${b.lead}\n\n${list(b.items)}`)).join('\n\n'),
     `## Languages\n\n${profile.languages.map((l) => l.name).join(', ')}`,
     `## Skills\n\n${list([...new Set(skills.map((s) => s.data.category))].map((cat) => `${cat}: ${skills.filter((s) => s.data.category === cat).map((s) => `${s.data.name} (${s.data.level})`).join(', ')}`))}`,
     `## Recommendations\n\n${recs.map((r) => `> ${r.data.quote}\n\n${r.data.author}, ${r.data.title} (${r.data.relationship}, ${date(r.data.date)}). ${r.data.url}`).join('\n\n')}`,
@@ -86,7 +86,7 @@ export async function buildTwins(): Promise<Twin[]> {
       d.summary,
       mdxToMarkdown(p.body ?? ''),
       d.media.length ? `## Screenshots\n\n${list(d.media.map((m) => `${m.alt}. ${m.caption}`))}` : '',
-      `## Results\n\n${metrics.length ? list(metrics.map((m) => `${m.label}: ${m.value}${m.placeholder ? ' (sample figure, not yet confirmed)' : ''}`)) : 'Numbers to come.'}`,
+      `## Results\n\n${metrics.length ? list(metrics.map((m) => `${m.label}: ${m.value}${m.context ? ` (${m.context})` : ''}${m.placeholder ? ' (sample figure, not yet confirmed)' : ''}`)) : 'Numbers to come.'}`,
       `## Stack and links\n\n${stack}${d.links.repo ? `\n\nRepository: ${d.links.repo}` : ''}${d.links.demo ? `\n\nLive product: ${d.links.demo}` : ''}`,
     ]));
   }

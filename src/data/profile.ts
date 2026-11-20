@@ -7,7 +7,8 @@ export const profileSchema = z.object({
   headline: z.string(),
   oneLiner: z.string().max(160),
   shortBio: z.string(),
-  longBio: z.array(z.string()).min(1),
+  /** Paragraphs, or a lead sentence followed by a bullet list. */
+  longBio: z.array(z.union([z.string(), z.object({ lead: z.string(), items: z.array(z.string()).min(1) })])).min(1),
   location: z.object({ city: z.string(), country: z.string(), timeZone: z.string() }),
   languages: z.array(z.object({ code: z.string(), name: z.string() })),
   email: z.email(),
@@ -35,14 +36,33 @@ export type Profile = z.infer<typeof profileSchema>;
 
 export const profile: Profile = {
   name: 'Youssef Alouani',
-  jobTitle: 'AI Systems Engineer',
-  headline: 'AI Systems Engineer with a backend foundation. I build NLP, speech, recommendation and agentic systems, and the platforms they run on.',
-  oneLiner: 'Casablanca-based AI systems engineer and founder of Osoul: NLP/NLU, speech, recommendations, ETL and agentic systems on a solid backend.',
+  jobTitle: 'AI Engineer',
+  headline: 'I build AI that works on real data in production, and keeps that data safe. AI engineer with a backend foundation: RAG and MCP over private data, Saudi-dialect speech, recommendations and privacy-aware assistants, evaluated before they ship.',
+  oneLiner: 'Casablanca-based AI engineer with a backend foundation: RAG, MCP, speech and privacy-aware assistants that work on real data in production.',
   shortBio:
-    'Youssef Alouani is an AI systems engineer in Casablanca with five years of backend experience, and the technical founder of Osoul, a Revenue-as-a-Service (RaaS) growth engine for fine-dining restaurants. He has built backends, NLP/NLU engines, speech-to-text, recommendation systems and data pipelines at Qalqul, Finamaze and Axelerated Solutions, with a focus on security, privacy and systems that hold up in production.',
+    'Youssef Alouani is an AI engineer in Casablanca with a backend foundation, and the technical founder of Osoul, a Revenue-as-a-Service (RaaS) growth engine for fine-dining restaurants. He builds the systems that let models work on real data in production while keeping that data safe: conversational AI at Qalqul Engine, fintech AI at Finamaze, and Whisper fine-tuning, RAG and MCP servers at Axelerated Solutions.',
   longBio: [
-    "I'm a backend engineer who ended up deep in AI because the interesting problems kept landing there. I started at Qalqul Engine working on Botpress v12 core, NLP/NLU engines on language servers and Duckling, and no-code workflow systems, while shipping portals, Kotlin SDKs and React chat widgets. At Finamaze I worked on reconciliation and on KYC with document and visual verification, alongside AI for a robo-advisor. At Axelerated Solutions I was a founding engineer and the backend lead in a team of nine. I fine-tuned Whisper large-v3 for Saudi-dialect call transcription, built RAG on Milvus, coding agents, and the Customer Voice RAG pipeline with an MCP server as its retriever, plus an MCP server over our backend APIs validated through Keycloak, where I owned the auth flow and the privacy and data-retention layer.",
-    "Since June 2026 I've been building Osoul, a Revenue-as-a-Service (RaaS) growth engine for fine dining: a SaaS built around specific revenue KPIs, with management tools built in. It uses mature technologies to capture the data restaurants usually lose and turn it into better KPIs. Under the hood: NFC/QR table ordering, reservations, recommendation systems, ad signal infrastructure and a privacy-aware AI assistant for restaurants, on NestJS, PostgreSQL, Redis and Keycloak. I've also worked on platform migrations and hybrid deployments for banking and government institutions. I care about fundamentals, clean architecture, and AI that respects user data.",
+    "I'm an AI engineer with a backend foundation. I build the systems that let models work on real data in production while keeping that data safe. I started in conversational AI at Qalqul Engine, working on the Botpress v12 core, NLP/NLU engines on language servers and Duckling, and no-code workflow systems. At Finamaze I applied AI to fintech: KYC with document and visual verification, reconciliation, and a robo-advisor.",
+    'At Axelerated Solutions I was a founding engineer and the backend lead in a team of nine. I fine-tuned Whisper large-v3 for Saudi-dialect call transcription and owned the data preparation from WhatsApp and Asterisk audio. I also built RAG on Milvus, coding agents, tool-using chatbots and the Customer Voice RAG pipeline, which uses an MCP server as its retriever. Alongside it I built an MCP server over our backend APIs, validated through Keycloak, where I owned the auth flow and the privacy and data-retention layer. I also worked on platform migrations and hybrid deployments for banking, government and private institutions.',
+    {
+      lead: "Since June 2026 I've been building Osoul, a Revenue-as-a-Service (RaaS) growth engine for fine dining. AI there turns the data restaurants usually lose into better KPIs through:",
+      items: [
+        'personalized dish and beverage recommendations',
+        'ad-signal pipelines for audience optimization',
+        'a privacy-aware AI assistant built with LangChain, with PII redaction and user auth propagation',
+      ],
+    },
+    {
+      lead: 'My day-to-day stack:',
+      items: [
+        'Frameworks: LangChain and LangGraph',
+        'Models: local models through Ollama, plus open-source and OpenAI-compatible models',
+        'Serving: FastAPI and FastAPI-MCP',
+        'Evaluation: DeepEval and Giskard',
+      ],
+    },
+    'On the side I build AI Stones, a personal AI harness for Claude published on npm, and archio, object storage with semantic search built on Docling.',
+    'I care about AI that works from the right data, gets evaluated before it ships, and protects user data by design.',
   ],
   location: { city: 'Casablanca', country: 'MA', timeZone: 'Africa/Casablanca (GMT+1)' },
   languages: [
@@ -69,7 +89,7 @@ export const profile: Profile = {
       id: 'agentic',
       title: focusTitle('agentic'),
       body: "RAG pipelines with an MCP server as the retriever, and assistants that act with the user's own permissions, redact personal data and ask before they write.",
-      skills: ['rag', 'mcp', 'langgraph', 'langchain', 'claude-harnesses'],
+      skills: ['rag', 'mcp', 'langchain', 'claude-harnesses', 'pii-redaction'],
       project: 'customer-voice',
     },
     {
@@ -83,7 +103,7 @@ export const profile: Profile = {
       id: 'ml',
       title: focusTitle('ml'),
       body: 'Whisper large-v3 fine-tuned for Saudi-dialect calls, from audio preparation to evaluation, serving live transcripts and voice agents.',
-      skills: ['whisper', 'fine-tuning', 'huggingface-transformers'],
+      skills: ['whisper', 'fine-tuning', 'python'],
       project: 'saudi-stt',
     },
     {
@@ -97,7 +117,7 @@ export const profile: Profile = {
       id: 'etl',
       title: focusTitle('etl'),
       body: 'Pipelines that collect, clean, extract into type-safe LLM schemas and load: job ingestion, call-recording pipelines and signed server-side CAPI events.',
-      skills: ['data-pipelines', 'docling', 'clickhouse'],
+      skills: ['data-pipelines', 'docling', 'embeddings'],
       project: '10xjobs-ingestion',
     },
     {
@@ -110,32 +130,36 @@ export const profile: Profile = {
   ],
   faq: [
     {
-      q: 'What does Youssef Alouani do now?',
-      a: 'He is the technical founder of Osoul, a Revenue-as-a-Service growth engine for fine-dining restaurants, and runs 10xJobs, a job-matching pipeline for software engineers, as a side project. Before that he was Lead Backend Engineer and a founding engineer at Axelerated Solutions.',
+      q: 'What does Youssef Alouani do?',
+      a: 'He is an AI engineer with a backend foundation. He builds the systems that let models work on real data in production while keeping that data safe: RAG and MCP servers over private data, Saudi-dialect speech-to-text, recommendations and privacy-aware assistants. Since June 2026 he has been the technical founder of Osoul; before that he was a founding engineer and the backend lead at Axelerated Solutions.',
     },
     {
-      q: 'What is his main stack?',
-      a: 'TypeScript with NestJS, Go and Python on the backend; PostgreSQL, Redis, Milvus and Kafka for data; RAG, MCP servers, LangChain and Whisper for AI; Keycloak and Kubernetes for identity and platform.',
+      q: 'What is Osoul, and where does AI fit in?',
+      a: 'Osoul is a Revenue-as-a-Service (RaaS) growth engine for fine dining. AI turns the data restaurants usually lose into better KPIs through personalized dish and beverage recommendations, ad-signal pipelines for audience optimization, and a privacy-aware AI assistant built with LangChain, with PII redaction and user auth propagation. Its customers include venues of Barceló Group and Atlas Group.',
     },
     {
-      q: 'Where is he based, and in which time zone?',
-      a: 'Casablanca, Morocco (GMT+1). He has worked remotely with teams and clients in Saudi Arabia and Morocco.',
+      q: 'What AI has he shipped to production?',
+      a: 'At Axelerated Solutions: Whisper large-v3 fine-tuned for Saudi-dialect call transcription, with the data preparation from WhatsApp and Asterisk audio, RAG on Milvus, coding agents, tool-using chatbots and the Customer Voice RAG pipeline with an MCP server as its retriever. At Finamaze: KYC with document and visual verification, reconciliation and a robo-advisor. At Qalqul Engine: the Botpress v12 core and NLP/NLU engines on language servers and Duckling.',
     },
     {
-      q: 'Which languages does he speak?',
-      a: 'English, French and Arabic.',
+      q: 'How does he keep user data safe in AI systems?',
+      a: 'By design. He built an MCP server over backend APIs validated through Keycloak, owning the auth flow and the privacy and data-retention layer, and Osoul’s assistant redacts PII and propagates the user’s own auth. He has also worked on platform migrations and hybrid deployments for banking, government and private institutions.',
     },
     {
-      q: 'What is Osoul?',
-      a: 'Osoul is a SaaS growth engine for fine dining built around specific revenue KPIs, with management tools built in: NFC/QR table ordering, reservations, recommendations, ad signal infrastructure and a privacy-aware AI assistant. Its customers include venues of Barceló Group and Atlas Group.',
+      q: 'What is his day-to-day AI stack?',
+      a: 'LangChain and LangGraph for frameworks; local models through Ollama, plus open-source and OpenAI-compatible models; FastAPI and FastAPI-MCP for serving; DeepEval and Giskard to evaluate before anything ships.',
     },
     {
-      q: 'Is he open to new roles?',
-      a: 'Yes. He is open to backend and AI engineering positions, remote or in Casablanca.',
+      q: 'What does he build on the side?',
+      a: 'AI Stones, a personal AI harness for Claude published on npm, and archio, object storage with semantic search built on Docling.',
     },
     {
-      q: 'How can I reach him?',
-      a: 'Book a Google Meet call from the contact page, email hello@youssefalouani.com, or find him on LinkedIn and GitHub (alouani-youssef).',
+      q: 'Where is he based, and which languages does he speak?',
+      a: 'Casablanca, Morocco (GMT+1). He speaks English, French and Arabic, and has worked remotely with teams and clients in Saudi Arabia and Morocco.',
+    },
+    {
+      q: 'Is he open to new roles, and how can I reach him?',
+      a: 'Yes. He is open to backend and AI engineering positions, remote or in Casablanca. Book a Google Meet call from the contact page, email hello@youssefalouani.com, or find him on LinkedIn and GitHub (alouani-youssef).',
     },
   ],
   now: {
