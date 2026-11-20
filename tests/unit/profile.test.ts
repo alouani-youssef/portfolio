@@ -20,4 +20,5 @@ it('profile is valid and on-message', () => {
   expect(profile.faq.length).toBeGreaterThanOrEqual(6);
   expect(profile.faq.length).toBeLessThanOrEqual(8);
   expect(profile.email).toBe('hello@youssefalouani.com');
+  expect(profile.links.schedule).toBe('https://calendar.app.google/ru99z5cCrAbbu8LP9');
 });

@@ -17,6 +17,8 @@ export const profileSchema = z.object({
     /** Current Medium account; the older one (alouani-youssef.medium.com) was lost but stays in sameAs. */
     medium: z.url(),
     osoul: z.url(),
+    /** Google Calendar appointment schedule; each booking gets a Google Meet link. */
+    schedule: z.url(),
   }),
   sameAs: z.array(z.url()),
   education: z.object({ degree: z.string(), school: z.string(), start: z.number(), end: z.number() }),
@@ -55,6 +57,7 @@ export const profile: Profile = {
     linkedin: 'https://www.linkedin.com/in/alouani-youssef',
     medium: 'https://medium.com/@alouaniyoussef',
     osoul: 'https://osoul.io',
+    schedule: 'https://calendar.app.google/ru99z5cCrAbbu8LP9',
   },
   sameAs: [
     'https://www.linkedin.com/in/alouani-youssef',
@@ -139,7 +142,7 @@ export const profile: Profile = {
     },
     {
       q: 'How can I reach him?',
-      a: 'By email at hello@youssefalouani.com, or on LinkedIn and GitHub (alouani-youssef).',
+      a: 'Book a Google Meet call from the contact page, email hello@youssefalouani.com, or find him on LinkedIn and GitHub (alouani-youssef).',
     },
   ],
   now: {

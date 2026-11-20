@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { readHtml, listHtmlPages } from './helpers';
+import { readHtml, listHtmlPages, exists, readText } from './helpers';
+import { profile } from '../../src/data/profile';
+import { VCARD_PATH } from '../../src/lib/vcard';
 import { GROUP_LABELS, GROUP_ORDER } from '../../src/lib/clients';
 import { SKILL_CATEGORIES, LEVEL_LABELS } from '../../src/lib/skill-icons';
 import { readFileSync } from 'node:fs';
@@ -72,6 +74,11 @@ describe('home', () => {
     expect(hrefs).toContain('/contact');
     expect(hrefs).toContain('/cv');
   });
+  it('leads with a Schedule a call CTA to the Google Calendar booking page', () => {
+    const cta = doc.querySelector('main a[data-cta="schedule"]')!;
+    expect(cta.text.trim()).toBe('Schedule a call');
+    expect(cta.getAttribute('href')).toBe(profile.links.schedule);
+  });
 });
 
 describe('about', () => {
@@ -126,6 +133,14 @@ describe('now and contact', () => {
   });
   it('/contact shows the public email', () => {
     expect(main('/contact').querySelector('a[href="mailto:hello@youssefalouani.com"]')).not.toBeNull();
+  });
+  it('/contact offers a call booking and a downloadable vCard', () => {
+    const m = main('/contact');
+    expect(m.querySelector('a[data-cta="schedule"]')!.getAttribute('href')).toBe(profile.links.schedule);
+    const vcf = m.querySelector(`a[href="${VCARD_PATH}"]`)!;
+    expect(vcf.getAttribute('download')).toBe('youssef-alouani.vcf');
+    expect(exists(VCARD_PATH)).toBe(true);
+    expect(readText(VCARD_PATH)).toContain('FN:Youssef Alouani');
   });
 });
 

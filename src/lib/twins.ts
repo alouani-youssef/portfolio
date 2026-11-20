@@ -9,6 +9,7 @@ import { isPreview } from './metrics';
 import { mdxToMarkdown, twinHref } from './markdown';
 import { getOss } from './oss';
 import { services } from '../data/services';
+import { VCARD_PATH } from './vcard';
 
 const SITE = 'https://youssefalouani.com';
 
@@ -42,7 +43,7 @@ export async function buildTwins(): Promise<Twin[]> {
     `## What I build\n\n${profile.expertise.map((e) => `### ${e.title}\n\n${e.body}`).join('\n\n')}`,
     `## Featured case studies\n\n${list(projects.filter((p) => p.data.featured).map((p) => `[${p.data.title}](${SITE}${twinHref(`/projects/${entrySlug(p.id)}`)}): ${p.data.summary}`))}`,
     `## Clients I have worked for\n\n${await clientsSection()}`,
-    `## Elsewhere\n\n${list([`Email: ${profile.email}`, `GitHub: ${profile.links.github}`, `LinkedIn: ${profile.links.linkedin}`, `Résumé (JSON Resume): ${SITE}/resume.json`])}`,
+    `## Elsewhere\n\n${list([`Schedule a call (Google Meet): ${profile.links.schedule}`, `Email: ${profile.email}`, `GitHub: ${profile.links.github}`, `LinkedIn: ${profile.links.linkedin}`, `Résumé (JSON Resume): ${SITE}/resume.json`])}`,
   ]));
 
   twins.push(page('/about', 'About', [
@@ -115,7 +116,7 @@ export async function buildTwins(): Promise<Twin[]> {
   }
 
   twins.push(page('/now', 'Now', [`Updated: ${profile.now.updated}`, list(profile.now.items)]));
-  twins.push(page('/contact', 'Contact', [list([`Email: ${profile.email}`, `LinkedIn: ${profile.links.linkedin}`, `GitHub: ${profile.links.github}`, `CV: ${SITE}/cv`]),
+  twins.push(page('/contact', 'Contact', [list([`Email: ${profile.email}`, `LinkedIn: ${profile.links.linkedin}`, `GitHub: ${profile.links.github}`, `CV: ${SITE}/cv`, `Contact card (vCard): ${SITE}${VCARD_PATH}`]),
     '## Services',
     services.map((s) => `### ${s.title}\n\n${s.summary}\n\n${list(s.points)}`).join('\n\n'),
   ]));

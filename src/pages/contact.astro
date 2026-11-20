@@ -5,6 +5,7 @@ import { profile } from '../data/profile';
 import { resolveIcon } from '../lib/skill-icons';
 import portrait from '../assets/media/youssef-portrait.png';
 import { services, mailtoHref } from '../data/services';
+import { VCARD_PATH } from '../lib/vcard';
 
 const general = {
   subject: 'Hello from your portfolio',
@@ -21,6 +22,7 @@ const channels = [
   { label: 'LinkedIn', href: profile.links.linkedin, text: 'in/alouani-youssef', svg: linkedinSvg, external: true },
   { label: 'GitHub', href: profile.links.github, text: 'alouani-youssef', svg: icon('si:github'), external: true },
   { label: 'CV', href: '/cv', text: 'Save as PDF', svg: icon('lucide:file-text'), external: false },
+  { label: 'Contact card', href: VCARD_PATH, text: 'Download vCard', svg: icon('lucide:contact-round'), external: false, download: 'youssef-alouani.vcf' },
 ];
 
 const facts = [
@@ -29,7 +31,7 @@ const facts = [
   { svg: icon('lucide:languages'), text: profile.languages.map((l) => l.name).join(' · ') },
 ];
 ---
-<BaseLayout title="Contact" description="How to reach Youssef Alouani: email, LinkedIn, GitHub and CV." path="/contact">
+<BaseLayout title="Contact" description="How to reach Youssef Alouani: schedule a Google Meet call, email, LinkedIn, GitHub, vCard and CV." path="/contact">
   <section class="contact relative overflow-hidden">
     <div class="contact-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
     <div class="container-page relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.35fr_0.65fr] lg:gap-6 lg:py-20">
@@ -42,11 +44,18 @@ const facts = [
           Let’s build something that <span class="text-accent">holds up in production.</span>
         </h1>
         <p class="mt-5 max-w-[52ch] text-lg text-muted">
-          Have a platform to scale, an AI system to ship, or a role to talk about? Email is the fastest way to reach me.
+          Have a platform to scale, an AI system to ship, or a role to talk about? Book a call on Google Meet, or email me;
           I usually reply within a couple of days. <a href="#services">Pick a service</a> to start from a ready-made email.
         </p>
 
-        <div class="email-card mt-8">
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a class="btn-primary btn-lg" href={profile.links.schedule} target="_blank" rel="noopener" data-cta="schedule">
+            <span set:html={icon('lucide:calendar-clock')} />Schedule a call
+          </a>
+          <span class="flex items-center gap-2 text-sm text-muted"><span class="fact-icon" set:html={icon('lucide:video')} />Google Meet · pick a slot that suits you</span>
+        </div>
+
+        <div class="email-card mt-6">
           <span class="email-icon" set:html={icon('lucide:mail')} />
           <div class="min-w-0 flex-1">
             <p class="eyebrow">Email</p>
@@ -59,10 +68,10 @@ const facts = [
           </button>
         </div>
 
-        <ul class="mt-4 grid gap-3 sm:grid-cols-3">
+        <ul class="mt-4 grid gap-3 sm:grid-cols-2">
           {channels.map((c) => (
             <li>
-              <a class="channel" href={c.href} {...(c.external ? { rel: 'me noopener', target: '_blank' } : {})}>
+              <a class="channel" href={c.href} {...(c.external ? { rel: 'me noopener', target: '_blank' } : {})} {...(c.download ? { download: c.download, type: 'text/vcard' } : {})}>
                 <span class="channel-icon" set:html={c.svg} />
                 <span class="min-w-0">
                   <span class="block font-medium text-fg">{c.label}</span>
@@ -301,6 +310,7 @@ const facts = [
   .btn-ghost { background: var(--bg); color: var(--fg); border: 1px solid var(--border); }
   .btn-ghost:hover { border-color: var(--accent); }
   .btn-primary :global(svg), .btn-ghost :global(svg) { width: 1rem; height: 1rem; }
+  .btn-lg { padding: 0.8rem 1.35rem; font-size: 1rem; box-shadow: 0 12px 28px -14px color-mix(in oklab, var(--accent) 70%, transparent); }
 
   .contact { isolation: isolate; }
   .contact-grid {
