@@ -7,6 +7,7 @@ export interface TagMeta { label: string; icon: string; hue: number; blurb: stri
 
 export const TAGS = {
   architecture: { label: 'Architecture', icon: 'lucide:layers', hue: 255, blurb: 'How systems are split, connected and kept changeable.' },
+  react: { label: 'React', icon: 'si:react', hue: 200, blurb: 'How React renders: the virtual DOM, reconciliation and hooks.' },
   'api-gateway': { label: 'API gateway', icon: 'lucide:route', hue: 230, blurb: 'The front door of a backend: routing, auth and rate limits.' },
   messaging: { label: 'Messaging', icon: 'lucide:arrow-left-right', hue: 25, blurb: 'Brokers, queues and event streams.' },
   kafka: { label: 'Kafka', icon: 'si:apachekafka', hue: 265, blurb: 'Apache Kafka: topics, partitions and consumer groups.' },

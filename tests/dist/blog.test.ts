@@ -12,11 +12,13 @@ const MEDIUM = [
   ['2022-07-13', 'https://alouani-youssef.medium.com/apache-kafka-all-what-i-know-71babb86a9ac'],
   ['2022-06-15', 'https://alouani-youssef.medium.com/git-and-github-master-your-important-tool-as-a-developer-bf4482237d04'],
   ['2022-03-13', 'https://alouani-youssef.medium.com/rabbitmq-understand-how-it-works-under-the-hood-895b74c37f3b'],
+  ['2021-08-25', 'https://alouani-youssef.medium.com/how-react-works-under-the-hood-in-details-fbdbf5be9b29'],
+  ['2021-07-30', 'https://alouani-youssef.medium.com/data-and-databases-read-and-make-your-choice-sql-or-nosql-df6728857d97'],
 ];
 
 describe('blog', () => {
   const doc = readHtml('/blog');
-  it('lists the ten Medium posts with their dates and badges', () => {
+  it('lists the twelve Medium posts with their dates and badges', () => {
     for (const [date, url] of MEDIUM) {
       const link = doc.querySelector(`a[href="${url}"]`);
       expect(link, url).not.toBeNull();
@@ -60,6 +62,12 @@ describe('writing order and upcoming drafts', () => {
       expect(s!.text).toMatch(/\d+ claps? · \d+ comments?/);
       expect(s!.getAttribute('title')).toMatch(/^On Medium, as of \d{1,2} \w+ \d{4}$/);
     }
+  });
+  it('leads with the most clapped post, React under the hood, tagged React', () => {
+    const first = doc.querySelector('.post-grid > li')!;
+    expect(first.text).toContain('How React works under the hood');
+    expect(first.querySelector('.post-card__stats')!.text).toBe('78 claps · 0 comments');
+    expect(readHtml('/blog/tags/react').querySelector('a[href*="how-react-works-under-the-hood"]')).not.toBeNull();
   });
   it('orders published posts by claps, highest first', () => {
     const claps = doc.querySelectorAll('.post-grid > li .post-card__stats').map((s) => Number(s.text.match(/(\d+) clap/)![1]));

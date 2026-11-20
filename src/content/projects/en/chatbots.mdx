@@ -23,7 +23,7 @@ A chatbot is one of the few parts of a product that anyone on the internet can t
 ## Constraints
 
 - **Public by design**: the widget and its API are reachable by anyone, so every message is untrusted input and every endpoint can be scripted or flooded.
-- **Different engines for different bots**: Botpress for flow-driven bots, Rasa where the team needed its own trained NLU and dialogue models, and an in-house engine where neither fitted. {/* CHECK: why each engine was chosen, and at which company Rasa and the in-house engine were used */}
+- **Different engines for different clients**: Botpress v12 across Qalqul's clients, and Rasa with an in-house engine for AtlantaSanad, an insurer.
 - **Embedded everywhere**: the same bot runs in a web widget, mobile SDKs and messaging channels, and has to hand off to a human with the history intact.
 - **Personal data in free text**: customers type card numbers, phone numbers and names into the chat whether asked to or not.
 
