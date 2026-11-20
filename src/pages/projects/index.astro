@@ -1,41 +1,93 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import { getProjectAreas, getChildren } from '../../lib/projects';
+import { getTopProjects, focusCounts, getChildren } from '../../lib/projects';
+import { focusTitle } from '../../lib/focus';
 import { entrySlug } from '../../lib/i18n';
-const areas = await getProjectAreas();
-const withChildren = await Promise.all(
-  areas.map(async (a) => ({ ...a, projects: await Promise.all(a.projects.map(async (p) => ({ p, children: await getChildren(p.id) }))) })),
-);
-const total = areas.reduce((n, a) => n + a.projects.length, 0);
+const top = await getTopProjects();
+const projects = await Promise.all(top.map(async (p) => ({ p, children: await getChildren(p.id) })));
+const areas = focusCounts(top);
 const short = (t: string) => t.replace(/^.*?deep-dive:\s*/, '').replace(/^[^:]*:\s*/, '').replace(/^./, (c) => c.toUpperCase());
 ---
 <BaseLayout title="Projects" description="Case studies in six areas: agentic systems, NLP/NLU, ML/DL and speech, recommendation systems, data pipelines and backend." path="/projects">
-  <div class="container-page py-12 sm:py-16">
+  <div class="container-page py-12 sm:py-16" data-project-filter>
     <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Projects</h1>
-    <p class="mt-3 max-w-[70ch] text-muted">{total} case studies in six areas, with deep dives inside each. Written at the architecture level: the problem, the design and the trade-offs, never client data.</p>
-    <nav aria-label="Jump to area" class="mt-6 flex flex-wrap gap-2">
-      {areas.map((a) => <a class="chip" href={`#${a.id}`}>{a.title} · {a.projects.length}</a>)}
+    <p class="mt-3 max-w-[70ch] text-muted">{top.length} case studies in six areas, with deep dives inside each. Written at the architecture level: the problem, the design and the trade-offs, never client data.</p>
+    <nav aria-label="Filter by area" class="area-bar mt-8">
+      <a class="chip area-filter" href="/projects" data-filter="all" aria-current="page">All <span class="tag-chip__count">{top.length}</span></a>
+      {areas.map((a) => (
+        <a class="chip area-filter" href={`/projects?area=${a.id}`} data-filter={a.id} title={a.title}>
+          <span>{a.title}</span> <span class="tag-chip__count">{a.count}</span>
+        </a>
+      ))}
     </nav>
-    {withChildren.map((a) => (
-      <section id={a.id} data-focus={a.id} class="mt-14 scroll-mt-20" aria-labelledby={`${a.id}-h`}>
-        <h2 id={`${a.id}-h`} class="border-b border-border pb-4 text-xl font-semibold">{a.title}</h2>
-        <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {a.projects.map(({ p, children }) => (
-            <li class="flex flex-col gap-3" data-parent={entrySlug(p.id)}>
-              <ProjectCard project={p} />
-              {children.length > 0 && (
-                <div class="px-1 text-sm">
-                  <p class="eyebrow">Deep dives</p>
-                  <ul class="mt-1 space-y-1">
-                    {children.map((c) => <li><a href={`/projects/${entrySlug(c.id)}`}>{short(c.data.title)}</a></li>)}
-                  </ul>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))}
+    <p class="area-status mt-3 min-h-6 text-sm text-muted" role="status" aria-live="polite"></p>
+    <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map(({ p, children }) => (
+        <li class="flex flex-col gap-3" data-parent={entrySlug(p.id)} data-focus={p.data.focus!.join(' ')}>
+          <ProjectCard project={p} />
+          <p class="px-1 font-mono text-xs text-muted">{p.data.focus!.map(focusTitle).join(' · ')}</p>
+          {children.length > 0 && (
+            <div class="px-1 text-sm">
+              <p class="eyebrow">Deep dives</p>
+              <ul class="mt-1 space-y-1">
+                {children.map((c) => <li><a href={`/projects/${entrySlug(c.id)}`}>{short(c.data.title)}</a></li>)}
+              </ul>
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
   </div>
 </BaseLayout>
+
+<script>
+  /** Area chips filter the grid in place and keep ?area= in the URL; old #area anchors still land on their filter. */
+  for (const root of document.querySelectorAll<HTMLElement>('[data-project-filter]')) {
+    const links = [...root.querySelectorAll<HTMLAnchorElement>('.area-filter')];
+    const items = [...root.querySelectorAll<HTMLElement>('li[data-focus]')];
+    const status = root.querySelector<HTMLElement>('.area-status')!;
+    const known = new Set(links.map((a) => a.dataset.filter));
+
+    const apply = (filter: string, push: boolean) => {
+      if (!known.has(filter)) filter = 'all';
+      let shown = 0;
+      for (const a of links) {
+        if (a.dataset.filter === filter) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      }
+      for (const li of items) {
+        li.hidden = filter !== 'all' && !li.dataset.focus!.split(' ').includes(filter);
+        if (!li.hidden) shown++;
+      }
+      const active = links.find((a) => a.dataset.filter === filter)!;
+      status.textContent = filter === 'all' ? '' : `${shown} case stud${shown === 1 ? 'y' : 'ies'} · ${active.title}`;
+      if (push) {
+        const url = new URL(location.href);
+        url.hash = '';
+        if (filter === 'all') url.searchParams.delete('area'); else url.searchParams.set('area', filter);
+        history.replaceState(null, '', url);
+      }
+    };
+
+    root.querySelector<HTMLElement>('.area-bar')!.addEventListener('click', (e: MouseEvent) => {
+      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('.area-filter');
+      if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+      e.preventDefault();
+      apply(a.getAttribute('aria-current') && a.dataset.filter !== 'all' ? 'all' : a.dataset.filter!, true);
+    });
+
+    const url = new URL(location.href);
+    const fromHash = url.hash.slice(1);
+    if (!url.searchParams.has('area') && known.has(fromHash) && fromHash !== 'all') apply(fromHash, true);
+    else apply(url.searchParams.get('area') ?? 'all', false);
+  }
+</script>
+
+<style>
+  .area-bar { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.25rem; scrollbar-width: thin; }
+  @media (min-width: 768px) { .area-bar { flex-wrap: wrap; overflow: visible; } }
+  .area-filter { flex: none; padding-block: 0.3125rem; }
+  .area-filter[aria-current] { background: var(--fg); border-color: var(--fg); color: var(--bg); }
+  .area-filter[aria-current] .tag-chip__count { color: inherit; opacity: 0.7; }
+</style>

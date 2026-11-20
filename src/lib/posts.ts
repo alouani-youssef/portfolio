@@ -1,13 +1,19 @@
 type Stats = { claps: number; comments: number; asOf: Date };
 type PostLike = { id: string; data: { pubDate: Date; draft: boolean; stats?: Stats; title?: string } };
 
-/** Most clapped first, then most commented; posts without stats follow, newest first. */
+/** A comment weighs as much as this many claps when ranking posts. */
+export const CLAPS_PER_COMMENT = 10;
+
+const score = (s?: Stats) => (s ? s.claps + CLAPS_PER_COMMENT * s.comments : -1);
+
+/**
+ * Highest score first (claps + 10 per comment), ties broken by comments;
+ * posts without stats follow, newest first.
+ */
 export function byPopularity<T extends { data: { stats?: Stats; pubDate: Date } }>(a: T, b: T): number {
-  const ca = a.data.stats?.claps ?? -1;
-  const cb = b.data.stats?.claps ?? -1;
   const ka = a.data.stats?.comments ?? -1;
   const kb = b.data.stats?.comments ?? -1;
-  return cb - ca || kb - ka || b.data.pubDate.getTime() - a.data.pubDate.getTime();
+  return score(b.data.stats) - score(a.data.stats) || kb - ka || b.data.pubDate.getTime() - a.data.pubDate.getTime();
 }
 
 /**

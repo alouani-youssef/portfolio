@@ -13,6 +13,13 @@ describe('byPopularity', () => {
     const xs = [post('ten', '2022-01-01', { views: 10 }), post('fifty', '2021-01-01', { views: 50 }), post('none-2023', '2023-01-01'), post('none-2024', '2024-01-01')];
     expect(ids([...xs].sort(byPopularity))).toEqual(['fifty', 'ten', 'none-2024', 'none-2023']);
   });
+  it('weighs each comment as 10 claps', () => {
+    const xs = [post('claps-68', '2022-01-01', { views: 68, comments: 2 }), post('claps-78', '2023-01-01', { views: 78, comments: 0 }), post('claps-10', '2021-01-01', { views: 10, comments: 1 }), post('claps-17', '2024-01-01', { views: 17 })];
+    expect(ids([...xs].sort(byPopularity))).toEqual(['claps-68', 'claps-78', 'claps-10', 'claps-17']);
+  });
+  it('breaks equal scores by comments', () => {
+    expect(ids([post('claps', '2023-01-01', { views: 20, comments: 0 }), post('talked', '2022-01-01', { views: 10, comments: 1 })].sort(byPopularity))).toEqual(['talked', 'claps']);
+  });
   it('breaks equal claps by comments', () => {
     expect(ids([post('quiet', '2023-01-01', { views: 5, comments: 0 }), post('talked', '2022-01-01', { views: 5, comments: 4 })].sort(byPopularity))).toEqual(['talked', 'quiet']);
   });

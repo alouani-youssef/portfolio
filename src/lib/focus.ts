@@ -1,4 +1,4 @@
-/** The six areas the site is organised around: expertise cards, /projects sections and each case study's `focus`. */
+/** The six areas the site is organised around: expertise cards, the /projects filter and each case study's `focus`. */
 export const FOCUS_AREAS = [
   { id: 'agentic', title: 'Agentic systems & AI harnesses' },
   { id: 'nlp', title: 'NLP / NLU' },

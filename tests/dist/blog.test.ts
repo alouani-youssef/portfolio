@@ -63,15 +63,20 @@ describe('writing order and upcoming drafts', () => {
       expect(s!.getAttribute('title')).toMatch(/^On Medium, as of \d{1,2} \w+ \d{4}$/);
     }
   });
-  it('leads with the most clapped post, React under the hood, tagged React', () => {
-    const first = doc.querySelector('.post-grid > li')!;
-    expect(first.text).toContain('How React works under the hood');
-    expect(first.querySelector('.post-card__stats')!.text).toBe('78 claps · 0 comments');
+  it('leads with the top-scoring post, Architecture Styles (68 claps + 2 comments), then React', () => {
+    const [first, second] = doc.querySelectorAll('.post-grid > li');
+    expect(first.text).toContain('A Vision about Software Architecture Styles');
+    expect(first.querySelector('.post-card__stats')!.text).toBe('68 claps · 2 comments');
+    expect(second.text).toContain('How React works under the hood');
+    expect(second.querySelector('.post-card__stats')!.text).toBe('78 claps · 0 comments');
     expect(readHtml('/blog/tags/react').querySelector('a[href*="how-react-works-under-the-hood"]')).not.toBeNull();
   });
-  it('orders published posts by claps, highest first', () => {
-    const claps = doc.querySelectorAll('.post-grid > li .post-card__stats').map((s) => Number(s.text.match(/(\d+) clap/)![1]));
-    expect(claps).toEqual([...claps].sort((a, b) => b - a));
+  it('orders published posts by score, each comment counting as 10 claps, highest first', () => {
+    const scores = doc.querySelectorAll('.post-grid > li .post-card__stats').map((s) => {
+      const [, claps, comments] = s.text.match(/(\d+) claps? · (\d+) comments?/)!;
+      return Number(claps) + 10 * Number(comments);
+    });
+    expect(scores).toEqual([...scores].sort((a, b) => b - a));
   });
   it('lists the drafts last as Coming soon, with no date and no link (Review Focus 3)', () => {
     const up = doc.querySelectorAll('[data-upcoming] .upcoming-grid > li');

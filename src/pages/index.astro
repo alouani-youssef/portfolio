@@ -13,7 +13,7 @@ import { splitHeadline } from '../lib/markdown';
 import { getPosts } from '../lib/post-queries';
 import { profilePageJsonLd } from '../lib/jsonld';
 import { getOss } from '../lib/oss';
-import { getProjectAreas } from '../lib/projects';
+import { getTopProjects } from '../lib/projects';
 import ProjectCard from '../components/ProjectCard.astro';
 import headshot from '../assets/media/headshot.png';
 
@@ -23,7 +23,7 @@ const pull = recs.find((r) => r.id === 'mohammad-al-ahmad')!;
 const others = recs.filter((r) => r !== pull).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 const featured = (await getCollection('projects', (p) => p.data.featured && p.id.startsWith('en/'))).sort((a, b) => a.data.order - b.data.order);
 const oss = await getOss();
-const projectCount = (await getProjectAreas()).reduce((n, a) => n + a.projects.length, 0);
+const projectCount = (await getTopProjects()).length;
 const posts = (await getPosts(false)).slice(0, 3);
 ---
 <BaseLayout title="Youssef Alouani · AI Systems Engineer" description={profile.oneLiner} path="/" jsonLd={[profilePageJsonLd(profile, Astro.site!.origin)]}>

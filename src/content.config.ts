@@ -92,8 +92,8 @@ const projects = defineCollection({
       area: z.enum(['backend', 'ai', 'platform', 'frontend']),
       kind: z.enum(['founder', 'employer', 'open-source', 'side']),
       company: reference('experience').optional(),
-      /** Focus area for top-level case studies; deep dives set `parent` instead. */
-      focus: z.enum(FOCUS_IDS).optional(),
+      /** Focus areas of a top-level case study, main one first; they drive the /projects filter. Deep dives set `parent` instead. */
+      focus: z.array(z.enum(FOCUS_IDS)).min(1).optional(),
       parent: reference('projects').optional(),
       status: z.enum(['live', 'shipped', 'in-progress', 'archived']),
       featured: z.boolean().default(false),
@@ -107,7 +107,7 @@ const projects = defineCollection({
       coverAlt: z.string().min(1),
       order: z.number(),
       updatedAt: z.coerce.date(),
-    }),
+    }).refine((p) => !p.focus !== !p.parent, { message: 'a case study needs exactly one of `focus` (top level) or `parent` (deep dive)', path: ['focus'] }),
 });
 
 const blog = defineCollection({

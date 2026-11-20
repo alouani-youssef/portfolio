@@ -14,16 +14,15 @@ export function projectThumb(p: CollectionEntry<'projects'>): { src: ImageMetada
   return { src: p.data.cover, alt: p.data.coverAlt };
 }
 
-export interface ProjectArea {
-  id: FocusId;
-  title: string;
-  projects: CollectionEntry<'projects'>[];
+/** Top-level case studies (a `focus`, no `parent`): featured first, then in display order. */
+export async function getTopProjects(): Promise<CollectionEntry<'projects'>[]> {
+  const top = (await getProjects()).filter((p) => p.data.focus && !p.data.parent);
+  return top.sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order);
 }
 
-/** Top-level case studies (a `focus`, no `parent`) by focus area, in FOCUS_AREAS order; empty areas dropped. */
-export async function getProjectAreas(): Promise<ProjectArea[]> {
-  const top = (await getProjects()).filter((p) => p.data.focus && !p.data.parent);
-  return FOCUS_AREAS.map((a) => ({ id: a.id, title: a.title, projects: top.filter((p) => p.data.focus === a.id) })).filter((a) => a.projects.length > 0);
+/** Focus areas with how many top-level case studies carry each, in FOCUS_AREAS order; unused areas dropped. */
+export function focusCounts(projects: CollectionEntry<'projects'>[]): Array<{ id: FocusId; title: string; count: number }> {
+  return FOCUS_AREAS.map((a) => ({ id: a.id, title: a.title, count: projects.filter((p) => p.data.focus?.includes(a.id)).length })).filter((a) => a.count > 0);
 }
 
 /** Deep dives of a case study, in display order. */
