@@ -9,13 +9,15 @@
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
     "build:preview": "PUBLIC_PREVIEW=true astro build && pagefind --site dist",
-    "preview": "astro preview",
+    "preview": "npm run build && wrangler dev",
     "check": "astro check",
     "test:unit": "vitest run --project unit",
     "test:dist": "vitest run --project dist",
     "astro": "astro",
     "media": "node scripts/redact-media.mjs",
-    "covers": "node scripts/build-covers.mjs"
+    "covers": "node scripts/build-covers.mjs",
+    "generate-types": "wrangler types",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "astro": "^7.4.13"
@@ -39,6 +41,7 @@
     "tailwindcss": "^4.3.5",
     "typescript": "^6.0.3",
     "vitest": "^5.1.1",
+    "wrangler": "^4.165.0",
     "yaml": "^2.9.1"
   }
 }

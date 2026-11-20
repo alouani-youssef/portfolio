@@ -35,13 +35,16 @@ const svgSprites = {
 export default defineConfig({
   site: 'https://youssefalouani.com',
   trailingSlash: 'never',
+
   // /about is served from about.html: no trailing-slash redirects on Cloudflare Pages.
   build: { format: 'file' },
+
   i18n: {
     locales: ['en', 'fr'],
     defaultLocale: 'en',
     routing: { prefixDefaultLocale: false },
   },
+
   fonts: [
     {
       provider: fontProviders.google(),
@@ -62,6 +65,7 @@ export default defineConfig({
       fallbacks: ['ui-monospace', 'monospace'],
     },
   ],
+
   integrations: [
     mdx(),
     svgSprites,
@@ -69,5 +73,6 @@ export default defineConfig({
       filter: (page) => !page.includes('/404') && !draftSlugs.some((slug) => page.includes(`/blog/${slug}`)),
     }),
   ],
+
   vite: { plugins: [tailwindcss()] },
 });
