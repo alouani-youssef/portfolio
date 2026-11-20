@@ -30,7 +30,7 @@ Agent outputs: `/<page>.md` twins, `/llms.txt`, `/llms-full.txt`, `/resume.json`
 
 ## Confirming a metric
 
-Each metric in a case study's frontmatter starts as `placeholder: true`. When the real number is known, set the value and change it to `placeholder: false`. The production build passes once none remain.
+A new metric starts as `placeholder: true` in the case study's frontmatter. When the real number is known, set the value and change it to `placeholder: false`. The production build fails while any placeholder remains, and also while any `CHECK` marker remains outside draft posts.
 
 ## Publishing the Whisper post
 
@@ -43,8 +43,8 @@ Each metric in a case study's frontmatter starts as `placeholder: true`. When th
 
 ## Launch checklist
 
-- [ ] Buy youssefalouani.com and connect it to Cloudflare Pages
-- [ ] Create the hello@youssefalouani.com mailbox
-- [ ] Confirm or correct the four placeholder metrics
-- [ ] Review the CHECK markers: `grep -rn "CHECK" src/content`
+- [x] Buy youssefalouani.com and connect it to Cloudflare Pages
+- [x] Create the hello@youssefalouani.com mailbox
+- [x] Confirm or correct the placeholder metrics
+- [x] Resolve the CHECK markers on published pages (the production build fails on any that remain; drafts are checked once published)
 - [ ] Replace the Qalqul screenshots in `src/assets/experience/qalqul/` with the cropped versions
