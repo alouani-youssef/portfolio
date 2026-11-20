@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { gzipSync } from 'node:zlib';
 import { readHtml, exists, listHtmlPages, DIST } from './helpers';
 
 describe('search, og images and budget', () => {
@@ -42,8 +43,8 @@ describe('search, og images and budget', () => {
     }
   });
 
-  it('keeps the blog index HTML under 60 KB', () => {
-    expect(statSync(join(DIST, 'blog.html')).size).toBeLessThan(60 * 1024);
+  it('keeps the blog index under 14 KB on the wire (gzip)', () => {
+    expect(gzipSync(readFileSync(join(DIST, 'blog.html')), { level: 9 }).length).toBeLessThan(14 * 1024);
   });
 
   it('keeps JavaScript under 50 KB per page', () => {

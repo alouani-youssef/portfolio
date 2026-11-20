@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
+import sharp from 'sharp';
 
 const require = createRequire(import.meta.url);
 const font = (weight: 400 | 600) => readFileSync(require.resolve(`@fontsource/inter/files/inter-latin-${weight}-normal.woff`));
@@ -28,5 +29,7 @@ export async function renderOgPng({ title, subtitle }: { title: string; subtitle
     ],
   );
   const svg = await satori(tree as never, { width: 1200, height: 630, fonts });
-  return new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng();
+  const png = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng();
+  // The card is flat colours and text: a 256-colour palette is visually lossless and about a third of the size.
+  return sharp(png).flatten({ background: '#fafaf9' }).png({ palette: true, quality: 90, compressionLevel: 9, effort: 10 }).toBuffer();
 }
