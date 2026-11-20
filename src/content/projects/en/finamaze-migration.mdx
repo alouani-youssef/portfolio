@@ -9,7 +9,7 @@ status: shipped
 featured: false
 confidentiality: architecture-only
 order: 30
-skills: [nodejs, typescript, postgresql, keycloak, microservices, clean-architecture]
+skills: [nodejs, typescript, postgresql, microservices, clean-architecture]
 cover: ../../../assets/projects/covers/finamaze-migration.jpg
 coverAlt: "Finamaze platform moving from one consumer app to isolated tenants for each financial institution"
 updatedAt: 2026-11-19
@@ -30,10 +30,10 @@ Finamaze started as a B2C robo-advisor: one app, one set of investors, one confi
 
 <LayerDiagram
   title="Finamaze B2C to B2B migration"
-  desc="Before: a single B2C app and backend serving one investor base. After: a multi-tenant B2B platform where each financial institution is a tenant with its own identity realm, data and configuration, on infrastructure adapted for tenant isolation."
+  desc="Before: a single B2C app and backend serving one investor base. After: a multi-tenant B2B platform where each financial institution is a tenant with its own users, data and configuration, on infrastructure adapted for tenant isolation."
   layers={[
     { caption: 'Before · B2C', nodes: [{ label: 'One consumer app', sub: 'one investor base' }] },
-    { caption: 'Migration', nodes: [{ label: 'Tenant model', sub: 'institution = tenant', accent: true }, { label: 'Identity per tenant', sub: 'Keycloak' }, { label: 'Infrastructure', sub: 'adapted for isolation' }] },
+    { caption: 'Migration', nodes: [{ label: 'Tenant model', sub: 'institution = tenant', accent: true }, { label: 'Users per tenant', sub: 'separate roles' }, { label: 'Infrastructure', sub: 'adapted for isolation' }] },
     { caption: 'After · multi-tenant B2B', nodes: [{ label: 'Institution A' }, { label: 'Institution B' }, { label: 'Shared platform' }] },
   ]}
 />
@@ -41,7 +41,7 @@ Finamaze started as a B2C robo-advisor: one app, one set of investors, one confi
 ## Key decisions
 
 1. **The institution is the tenant.** Every investor, portfolio and configuration belongs to one institution, so isolation is a property of the data model, not a filter added in each query. {/* CHECK: confirm */}
-2. **Identity per institution.** Authentication moved to [Keycloak](/projects/finamaze-keycloak), so each institution gets its own users and roles. {/* CHECK: realm per tenant or shared realm */}
+2. **Users per institution.** Each institution has its own users and roles, and no account can see across institutions. {/* CHECK: confirm */}
 3. **Infrastructure follows the tenant model.** Deployments, configuration and secrets were adapted so a new institution is onboarded by configuration rather than code. {/* CHECK: what was adapted */}
 
 Investor onboarding and KYC moved with the platform: see [investor onboarding, KYC and reconciliation](/projects/finamaze-kyc).

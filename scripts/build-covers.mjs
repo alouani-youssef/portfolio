@@ -45,13 +45,6 @@ const svg = (title, body) => sharp(Buffer.from(`<svg xmlns="http://www.w3.org/20
   <text x="80" y="120" font-family="${FONT}" font-size="52" font-weight="700" fill="#0f172a">${title}</text>
   ${body}</svg>`));
 
-const keycloak = svg('Identity on Keycloak', `
-  ${box(80, 240, 380, 120, 'Investor web')}${box(80, 410, 380, 120, 'Mobile apps')}${box(80, 580, 380, 120, 'Back office')}
-  ${arrow(460, 300, 640, 440)}${arrow(460, 470, 640, 470)}${arrow(460, 640, 640, 500)}
-  ${box(650, 380, 340, 180, 'Keycloak', 'OIDC · roles · KYC state', true)}
-  ${arrow(990, 440, 1140, 330)}${arrow(990, 500, 1140, 610)}
-  ${box(1150, 260, 380, 140, 'Onboarding &amp; KYC', 'grants investing roles')}${box(1150, 540, 380, 140, 'Portfolio services', 'validate tokens')}`);
-
 const botpress = svg('Bots and agents in one conversation', `
   <rect x="80" y="200" width="620" height="620" rx="28" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
   <rect x="120" y="250" width="420" height="90" rx="24" fill="#e2e8f0"/><text x="150" y="307" font-family="${FONT}" font-size="30" fill="#0f172a">Bonjour, ma carte est bloquée</text>
@@ -113,7 +106,6 @@ const COVERS = {
   'ai-stones': () => frame('docs/galery/ai_stones.png', { pad: 80 }),
   archio: () => frame('docs/galery/archio.jpeg', { pad: 80 }),
   'finamaze-kyc': () => frame('src/assets/projects/finamaze-kyc/onboarding.png', { fit: 'cover' }),
-  'finamaze-keycloak': () => keycloak,
   'finamaze-migration': () => frame('docs/galery/distrubted_systems.jpeg', { pad: 30 }),
   'sowtek-omnichannel-chat': () => frame('src/assets/experience/axelerated/inbox.jpeg', { fit: 'cover' }),
   'sowtek-flowbuilder': () => frame('src/assets/experience/axelerated/flowbuilder.jpeg', { fit: 'cover' }),

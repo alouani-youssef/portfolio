@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import type { HTMLElement, Node } from 'node-html-parser';
-import { readHtml, listHtmlPages } from './helpers';
+import { readHtml, readText, exists, listHtmlPages } from './helpers';
 
 const CASES = ['osoul', 'saudi-stt', 'customer-voice', 'ai-stones', 'archio', 'finamaze-kyc'] as const;
 const COMPANY_PROJECTS = [
   ['osoul', ['osoul-multi-tenancy', 'osoul-recommendations', 'osoul-server-side-tracking']],
   ['axelerated', ['saudi-stt', 'customer-voice', 'sowtek-omnichannel-chat', 'sowtek-voip', 'sowtek-flowbuilder']],
-  ['finamaze', ['finamaze-kyc', 'finamaze-keycloak', 'finamaze-migration']],
+  ['finamaze', ['finamaze-kyc', 'finamaze-migration']],
   ['qalqul', ['qalqul-botpress', 'qalqul-nlu', 'qalqul-realtime']],
   ['p-10xjobs', ['10xjobs-ingestion', '10xjobs-search']],
 ] as const;
@@ -25,6 +25,30 @@ describe('chatbots case study', () => {
   it('lists the Botpress integration as a deep dive and shows Rasa in the stack', () => {
     expect(doc.querySelector('main a[href="/projects/qalqul-botpress"]')).not.toBeNull();
     expect(doc.querySelector('ul[aria-label="Stack"] a[href="/about#skill-rasa"]')).not.toBeNull();
+  });
+});
+
+describe('finamaze never names its identity stack', () => {
+  const LEAK = /keycloak|oidc|openid|oauth/i;
+  it('has no identity-provider case study', () => {
+    expect(exists('projects/finamaze-keycloak.html')).toBe(false);
+    expect(exists('projects/finamaze-keycloak.md')).toBe(false);
+    expect(exists('og/projects/finamaze-keycloak.png')).toBe(false);
+  });
+  it('keeps the provider out of every Finamaze page and twin', () => {
+    for (const p of ['projects/finamaze-migration', 'projects/finamaze-kyc', 'experience/finamaze']) {
+      expect(readHtml(`/${p}`).querySelector('main')!.text, p).not.toMatch(LEAK);
+      expect(readText(`${p}.md`), `${p}.md`).not.toMatch(LEAK);
+    }
+  });
+  it('keeps the provider out of the machine outputs for Finamaze', () => {
+    const projects = JSON.parse(readText('api/projects.json')) as Array<{ id: string }>;
+    for (const p of projects.filter((x) => x.id.startsWith('finamaze'))) expect(JSON.stringify(p), p.id).not.toMatch(LEAK);
+    const skills = JSON.parse(readText('api/skills.json')) as Array<{ id: string; evidence: string[] }>;
+    for (const s of skills.filter((x) => LEAK.test(x.id))) expect(s.evidence.filter((e) => e.startsWith('finamaze')), s.id).toEqual([]);
+    // Sentence level: the bio names Finamaze and, in a later AXS sentence, Keycloak.
+    const sentences = readText('llms-full.txt').split(/(?<=[.!?])\s+|\n/);
+    expect(sentences.filter((s) => /finamaze/i.test(s) && LEAK.test(s))).toEqual([]);
   });
 });
 
@@ -48,7 +72,7 @@ const AREAS = [
 const CHILDREN: Record<string, string> = {
   'qalqul-botpress': 'chatbots', 'qalqul-realtime': 'qalqul-nlu', 'sowtek-voip': 'saudi-stt', '10xjobs-search': '10xjobs-ingestion',
   'osoul-multi-tenancy': 'osoul', 'osoul-table-sessions': 'osoul', 'sowtek-flowbuilder': 'sowtek-omnichannel-chat',
-  'finamaze-kyc': 'finamaze-migration', 'finamaze-keycloak': 'finamaze-migration',
+  'finamaze-kyc': 'finamaze-migration',
 };
 
 describe('projects index', () => {

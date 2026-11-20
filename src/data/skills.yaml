@@ -1,10 +1,10 @@
-- { id: typescript, name: "TypeScript", category: language, level: expert, evidence: [10xjobs, finamaze, qalqul, 10xjobs-ingestion, 10xjobs-search, finamaze-keycloak, finamaze-kyc, finamaze-migration, osoul-server-side-tracking, qalqul-botpress, qalqul-nlu, qalqul-realtime, sowtek-flowbuilder, sowtek-omnichannel-chat, tracking-kit, chatbots], icon: "si:typescript", core: 11 }
+- { id: typescript, name: "TypeScript", category: language, level: expert, evidence: [10xjobs, finamaze, qalqul, 10xjobs-ingestion, 10xjobs-search, finamaze-kyc, finamaze-migration, osoul-server-side-tracking, qalqul-botpress, qalqul-nlu, qalqul-realtime, sowtek-flowbuilder, sowtek-omnichannel-chat, tracking-kit, chatbots], icon: "si:typescript", core: 11 }
 - { id: go, name: "Go", category: language, level: production, evidence: [archio, osoul-server-side-tracking, tracking-kit], icon: "si:go", core: 10 }
 - { id: python, name: "Python", category: language, level: expert, evidence: [axelerated, customer-voice, qalqul-nlu, saudi-stt, sowtek-voip, translator, pg-inspector], icon: "si:python", core: 7 }
 - { id: kotlin, name: "Kotlin", category: language, level: production, evidence: [qalqul], icon: "si:kotlin" }
 - { id: sql, name: "SQL", category: language, level: expert, evidence: [], icon: "lucide:table" }
 - { id: nestjs, name: "NestJS", category: backend, level: expert, evidence: [axelerated, osoul, customer-voice, osoul-ai-assistant, osoul-multi-tenancy, osoul-recommendations, osoul-table-sessions, sowtek-flowbuilder, sowtek-omnichannel-chat, sowtek-voip], icon: "si:nestjs", core: 9 }
-- { id: nodejs, name: "Node.js", category: backend, level: production, evidence: [10xjobs, finamaze, qalqul, 10xjobs-ingestion, finamaze-keycloak, finamaze-kyc, finamaze-migration, qalqul-botpress, qalqul-nlu, qalqul-realtime, chatbots], icon: "si:nodedotjs" }
+- { id: nodejs, name: "Node.js", category: backend, level: production, evidence: [10xjobs, finamaze, qalqul, 10xjobs-ingestion, finamaze-kyc, finamaze-migration, qalqul-botpress, qalqul-nlu, qalqul-realtime, chatbots], icon: "si:nodedotjs" }
 - { id: fastapi, name: "FastAPI", category: backend, level: expert, evidence: [axelerated, saudi-stt, sowtek-voip, translator], icon: "si:fastapi", core: 8 }
 - { id: gin, name: "Gin", category: backend, level: production, evidence: [osoul-server-side-tracking, tracking-kit], icon: "si:gin" }
 - { id: typeorm, name: "TypeORM", category: backend, level: production, evidence: [osoul, osoul-multi-tenancy, osoul-recommendations], icon: "si:typeorm" }
@@ -39,10 +39,10 @@
 - { id: data-pipelines, name: "Data pipelines (ETL)", category: etl, level: production, evidence: [10xjobs-ingestion, 10xjobs-search], icon: "lucide:workflow" }
 - { id: clickhouse, name: "ClickHouse", category: etl, level: familiar, evidence: [], icon: "si:clickhouse" }
 - { id: pii-redaction, name: "PII redaction", category: security, level: production, evidence: [osoul, osoul-ai-assistant, chatbots], icon: "lucide:eye-off" }
-- { id: keycloak, name: "Keycloak", category: security, level: production, evidence: [axelerated, osoul, customer-voice, finamaze-keycloak, finamaze-migration, osoul-multi-tenancy], icon: "si:keycloak" }
-- { id: oauth2-oidc, name: "OAuth2/OIDC", category: security, level: production, evidence: [finamaze-keycloak, osoul-multi-tenancy], icon: "si:openid" }
+- { id: keycloak, name: "Keycloak", category: security, level: production, evidence: [axelerated, osoul, customer-voice, osoul-multi-tenancy], icon: "si:keycloak" }
+- { id: oauth2-oidc, name: "OAuth2/OIDC", category: security, level: production, evidence: [osoul-multi-tenancy], icon: "si:openid" }
 - { id: hmac-signing, name: "HMAC request signing", category: security, level: production, evidence: [osoul-server-side-tracking, tracking-kit], icon: "lucide:key-round" }
-- { id: token-session-design, name: "Token and session design", category: security, level: production, evidence: [finamaze-keycloak, osoul-ai-assistant, osoul-multi-tenancy, osoul-table-sessions, osoul], icon: "lucide:fingerprint" }
+- { id: token-session-design, name: "Token and session design", category: security, level: production, evidence: [osoul-ai-assistant, osoul-multi-tenancy, osoul-table-sessions, osoul], icon: "lucide:fingerprint" }
 - { id: privacy-retention, name: "Data privacy and retention", category: security, level: production, evidence: [customer-voice, osoul-server-side-tracking], icon: "lucide:user-lock" }
 - { id: cloudflare, name: "Cloudflare", category: security, level: production, evidence: [], icon: "si:cloudflare" }
 - { id: kubernetes, name: "Kubernetes", category: infra, level: production, evidence: [axelerated], icon: "si:kubernetes" }
