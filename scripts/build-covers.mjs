@@ -64,6 +64,14 @@ const botpress = svg('Bots and agents in one conversation', `
   ${box(820, 480, 360, 140, 'Botpress v12', 'bots · NLU', true)}${box(1220, 480, 300, 140, 'Agent queue', 'hand-off')}
   ${box(860, 690, 640, 110, 'Contact profile · tickets')}`);
 
+const chatbots = svg('Public chatbots, three engines', `
+  ${box(80, 230, 400, 120, 'Web chat widget')}${box(80, 400, 400, 120, 'Mobile SDKs')}${box(80, 570, 400, 120, 'WhatsApp · channels')}
+  ${arrow(480, 290, 600, 440)}${arrow(480, 460, 600, 460)}${arrow(480, 630, 600, 480)}
+  ${box(610, 360, 420, 200, 'Bot gateway', 'auth · rate limits · PII', true)}
+  ${arrow(1030, 420, 1130, 300)}${arrow(1030, 460, 1130, 460)}${arrow(1030, 500, 1130, 620)}
+  ${box(1140, 240, 380, 120, 'Botpress')}${box(1140, 400, 380, 120, 'Rasa')}${box(1140, 560, 380, 120, 'In-house engine')}
+  <text x="80" y="800" font-family="${FONT}" font-size="28" fill="#64748b">One secured entry point, the right engine behind it, hand-off to agents</text>`);
+
 const ent = (x, w, label, tag, color) => `<rect x="${x}" y="300" width="${w}" height="90" rx="14" fill="${color}" fill-opacity="0.15" stroke="${color}" stroke-width="3"/>
   <text x="${x + w / 2}" y="358" text-anchor="middle" font-family="${FONT}" font-size="40" fill="#0f172a">${label}</text>
   <text x="${x + w / 2}" y="440" text-anchor="middle" font-family="${FONT}" font-size="26" font-weight="600" fill="${color}">${tag}</text>`;
@@ -91,6 +99,7 @@ const search = svg('Segmentation, like a hash table', `
   <text x="760" y="860" font-family="${FONT}" font-size="24" fill="#1d4ed8">full check (answers · tech stack) only inside the bucket</text>`);
 
 const COVERS = {
+  chatbots: () => chatbots,
   '10xjobs-ingestion': () => frame('docs/galery/01_Data_Ingestion_Pipeline_What_Is_Data_Ingestion_Pipeline_82bab9ad91.png', { bg: { r: 44, g: 49, b: 56, alpha: 1 } }),
   '10xjobs-search': () => search,
   'osoul-multi-tenancy': () => frame('src/assets/projects/osoul/multi-tenant-platform.png', { pad: 50 }),
@@ -114,7 +123,9 @@ const COVERS = {
 };
 
 mkdirSync(OUT, { recursive: true });
-for (const [slug, make] of Object.entries(COVERS)) {
+// `npm run covers -- <slug> …` builds only those covers; no arguments rebuilds all of them.
+const only = process.argv.slice(2);
+for (const [slug, make] of Object.entries(COVERS).filter(([s]) => only.length === 0 || only.includes(s))) {
   await (await make()).flatten({ background: '#ffffff' }).jpeg({ quality: 86, mozjpeg: true }).toFile(resolve(OUT, `${slug}.jpg`));
   console.log(`covers/${slug}.jpg`);
 }

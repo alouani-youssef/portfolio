@@ -18,7 +18,7 @@ describe('home', () => {
   it('shows six focus-area expertise cards', () => {
     expect(doc.querySelectorAll('.expertise-card')).toHaveLength(6);
     const tops = doc.querySelectorAll('.expertise-card a.expertise-project').map((a) => a.getAttribute('href'));
-    expect(tops).toEqual(['/projects/customer-voice', '/projects/qalqul-nlu', '/projects/saudi-stt', '/projects/osoul-recommendations', '/projects/10xjobs-ingestion', '/projects/osoul']);
+    expect(tops).toEqual(['/projects/customer-voice', '/projects/chatbots', '/projects/saudi-stt', '/projects/osoul-recommendations', '/projects/10xjobs-ingestion', '/projects/osoul']);
     expect(doc.querySelector('section[aria-labelledby="expertise"] a[href="/projects"]')).not.toBeNull();
   });
   it('offers an All filter plus one per group, in order, with counts', () => {

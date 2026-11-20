@@ -23,8 +23,8 @@ describe('project structure', () => {
   it('nests one level only: every parent is top-level', () => {
     for (const id of ids) if (fm[id].parent) expect(fm[fm[id].parent!.replace(/^en\//, '')].focus, id).toBeTruthy();
   });
-  it('has 11 top-level case studies and 9 deep dives', () => {
-    expect(ids.filter((id) => fm[id].focus)).toHaveLength(11);
+  it('has 12 top-level case studies and 9 deep dives', () => {
+    expect(ids.filter((id) => fm[id].focus)).toHaveLength(12);
     expect(ids.filter((id) => fm[id].parent)).toHaveLength(9);
   });
   it('features Osoul, Saudi STT and Customer Voice', () => {

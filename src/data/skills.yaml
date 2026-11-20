@@ -1,10 +1,10 @@
-- { id: typescript, name: "TypeScript", category: language, level: expert, evidence: [10xjobs, finamaze, qalqul, 10xjobs-ingestion, 10xjobs-search, finamaze-keycloak, finamaze-kyc, finamaze-migration, osoul-server-side-tracking, qalqul-botpress, qalqul-nlu, qalqul-realtime, sowtek-flowbuilder, sowtek-omnichannel-chat, tracking-kit], icon: "si:typescript", core: 11 }
+- { id: typescript, name: "TypeScript", category: language, level: expert, evidence: [10xjobs, finamaze, qalqul, 10xjobs-ingestion, 10xjobs-search, finamaze-keycloak, finamaze-kyc, finamaze-migration, osoul-server-side-tracking, qalqul-botpress, qalqul-nlu, qalqul-realtime, sowtek-flowbuilder, sowtek-omnichannel-chat, tracking-kit, chatbots], icon: "si:typescript", core: 11 }
 - { id: go, name: "Go", category: language, level: production, evidence: [archio, osoul-server-side-tracking, tracking-kit], icon: "si:go", core: 10 }
 - { id: python, name: "Python", category: language, level: expert, evidence: [axelerated, customer-voice, qalqul-nlu, saudi-stt, sowtek-voip, translator, pg-inspector], icon: "si:python", core: 7 }
 - { id: kotlin, name: "Kotlin", category: language, level: production, evidence: [qalqul], icon: "si:kotlin" }
 - { id: sql, name: "SQL", category: language, level: expert, evidence: [], icon: "lucide:table" }
 - { id: nestjs, name: "NestJS", category: backend, level: expert, evidence: [axelerated, osoul, customer-voice, osoul-ai-assistant, osoul-multi-tenancy, osoul-recommendations, osoul-table-sessions, sowtek-flowbuilder, sowtek-omnichannel-chat, sowtek-voip], icon: "si:nestjs", core: 9 }
-- { id: nodejs, name: "Node.js", category: backend, level: production, evidence: [10xjobs, finamaze, qalqul, 10xjobs-ingestion, finamaze-keycloak, finamaze-kyc, finamaze-migration, qalqul-botpress, qalqul-nlu, qalqul-realtime], icon: "si:nodedotjs" }
+- { id: nodejs, name: "Node.js", category: backend, level: production, evidence: [10xjobs, finamaze, qalqul, 10xjobs-ingestion, finamaze-keycloak, finamaze-kyc, finamaze-migration, qalqul-botpress, qalqul-nlu, qalqul-realtime, chatbots], icon: "si:nodedotjs" }
 - { id: fastapi, name: "FastAPI", category: backend, level: expert, evidence: [axelerated, saudi-stt, sowtek-voip, translator], icon: "si:fastapi", core: 8 }
 - { id: gin, name: "Gin", category: backend, level: production, evidence: [osoul-server-side-tracking, tracking-kit], icon: "si:gin" }
 - { id: typeorm, name: "TypeORM", category: backend, level: production, evidence: [osoul, osoul-multi-tenancy, osoul-recommendations], icon: "si:typeorm" }
@@ -16,7 +16,7 @@
 - { id: grpc, name: "gRPC", category: messaging, level: production, evidence: [axelerated, customer-voice], icon: "lucide:waypoints" }
 - { id: kafka, name: "Kafka", category: messaging, level: production, evidence: [sowtek-omnichannel-chat], icon: "si:apachekafka", core: 14 }
 - { id: rabbitmq, name: "RabbitMQ", category: messaging, level: production, evidence: [archio, qalqul-realtime], icon: "si:rabbitmq" }
-- { id: websockets, name: "WebSockets", category: messaging, level: production, evidence: [qalqul, qalqul-botpress, qalqul-realtime, sowtek-omnichannel-chat, sowtek-voip], icon: "lucide:cable" }
+- { id: websockets, name: "WebSockets", category: messaging, level: production, evidence: [qalqul, qalqul-botpress, qalqul-realtime, sowtek-omnichannel-chat, sowtek-voip, chatbots], icon: "lucide:cable" }
 - { id: sse, name: "SSE", category: messaging, level: production, evidence: [], icon: "lucide:activity" }
 - { id: push-notifications, name: "Push notifications", category: messaging, level: production, evidence: [], icon: "lucide:bell" }
 - { id: semantic-search, name: "Semantic search", category: llm, level: production, evidence: [10xjobs, archio, translator], icon: "lucide:file-search" }
@@ -32,12 +32,13 @@
 - { id: fine-tuning, name: "Fine-tuning", category: ml, level: production, evidence: [axelerated, saudi-stt], icon: "lucide:sliders-horizontal", core: 6 }
 - { id: zero-shot-classification, name: "Zero-shot classification", category: ml, level: production, evidence: [axelerated, sowtek-voip], icon: "lucide:tags" }
 - { id: huggingface-transformers, name: "Hugging Face Transformers", category: ml, level: production, evidence: [], icon: "si:huggingface" }
-- { id: duckling, name: "Duckling", category: ml, level: production, evidence: [qalqul, qalqul-nlu], icon: "lucide:calendar-clock" }
+- { id: duckling, name: "Duckling", category: ml, level: production, evidence: [qalqul, qalqul-nlu, chatbots], icon: "lucide:calendar-clock" }
+- { id: rasa, name: "Rasa", category: ml, level: production, evidence: [chatbots], icon: "si:rasa" }
 - { id: recommendation-systems, name: "Recommendation systems", category: ml, level: expert, evidence: [osoul-recommendations], icon: "lucide:thumbs-up" }
 - { id: docling, name: "Docling", category: etl, level: production, evidence: [axelerated, archio], icon: "lucide:file-text" }
 - { id: data-pipelines, name: "Data pipelines (ETL)", category: etl, level: production, evidence: [10xjobs-ingestion, 10xjobs-search], icon: "lucide:workflow" }
 - { id: clickhouse, name: "ClickHouse", category: etl, level: familiar, evidence: [], icon: "si:clickhouse" }
-- { id: pii-redaction, name: "PII redaction", category: security, level: production, evidence: [osoul, osoul-ai-assistant], icon: "lucide:eye-off" }
+- { id: pii-redaction, name: "PII redaction", category: security, level: production, evidence: [osoul, osoul-ai-assistant, chatbots], icon: "lucide:eye-off" }
 - { id: keycloak, name: "Keycloak", category: security, level: production, evidence: [axelerated, osoul, customer-voice, finamaze-keycloak, finamaze-migration, osoul-multi-tenancy], icon: "si:keycloak" }
 - { id: oauth2-oidc, name: "OAuth2/OIDC", category: security, level: production, evidence: [finamaze-keycloak, osoul-multi-tenancy], icon: "si:openid" }
 - { id: hmac-signing, name: "HMAC request signing", category: security, level: production, evidence: [osoul-server-side-tracking, tracking-kit], icon: "lucide:key-round" }
@@ -70,10 +71,10 @@
 - { id: event-driven, name: "Event-driven", category: patterns, level: production, evidence: [osoul-recommendations, osoul-server-side-tracking, sowtek-flowbuilder, sowtek-omnichannel-chat, sowtek-voip], icon: "lucide:zap" }
 - { id: microservices, name: "Microservices", category: patterns, level: production, evidence: [finamaze-migration], icon: "lucide:boxes" }
 - { id: n8n, name: "n8n", category: lowcode, level: production, evidence: [qalqul, sowtek-flowbuilder], icon: "si:n8n" }
-- { id: botpress, name: "Botpress", category: lowcode, level: production, evidence: [qalqul, qalqul-botpress], icon: "lucide:bot" }
-- { id: react, name: "React", category: frontend, level: production, evidence: [finamaze, qalqul, finamaze-kyc], icon: "si:react" }
+- { id: botpress, name: "Botpress", category: lowcode, level: production, evidence: [qalqul, qalqul-botpress, chatbots], icon: "lucide:bot" }
+- { id: react, name: "React", category: frontend, level: production, evidence: [finamaze, qalqul, finamaze-kyc, chatbots], icon: "si:react" }
 - { id: nextjs, name: "Next.js", category: frontend, level: production, evidence: [finamaze, osoul, finamaze-kyc], icon: "si:nextdotjs" }
 - { id: astro, name: "Astro", category: frontend, level: production, evidence: [], icon: "si:astro" }
 - { id: tailwind, name: "Tailwind", category: frontend, level: production, evidence: [], icon: "si:tailwindcss" }
 - { id: react-native, name: "React Native", category: frontend, level: production, evidence: [osoul, osoul-table-sessions], icon: "si:react" }
-- { id: chat-widgets, name: "Chat widgets", category: frontend, level: production, evidence: [qalqul, qalqul-botpress], icon: "lucide:message-circle" }
+- { id: chat-widgets, name: "Chat widgets", category: frontend, level: production, evidence: [qalqul, qalqul-botpress, chatbots], icon: "lucide:message-circle" }

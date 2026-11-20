@@ -12,6 +12,22 @@ const COMPANY_PROJECTS = [
 ] as const;
 const H2 = ['Problem', 'Constraints', 'Architecture', 'Key decisions', 'Results', 'Stack and links'];
 
+describe('chatbots case study', () => {
+  const doc = readHtml('/projects/chatbots');
+  const text = doc.querySelector('main')!.text;
+  it('covers the three engines', () => {
+    for (const engine of ['Botpress', 'Rasa', 'in-house engine']) expect(text).toContain(engine);
+  });
+  it('covers backend, UI and the security of a public bot', () => {
+    expect(doc.querySelectorAll('main h2').map((h) => h.text.trim())).toEqual(H2);
+    for (const s of ['widget', 'rate limit', 'prompt injection', 'PII']) expect(text.toLowerCase()).toContain(s.toLowerCase());
+  });
+  it('lists the Botpress integration as a deep dive and shows Rasa in the stack', () => {
+    expect(doc.querySelector('main a[href="/projects/qalqul-botpress"]')).not.toBeNull();
+    expect(doc.querySelector('ul[aria-label="Stack"] a[href="/about#skill-rasa"]')).not.toBeNull();
+  });
+});
+
 describe('finamaze migration', () => {
   it('tells the B2C to multi-tenant B2B story', () => {
     const t = readHtml('/projects/finamaze-migration').querySelector('main')!.text;
@@ -23,14 +39,14 @@ describe('finamaze migration', () => {
 
 const AREAS = [
   ['agentic', ['customer-voice', 'osoul-ai-assistant', 'ai-stones']],
-  ['nlp', ['qalqul-nlu']],
+  ['nlp', ['chatbots', 'qalqul-nlu']],
   ['ml', ['saudi-stt']],
   ['recsys', ['osoul-recommendations']],
   ['etl', ['osoul-server-side-tracking', '10xjobs-ingestion']],
   ['backend', ['osoul', 'sowtek-omnichannel-chat', 'finamaze-migration']],
 ] as const;
 const CHILDREN: Record<string, string> = {
-  'qalqul-botpress': 'qalqul-nlu', 'qalqul-realtime': 'qalqul-nlu', 'sowtek-voip': 'saudi-stt', '10xjobs-search': '10xjobs-ingestion',
+  'qalqul-botpress': 'chatbots', 'qalqul-realtime': 'qalqul-nlu', 'sowtek-voip': 'saudi-stt', '10xjobs-search': '10xjobs-ingestion',
   'osoul-multi-tenancy': 'osoul', 'osoul-table-sessions': 'osoul', 'sowtek-flowbuilder': 'sowtek-omnichannel-chat',
   'finamaze-kyc': 'finamaze-migration', 'finamaze-keycloak': 'finamaze-migration',
 };
@@ -45,7 +61,7 @@ describe('projects index', () => {
       const cards = doc.querySelectorAll(`section[data-focus="${area}"] .project-card`);
       expect(cards.map((c) => (c.tagName === 'A' ? c : c.querySelector('a'))!.getAttribute('href')), area).toEqual(slugs.map((s) => `/projects/${s}`));
     }
-    expect(doc.querySelectorAll('main .project-card')).toHaveLength(11);
+    expect(doc.querySelectorAll('main .project-card')).toHaveLength(12);
     expect(doc.querySelector('main a[href="/projects/osoul"]')!.text).toContain('Flagship');
   });
   it('lists every deep dive under its parent card', () => {
@@ -55,7 +71,7 @@ describe('projects index', () => {
   });
   it('gives every project card its own cover with alt text', () => {
     const imgs = doc.querySelectorAll('main .project-card img');
-    expect(imgs.length).toBe(11);
+    expect(imgs.length).toBe(12);
     const names = imgs.map((i) => i.getAttribute('src')!.split('/').pop()!.split('.')[0]);
     expect(new Set(names).size, names.join(', ')).toBe(imgs.length);
     for (const img of imgs) expect(img.getAttribute('alt')?.trim()).toBeTruthy();

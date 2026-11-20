@@ -79,9 +79,9 @@ export const profile: Profile = {
     {
       id: 'nlp',
       title: focusTitle('nlp'),
-      body: 'Intent classification and entity extraction tuned per client across Arabic, French and Darija, on language servers, Duckling and Botpress v12 core.',
-      skills: ['duckling', 'botpress', 'zero-shot-classification', 'nllb-200'],
-      project: 'qalqul-nlu',
+      body: 'Public chatbots on Botpress, Rasa and an in-house engine, from the backend and chat widgets to their security, plus intent and entity extraction tuned per client across Arabic, French and Darija.',
+      skills: ['botpress', 'rasa', 'duckling', 'zero-shot-classification', 'nllb-200'],
+      project: 'chatbots',
     },
     {
       id: 'ml',

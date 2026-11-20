@@ -1,0 +1,66 @@
+---
+title: "Public chatbots on Botpress, Rasa and an in-house engine"
+summary: "Chatbots built on three engines, from the bot backend and the chat widgets to the security a bot needs when anyone on the internet can talk to it."
+area: ai
+kind: employer
+focus: nlp
+company: en/qalqul
+status: shipped
+featured: false
+confidentiality: architecture-only
+order: 39
+skills: [botpress, rasa, duckling, typescript, nodejs, websockets, chat-widgets, react, pii-redaction]
+cover: ../../../assets/projects/covers/chatbots.jpg
+coverAlt: "Diagram: web widgets, mobile SDKs and messaging channels enter one bot gateway with auth, rate limits and PII handling, which routes to Botpress, Rasa or an in-house engine"
+updatedAt: 2026-11-20
+---
+import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
+
+## Problem
+
+A chatbot is one of the few parts of a product that anyone on the internet can talk to, without an account, at any volume. Clients wanted bots that answered real questions in their customers' languages, embedded in their own websites, apps and messaging channels, and handed off to an agent when needed. That meant choosing the right engine for each bot, building the backend and the chat UI around it, and securing an endpoint that is public by design.
+
+## Constraints
+
+- **Public by design**: the widget and its API are reachable by anyone, so every message is untrusted input and every endpoint can be scripted or flooded.
+- **Different engines for different bots**: Botpress for flow-driven bots, Rasa where the team needed its own trained NLU and dialogue models, and an in-house engine where neither fitted. {/* CHECK: why each engine was chosen, and at which company Rasa and the in-house engine were used */}
+- **Embedded everywhere**: the same bot runs in a web widget, mobile SDKs and messaging channels, and has to hand off to a human with the history intact.
+- **Personal data in free text**: customers type card numbers, phone numbers and names into the chat whether asked to or not.
+
+## Architecture
+
+<LayerDiagram
+  title="Public chatbots"
+  desc="Web chat widgets, mobile SDKs and messaging channels reach one bot gateway. The gateway authenticates the widget, applies rate limits and abuse checks, and redacts personal data before routing each conversation to Botpress, Rasa or the in-house engine. Hand-off moves the conversation to an agent queue with its history."
+  layers={[
+    { caption: 'Entry (public)', nodes: [{ label: 'Web chat widget', sub: 'React' }, { label: 'Mobile SDKs' }, { label: 'Messaging channels' }] },
+    { caption: 'Gateway', nodes: [{ label: 'Bot gateway', sub: 'auth · rate limits · PII', accent: true }] },
+    { caption: 'Engines', nodes: [{ label: 'Botpress' }, { label: 'Rasa' }, { label: 'In-house engine' }, { label: 'Agent hand-off', sub: 'queues · history' }] },
+  ]}
+/>
+
+<details>
+<summary>Diagram source (Mermaid)</summary>
+
+```mermaid
+flowchart LR
+  w[Web chat widget] --> g[Bot gateway · auth · rate limits · PII]
+  m[Mobile SDKs] --> g
+  c[Messaging channels] --> g
+  g --> bp[Botpress]
+  g --> ra[Rasa]
+  g --> ih[In-house engine]
+  bp & ra & ih --> h[Agent hand-off]
+```
+
+</details>
+
+## Key decisions
+
+1. **One gateway in front of every engine.** Widgets never talk to Botpress, Rasa or the in-house engine directly. The gateway owns authentication, limits and logging, so the security of a bot does not depend on which engine it runs on. {/* CHECK: confirm a single gateway layer existed */}
+2. **Treat the widget as an untrusted client.** Widget tokens are scoped to one bot and one site and expire, messages are validated and size-limited, and requests are rate limited per session and per IP, so a scraped widget key cannot be used to flood or abuse the bot. {/* CHECK: token scheme and limits */}
+3. **Redact before anything is stored.** Card numbers, phone numbers and similar personal data are masked in transcripts before they reach logs, analytics or training data. {/* CHECK: redaction method */}
+4. **Guard the LLM-backed paths against prompt injection.** Where a bot calls a language model or tools, user text is kept separate from instructions, tools run with the conversation's own permissions, and actions that change data need explicit confirmation. {/* CHECK: which bots used LLMs */}
+5. **Pick the engine per bot, keep the UI the same.** The React widget, the SDKs and the hand-off path are shared, so changing a bot's engine does not change what the customer sees. {/* CHECK: confirm */}
+
+The Botpress side is described in detail in [Botpress integration](/projects/qalqul-botpress).

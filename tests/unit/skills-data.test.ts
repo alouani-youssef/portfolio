@@ -40,7 +40,7 @@ describe('skills.yaml', () => {
 
   it('splits LLMs from ML / DL / NLP / NLU', () => {
     expect(inCat('llm')).toEqual(['claude-harnesses', 'embeddings', 'langchain', 'langgraph', 'mcp', 'ollama', 'rag', 'semantic-search']);
-    expect(inCat('ml')).toEqual(['duckling', 'fine-tuning', 'huggingface-transformers', 'nllb-200', 'recommendation-systems', 'whisper', 'zero-shot-classification']);
+    expect(inCat('ml')).toEqual(['duckling', 'fine-tuning', 'huggingface-transformers', 'nllb-200', 'rasa', 'recommendation-systems', 'whisper', 'zero-shot-classification']);
   });
 
   it('has testing, design patterns, low-code, ETL, ops and infra sections', () => {
