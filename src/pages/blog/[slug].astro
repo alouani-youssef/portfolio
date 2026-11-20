@@ -18,7 +18,7 @@ const d = post.data;
 const slug = entrySlug(post.id);
 const minutes = readingMinutes(post.body ?? '');
 ---
-<BaseLayout title={d.title} description={d.description} path={`/blog/${slug}`} noindex={d.draft} twin={!d.draft} jsonLd={[blogPostingJsonLd(d, `${Astro.site!.origin}/blog/${slug}`)]}>
+<BaseLayout title={d.title} description={d.description} path={`/blog/${slug}`} noindex={d.draft} twin={!d.draft} article={d.draft ? {} : { published: d.pubDate, modified: d.updatedDate ?? d.pubDate, tags: d.tags }} jsonLd={[blogPostingJsonLd(d, `${Astro.site!.origin}/blog/${slug}`)]}>
   <article class="container-page py-12 sm:py-16">
     <div class="mx-auto max-w-[70ch]">
       <a href="/blog" class="text-sm">← Blog</a>

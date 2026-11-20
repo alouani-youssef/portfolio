@@ -1,0 +1,12 @@
+# Machine-readable twins of the HTML pages: readable by agents and LLM crawlers,
+# but kept out of search results so they never compete with the HTML page.
+/*.md
+  X-Robots-Tag: noindex
+/api/*
+  X-Robots-Tag: noindex
+/resume.json
+  X-Robots-Tag: noindex
+/llms-full.txt
+  X-Robots-Tag: noindex
+/youssef-alouani.vcf
+  X-Robots-Tag: noindex

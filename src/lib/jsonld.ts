@@ -1,4 +1,5 @@
 import type { Profile } from '../data/profile';
+import { SITE } from '../data/site';
 
 const CTX = 'https://schema.org';
 
@@ -24,6 +25,24 @@ export function profilePageJsonLd(profile: Profile, site: string): object {
   return { '@context': CTX, '@type': 'ProfilePage', url: site, mainEntity: personJsonLd(profile, site) };
 }
 
+export function webSiteJsonLd(profile: Profile, site: string): object {
+  return { '@context': CTX, '@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: profile.name, inLanguage: 'en', publisher: { '@id': `${site}/#person` } };
+}
+
+const SECTIONS: Record<string, string> = { projects: 'Projects', experience: 'Experience', blog: 'Blog' };
+
+/** Home › Section › Page for pages nested under a listed section; null elsewhere. */
+export function breadcrumbJsonLd(path: string, title: string, site: string): object | null {
+  const [section, ...rest] = path.split('/').filter(Boolean);
+  if (!SECTIONS[section] || rest.length !== 1) return null;
+  const items = [
+    { name: 'Home', item: `${site}/` },
+    { name: SECTIONS[section], item: `${site}/${section}` },
+    { name: title, item: `${site}${path}` },
+  ];
+  return { '@context': CTX, '@type': 'BreadcrumbList', itemListElement: items.map((x, i) => ({ '@type': 'ListItem', position: i + 1, ...x })) };
+}
+
 export function faqPageJsonLd(faq: Array<{ q: string; a: string }>): object {
   return {
     '@context': CTX,
@@ -32,7 +51,7 @@ export function faqPageJsonLd(faq: Array<{ q: string; a: string }>): object {
   };
 }
 
-const author = { '@type': 'Person', name: 'Youssef Alouani', url: 'https://youssefalouani.com' };
+const author = { '@type': 'Person', name: 'Youssef Alouani', url: SITE };
 
 export function projectJsonLd(
   project: { title: string; summary: string; updatedAt: Date; links: { repo?: string } },
@@ -57,6 +76,8 @@ export function blogPostingJsonLd(post: { title: string; description: string; pu
     headline: post.title,
     description: post.description,
     url,
+    mainEntityOfPage: url,
+    image: `${url.replace('/blog/', '/og/blog/')}.png`,
     // A draft has no publication date yet: its pubDate is only a plan.
     ...(post.draft ? {} : { datePublished: post.pubDate.toISOString().slice(0, 10), dateModified: (post.updatedDate ?? post.pubDate).toISOString().slice(0, 10) }),
     ...(post.tags?.length ? { keywords: post.tags.join(', ') } : {}),

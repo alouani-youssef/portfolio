@@ -10,7 +10,7 @@ import type { ApiName } from './api-schemas';
 import { partialDate } from './resume';
 import { getOss } from './oss';
 
-const SITE = 'https://youssefalouani.com';
+import { SITE } from '../data/site';
 const day = (d: Date) => d.toISOString().slice(0, 10);
 
 export async function buildApi(name: ApiName): Promise<unknown> {

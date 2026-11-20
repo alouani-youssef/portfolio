@@ -12,7 +12,7 @@ describe('search, og images and budget', () => {
   it('every page has a 1200×630 PNG og:image that exists', () => {
     for (const route of listHtmlPages()) {
       const content = readHtml(route).querySelector('meta[property="og:image"]')?.getAttribute('content');
-      expect(content, route).toMatch(/^https:\/\/youssefalouani\.com\/og\/.+\.png$/);
+      expect(content, route).toMatch(/^https:\/\/www\.alouaniyoussef\.com\/og\/.+\.png$/);
       const file = join(DIST, new URL(content!).pathname);
       const buf = readFileSync(file);
       expect(buf.subarray(1, 4).toString(), route).toBe('PNG');

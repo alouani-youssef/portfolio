@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 const { tag, posts, others } = Astro.props;
 const m = tagMeta(tag);
 ---
-<BaseLayout title={`Writing on ${m.label}`} description={`${m.blurb} Posts by Youssef Alouani tagged ${m.label}.`} path={`/blog/tags/${tag}`} twin={false}>
+<BaseLayout title={`Writing on ${m.label}`} description={`${m.blurb} Posts by Youssef Alouani tagged ${m.label}.`} path={`/blog/tags/${tag}`} twin={false} noindex>
   <div class="container-page py-12 sm:py-16">
     <a href="/blog" class="text-sm">← All posts</a>
     <header class="tag-hero mt-6" style={`--h: ${m.hue}`}>

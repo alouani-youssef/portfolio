@@ -70,7 +70,7 @@ export const profile: Profile = {
     { code: 'fr', name: 'French' },
     { code: 'ar', name: 'Arabic' },
   ],
-  email: 'hello@youssefalouani.com',
+  email: 'hello@alouaniyoussef.com',
   links: {
     github: 'https://github.com/alouani-youssef',
     linkedin: 'https://www.linkedin.com/in/alouani-youssef',
@@ -159,7 +159,7 @@ export const profile: Profile = {
     },
     {
       q: 'Is he open to new roles, and how can I reach him?',
-      a: 'Yes. He is open to backend and AI engineering positions, remote or in Casablanca. Book a Google Meet call from the contact page, email hello@youssefalouani.com, or find him on LinkedIn and GitHub (alouani-youssef).',
+      a: 'Yes. He is open to backend and AI engineering positions, remote or in Casablanca. Book a Google Meet call from the contact page, email hello@alouaniyoussef.com, or find him on LinkedIn and GitHub (alouani-youssef).',
     },
   ],
   now: {

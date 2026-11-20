@@ -2,7 +2,7 @@ import { it, expect } from 'vitest';
 import { profile } from '../../src/data/profile';
 import { buildVcard } from '../../src/lib/vcard';
 
-const card = buildVcard(profile, 'https://youssefalouani.com');
+const card = buildVcard(profile, 'https://www.alouaniyoussef.com');
 const unfolded = card.replace(/\r\n /g, '');
 
 it('is a CRLF vCard 3.0 with the public contact details', () => {

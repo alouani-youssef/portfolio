@@ -11,7 +11,7 @@ import { profile } from '../data/profile';
 import { entrySlug } from '../lib/i18n';
 import { splitHeadline } from '../lib/markdown';
 import { getPosts } from '../lib/post-queries';
-import { profilePageJsonLd } from '../lib/jsonld';
+import { profilePageJsonLd, webSiteJsonLd } from '../lib/jsonld';
 import { getOss } from '../lib/oss';
 import { getTopProjects } from '../lib/projects';
 import ProjectCard from '../components/ProjectCard.astro';
@@ -26,7 +26,7 @@ const oss = await getOss();
 const projectCount = (await getTopProjects()).length;
 const posts = (await getPosts(false)).slice(0, 3);
 ---
-<BaseLayout title={`Youssef Alouani · ${profile.jobTitle}`} description={profile.oneLiner} path="/" jsonLd={[profilePageJsonLd(profile, Astro.site!.origin)]}>
+<BaseLayout title={`Youssef Alouani · ${profile.jobTitle}`} description={profile.oneLiner} path="/" jsonLd={[webSiteJsonLd(profile, Astro.site!.origin), profilePageJsonLd(profile, Astro.site!.origin)]}>
   <section class="container-page grid items-center gap-10 py-16 sm:py-24 md:grid-cols-[1fr_auto]">
     <div>
       <p class="eyebrow">Casablanca · AI engineering &amp; backend</p>

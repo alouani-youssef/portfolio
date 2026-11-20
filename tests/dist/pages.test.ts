@@ -145,7 +145,7 @@ describe('now and contact', () => {
     expect(m.querySelector('#services h3')!.text.trim()).toBe('AI assistants');
   });
   it('/contact shows the public email', () => {
-    expect(main('/contact').querySelector('a[href="mailto:hello@youssefalouani.com"]')).not.toBeNull();
+    expect(main('/contact').querySelector('a[href="mailto:hello@alouaniyoussef.com"]')).not.toBeNull();
   });
   it('/contact offers a call booking and a downloadable vCard', () => {
     const m = main('/contact');

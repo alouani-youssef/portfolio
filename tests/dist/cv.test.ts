@@ -28,8 +28,8 @@ describe('/cv', () => {
     const cvSkills = doc.querySelector('.cv-skills')!.text;
     for (const s of listed) expect(cvSkills, s.name).toContain(s.name);
     for (const name of ['Ollama', 'Kotlin', 'Nginx']) expect(cvSkills, name).not.toContain(name);
-    expect(text).toContain('hello@youssefalouani.com');
-    expect(text).toContain('youssefalouani.com');
+    expect(text).toContain('hello@alouaniyoussef.com');
+    expect(text).toContain('www.alouaniyoussef.com');
   });
   it('ships print styles that hide the site chrome', () => {
     const inline = doc.querySelectorAll('style').map((s) => s.text).join('\n');

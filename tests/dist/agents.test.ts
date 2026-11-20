@@ -31,7 +31,7 @@ describe('llms.txt', () => {
     expect(txt.startsWith('# Youssef Alouani\n\n> ')).toBe(true);
   });
   it('every site URL resolves to a built file (Review Focus 5)', () => {
-    const urls = [...txt.matchAll(/https:\/\/youssefalouani\.com(\/[^)\s]*)/g)].map((m) => m[1]);
+    const urls = [...txt.matchAll(/https:\/\/www\.alouaniyoussef\.com(\/[^)\s]*)/g)].map((m) => m[1]);
     expect(urls.length).toBeGreaterThan(8);
     for (const u of urls) expect(exists(u === '/' ? 'index.html' : u), u).toBe(true);
   });

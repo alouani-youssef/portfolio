@@ -14,10 +14,10 @@ describe('foundation', () => {
     expect(head.indexOf('data-theme')).toBeLessThan(head.indexOf('rel="stylesheet"'));
   });
 
-  it('every page has a canonical URL on youssefalouani.com', () => {
+  it('every page has a canonical URL on www.alouaniyoussef.com', () => {
     for (const route of listHtmlPages()) {
       const href = readHtml(route).querySelector('link[rel="canonical"]')?.getAttribute('href');
-      expect(href, route).toMatch(/^https:\/\/youssefalouani\.com\//);
+      expect(href, route).toMatch(/^https:\/\/www\.alouaniyoussef\.com\//);
     }
   });
 

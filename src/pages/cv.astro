@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile } from '../data/profile';
+import { SITE_HOST } from '../data/site';
 import { getRoles } from '../lib/experience';
 import { getOss } from '../lib/oss';
 import { SKILL_CATEGORIES } from '../lib/skill-icons';
@@ -12,7 +13,7 @@ const skillGroups = SKILL_CATEGORIES.map((c) => ({ label: c.label, names: skills
 
 const oss = await getOss();
 ---
-<BaseLayout title="CV" description={`Printable CV of Youssef Alouani, ${profile.jobTitle}.`} path="/cv">
+<BaseLayout title="CV" description={`Printable one-page CV of Youssef Alouani, ${profile.jobTitle} in Casablanca: roles, core stack, open source and education.`} path="/cv">
   <div class="container-page py-12 print:py-0">
     <article class="cv mx-auto max-w-[780px] text-[15px] leading-relaxed">
       <p class="no-print mb-6 text-sm text-muted">Use your browser's print dialog and choose “Save as PDF”.</p>
@@ -20,7 +21,7 @@ const oss = await getOss();
         <h1 class="text-3xl font-semibold tracking-tight">{profile.name}</h1>
         <p class="mt-1 text-lg">{profile.headline}</p>
         <p class="mt-2 text-sm text-muted">
-          {profile.location.city}, Morocco · {profile.email} · youssefalouani.com · github.com/alouani-youssef · linkedin.com/in/alouani-youssef
+          {profile.location.city}, Morocco · {profile.email} · {SITE_HOST} · github.com/alouani-youssef · linkedin.com/in/alouani-youssef
         </p>
       </header>
 

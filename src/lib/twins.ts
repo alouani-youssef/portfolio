@@ -11,7 +11,7 @@ import { getOss } from './oss';
 import { services } from '../data/services';
 import { VCARD_PATH } from './vcard';
 
-const SITE = 'https://youssefalouani.com';
+import { SITE } from '../data/site';
 
 export interface Twin { path: string; markdown: string }
 

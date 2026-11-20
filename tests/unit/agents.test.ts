@@ -17,7 +17,7 @@ describe('buildResume', () => {
   it('follows JSON Resume basics', () => {
     expect(r.$schema).toBe('https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json');
     expect(r.basics.name).toBe('Youssef Alouani');
-    expect(r.basics.email).toBe('hello@youssefalouani.com');
+    expect(r.basics.email).toBe('hello@alouaniyoussef.com');
     expect(r.basics.location).toEqual({ city: 'Casablanca', countryCode: 'MA' });
     expect(r.basics.profiles.map((p: any) => p.network)).toEqual(expect.arrayContaining(['GitHub', 'LinkedIn']));
   });
@@ -41,7 +41,7 @@ describe('buildResume', () => {
 describe('buildLlmsTxt', () => {
   const txt = buildLlmsTxt({
     profile,
-    site: 'https://youssefalouani.com',
+    site: 'https://www.alouaniyoussef.com',
     roles: [{ slug: 'osoul', company: 'Osoul' }],
     projects: [{ slug: 'osoul', title: 'Osoul platform', summary: 'S' }],
     posts: [{ slug: 'p', title: 'P', external: undefined }],
@@ -50,10 +50,10 @@ describe('buildLlmsTxt', () => {
   it('has the llms.txt structure', () => {
     expect(txt.startsWith('# Youssef Alouani\n\n> ')).toBe(true);
     for (const h of ['## Profile', '## Projects', '## Writing', '## Optional']) expect(txt).toContain(h);
-    expect(txt).toContain('[Osoul platform](https://youssefalouani.com/projects/osoul.md)');
-    expect(txt).toContain('(https://youssefalouani.com/llms-full.txt)');
-    expect(txt).toContain('(https://youssefalouani.com/resume.json)');
-    expect(txt).toContain('## Open source\n- [AI Stones](https://youssefalouani.com/open-source.md): CLI.');
+    expect(txt).toContain('[Osoul platform](https://www.alouaniyoussef.com/projects/osoul.md)');
+    expect(txt).toContain('(https://www.alouaniyoussef.com/llms-full.txt)');
+    expect(txt).toContain('(https://www.alouaniyoussef.com/resume.json)');
+    expect(txt).toContain('## Open source\n- [AI Stones](https://www.alouaniyoussef.com/open-source.md): CLI.');
   });
 });
 
@@ -62,7 +62,7 @@ describe('API schemas', () => {
     expect(Object.keys(API_SCHEMAS).sort()).toEqual(['experience', 'oss', 'posts', 'profile', 'projects', 'skills']);
   });
   it('require a licence on open-source items', () => {
-    expect(API_SCHEMAS.oss.safeParse([{ id: 'x', updatedAt: '2026-11-19', url: 'https://youssefalouani.com/open-source#x', name: 'X', pitch: 'p', languages: ['Go'], repos: [], links: [], highlights: [] }]).success).toBe(false);
+    expect(API_SCHEMAS.oss.safeParse([{ id: 'x', updatedAt: '2026-11-19', url: 'https://www.alouaniyoussef.com/open-source#x', name: 'X', pitch: 'p', languages: ['Go'], repos: [], links: [], highlights: [] }]).success).toBe(false);
   });
   it('reject items without id, updatedAt or url', () => {
     expect(API_SCHEMAS.skills.safeParse([{ name: 'Go' }]).success).toBe(false);

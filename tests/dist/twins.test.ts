@@ -20,7 +20,7 @@ describe('markdown twins', () => {
   it('the Osoul twin carries the content and the diagram source, not components', () => {
     const md = readText('projects/osoul.md');
     expect(md.startsWith('# Osoul platform')).toBe(true);
-    expect(md).toContain('Source: https://youssefalouani.com/projects/osoul');
+    expect(md).toContain('Source: https://www.alouaniyoussef.com/projects/osoul');
     expect(md).toContain('Revenue');
     expect(md).toContain('```mermaid');
     expect(md).not.toContain('<Gallery');

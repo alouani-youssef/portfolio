@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { profile } from '../../src/data/profile';
 import { profilePageJsonLd, faqPageJsonLd, projectJsonLd, blogPostingJsonLd } from '../../src/lib/jsonld';
 
-const SITE = 'https://youssefalouani.com';
+const SITE = 'https://www.alouaniyoussef.com';
 
 describe('jsonld', () => {
   it('wraps the Person in a ProfilePage with all sameAs links', () => {

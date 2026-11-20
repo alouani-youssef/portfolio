@@ -1,3 +1,4 @@
+import { SITE } from '../data/site';
 import type { Profile } from '../data/profile';
 
 interface RoleIn { company: string; role: string; url?: string; start: Date; end: Date | null; precision?: 'month' | 'year'; summary: string; highlights: string[] }
@@ -22,7 +23,7 @@ export function buildResume(
       name: profile.name,
       label: profile.jobTitle,
       email: profile.email,
-      url: 'https://youssefalouani.com',
+      url: SITE,
       summary: profile.shortBio,
       location: { city: profile.location.city, countryCode: profile.location.country },
       profiles: [
