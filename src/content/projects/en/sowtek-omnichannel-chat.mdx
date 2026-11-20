@@ -26,7 +26,7 @@ Contact-centre agents in Saudi Arabia answer customers on WhatsApp, email, X, In
 
 ## Constraints
 
-- **Every channel is different**: webhooks, polling, media types, message windows and rate limits all vary. {/* CHECK: confirm channel list */}
+- **Every channel is different**: webhooks, polling, media types, message windows and rate limits all vary.
 - **Real time**: messages appear for the right agent immediately, with typing and delivery states.
 - **No lost messages**: channel webhooks retry and duplicate, so ingestion must be idempotent.
 - **Routing**: conversations go to the right queue and agent, and can be handed to bots and workflows.
@@ -43,7 +43,6 @@ Contact-centre agents in Saudi Arabia answer customers on WhatsApp, email, X, In
     { caption: 'Agents', nodes: [{ label: 'Inbox', sub: 'WebSockets' }, { label: 'Customer profile', sub: 'cross-channel history' }] },
   ]}
 />
-{/* CHECK: event bus and transport choices are inferred */}
 
 <Gallery items={props.media} />
 

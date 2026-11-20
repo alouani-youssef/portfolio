@@ -24,18 +24,18 @@ Part of the [Osoul platform](/projects/osoul) case study.
 
 ## Problem
 
-In a fine-dining room the waiter suggests the starter, the wine and the dessert. When guests order from their phone at the table, those suggestions disappear, and so does part of the ticket. {/* CHECK: inferred */} Osoul's recommendations put them back in the Guest App, at the moments a waiter would make them.
+In a fine-dining room the waiter suggests the starter, the wine and the dessert. When guests order from their phone at the table, those suggestions disappear, and so does part of the ticket. Osoul's recommendations bring them back in the Guest App: guided ordering journeys help guests discover the menu, raising the check and their satisfaction, and their navigation data shows the restaurant what to improve on the menu and in the kitchen.
 
 ## Constraints
 
-- **Menus are not catalogues**: dishes have options, add-ons and pairings that change by service and by season. {/* CHECK */}
-- **Few signals per guest**: most diners visit a handful of times, so suggestions cannot rely on long histories. {/* CHECK */}
+- **Menus are not catalogues**: dishes have options, add-ons and pairings that change by service and by season.
+- **Few signals per guest**: most diners visit a handful of times, so suggestions cannot rely on long histories; for loyal guests, their history is used to lead them to parts of the menu they have not tried.
 - **Never pushy**: a suggestion that feels like an ad lowers trust in the whole menu.
-- **Measurable**: the point is the average ticket, so every surface has to be attributable. {/* CHECK: confirm attribution approach */}
+- **Measurable**: the point is the average ticket, so every surface has to be attributable.
 
 ## Architecture
 
-<OsoulRecommendationsDiagram> {/* CHECK: diagram inputs are inferred */}
+<OsoulRecommendationsDiagram>
 
 <details>
 <summary>Diagram source (Mermaid)</summary>
@@ -58,11 +58,11 @@ flowchart TB
 
 ### Dynamic pricing
 
-Recommendations raise the ticket; dynamic pricing fills the room when it would otherwise be empty. Pricing rules are attached to the menu and triggered by events such as the time of service, occupancy or a special night, and they feed meal-completion promos so a guest sees an offer at the moment it matters. {/* CHECK: inferred, confirm the event sources and how promos are attributed */}
+Recommendations raise the ticket; dynamic pricing adjusts prices automatically by event and season. Pricing rules are attached to the menu and triggered by events such as the time of service, occupancy or a special night, and they feed meal-completion promos so a guest sees an offer at the moment it matters.
 
 ## Key decisions
 
-1. **Model the menu for recommendations first.** A flat list of dishes can only recommend "popular". Pairings, courses and beverage links are part of the menu data, so the service can reason about what completes a meal. {/* CHECK: confirm menu data model */}
+1. **Model the menu for recommendations first.** A flat list of dishes can only recommend "popular". Pairings, courses and beverage links are part of the menu data, so the service can reason about what completes a meal.
 2. **Recommend in context, not on a separate page.** Suggestions appear where the decision happens: on the home screen as "complete your meal", and on a dish page as pairings and drinks to go with it.
-3. **Start from the order, then the guest.** The current order is the strongest signal at the table; favourites refine it for returning guests. {/* CHECK: confirm signal ordering */}
-4. **Price by event, not by hand.** Dynamic pricing applies time- and event-based rules (a quiet service, a match night, a set menu) to the same menu model, so promos and recommendations always show the price the guest will pay. {/* CHECK: confirm pricing triggers */}
+3. **Start from the order, then the guest.** The current order is the strongest signal at the table; favourites refine it for returning guests.
+4. **Price by event, not by hand.** Dynamic pricing applies time- and event-based rules (a quiet service, a match night, a set menu) to the same menu model, so promos and recommendations always show the price the guest will pay.

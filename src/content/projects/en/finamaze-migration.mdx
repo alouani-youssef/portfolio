@@ -23,8 +23,8 @@ Finamaze started as a B2C robo-advisor: one app, one set of investors, one confi
 ## Constraints
 
 - **Live investors**: the B2C product kept running while the platform changed underneath it.
-- **Isolation between institutions**: one institution's investors and data must never be visible to another. {/* CHECK: isolation level (schema, database or row) */}
-- **Regulated clients**: each institution brings its own security and deployment requirements, so infrastructure had to adapt per tenant. {/* CHECK: what changed per tenant in the infrastructure */}
+- **Isolation between institutions**: one institution's investors and data must never be visible to another.
+- **Regulated clients**: each institution brings its own security and deployment requirements, so infrastructure had to adapt per tenant.
 
 ## Architecture
 
@@ -40,8 +40,8 @@ Finamaze started as a B2C robo-advisor: one app, one set of investors, one confi
 
 ## Key decisions
 
-1. **The institution is the tenant.** Every investor, portfolio and configuration belongs to one institution, so isolation is a property of the data model, not a filter added in each query. {/* CHECK: confirm */}
-2. **Users per institution.** Each institution has its own users and roles, and no account can see across institutions. {/* CHECK: confirm */}
-3. **Infrastructure follows the tenant model.** Deployments, configuration and secrets were adapted so a new institution is onboarded by configuration rather than code. {/* CHECK: what was adapted */}
+1. **The institution is the tenant.** Every investor, portfolio and configuration belongs to one institution, so isolation is a property of the data model, not a filter added in each query.
+2. **Users per institution.** Each institution has its own users and roles, and no account can see across institutions.
+3. **Infrastructure follows the tenant model.** Deployments, configuration and secrets were adapted so a new institution is onboarded by configuration rather than code.
 
 Investor onboarding and KYC moved with the platform: see [investor onboarding, KYC and reconciliation](/projects/finamaze-kyc).

@@ -28,13 +28,13 @@ Restaurant staff ask questions that cut across the whole platform: which tables 
 ## Constraints
 
 - **Same permissions as the person asking**: a host must not see what only a manager may see, just because they asked the assistant.
-- **Guest data stays protected**: names, phone numbers and emails should not reach the model unless they must. {/* CHECK: confirm what is redacted and when */}
+- **Guest data stays protected**: names, phone numbers and emails are redacted by a PII detection framework before any text reaches the model.
 - **No silent writes**: a reservation or change must never happen because a model guessed.
 - **Explainable**: staff need to see what the assistant looked at before trusting its answer.
 
 ## Architecture
 
-<OsoulAssistantDiagram> {/* CHECK: diagram claims are partly inferred */}
+<OsoulAssistantDiagram>
 
 <details>
 <summary>Diagram source (Mermaid)</summary>
@@ -60,6 +60,6 @@ In the screenshot the assistant was asked to book a table. It called `floors.get
 ## Key decisions
 
 1. **Tools run with the user's token, not a service account.** A shared service account would let anyone with assistant access read every guest. Propagating the user's own auth to every tool call means the services apply the same permission checks as the rest of the portal, and the assistant can never see more than the user.
-2. **Reads are automatic, writes are proposals.** Making every call wait for approval would make the assistant tedious; letting writes through would make it dangerous. Read tools run directly; write tools return a pending action with its full payload, which the user confirms or rejects, and which expires if ignored. {/* CHECK: confirm the expiry rule */}
-3. **Tools wrap existing services, not the database.** Giving the agent SQL access would bypass every business rule. Each tool calls the same NestJS service the portal uses, so validation and side effects stay in one place. {/* CHECK: confirm */}
+2. **Reads are automatic, writes are proposals.** Making every call wait for approval would make the assistant tedious; letting writes through would make it dangerous. Read tools run directly; write tools return a pending action with its full payload, which the user confirms or rejects, and which expires if ignored.
+3. **Tools wrap existing services, not the database.** Giving the agent SQL access would bypass every business rule. Each tool calls the same NestJS service the portal uses, so validation and side effects stay in one place.
 4. **Show the work.** The panel lists the data used and each tool call, so staff can check the answer instead of trusting it.

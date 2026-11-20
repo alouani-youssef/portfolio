@@ -11,7 +11,7 @@ confidentiality: architecture-only
 order: 31
 skills: [nodejs, typescript, postgresql, react, nextjs]
 metrics:
-  - { label: "Manual review time per file", value: "−40%", placeholder: true }
+  - { label: "Manual review time per file", value: "−60%", placeholder: false }
 media:
   - { src: ../../../assets/projects/finamaze-kyc/onboarding.png, alt: "FinaMaze sign-up page with email, phone, country and city of residence, password and referral fields next to an investing illustration", caption: "Sign-up, the first step of investor onboarding before identity checks.", device: desktop }
   - { src: ../../../assets/projects/finamaze-kyc/mobile-apps.png, alt: "Five FinaMaze app-store screens: AI-tailored portfolios, account balance, Smartfolios positions, investment analysis and the invest flow", caption: "The robo-advisor investors reach once their identity is verified.", device: desktop }
@@ -24,18 +24,18 @@ import FinamazeKycDiagram from '../../../components/diagrams/FinamazeKycDiagram.
 
 ## Problem
 
-Finamaze runs a robo-advisor that builds AI-tailored portfolios for each investor's risk profile. Before anyone can invest, the platform has to know who they are, and once money moves, its own ledger has to agree with the bank's records to the cent. Both jobs used to depend on people checking documents and spreadsheets by hand. {/* CHECK: "to the cent" and the manual starting point are inferred */}
+Finamaze runs a robo-advisor that builds AI-tailored portfolios for each investor's risk profile. Before anyone can invest, the platform has to know who they are, and once money moves, its own ledger has to agree with the bank's records to the cent. Both jobs used to depend on people checking documents and spreadsheets by hand.
 
 ## Constraints
 
-- **Regulated onboarding**: identity checks are a precondition for investing, for a platform serving Saudi National Bank. {/* CHECK: confirm regulatory framing */}
+- **Regulated onboarding**: on an asset-management platform, identity checks are a precondition for investing, and onboarding has to follow the regulator's policies.
 - **Two kinds of evidence**: the document itself and the person presenting it both need verifying.
-- **Money must reconcile**: any difference between the platform's records and the bank's has to surface quickly, not at month end. {/* CHECK: cadence inferred */}
+- **Money must reconcile**: any difference between the platform's records and the bank's has to surface quickly, not at month end.
 - **Privacy**: identity documents are among the most sensitive data a fintech holds.
 
 ## Architecture
 
-<FinamazeKycDiagram> {/* CHECK: selfie, web and mobile sign-up, review queue are inferred */}
+<FinamazeKycDiagram>
 
 <details>
 <summary>Diagram source (Mermaid)</summary>
@@ -59,6 +59,6 @@ flowchart TB
 
 ## Key decisions
 
-1. **Document and visual verification as separate checks.** A valid document says nothing about who is holding it. Verifying the document and matching the person to it are separate steps with separate outcomes, so a failure says which one failed. {/* CHECK: confirm how the two checks were combined */}
-2. **A review queue for unclear cases instead of automatic rejection.** Rejecting every borderline case loses real investors; approving them loses compliance. Unclear results go to a person with the evidence attached. {/* CHECK */}
-3. **Reconciliation as a continuous job, not a month-end report.** Matching the platform's ledger against bank records on a schedule surfaces breaks while they are still small and explainable. {/* CHECK: confirm cadence and sources */}
+1. **Document and visual verification as separate checks.** A valid document says nothing about who is holding it. Verifying the document and matching the person to it are separate steps with separate outcomes, so a failure says which one failed.
+2. **A review queue for unclear cases instead of automatic rejection.** Rejecting every borderline case loses real investors; approving them loses compliance. Unclear results go to a person with the evidence attached.
+3. **Reconciliation as a continuous job, not a month-end report.** The broker's data is the source of truth: the platform's ledger is matched against it on a schedule, so every difference is found and traced while it is still small and explainable.

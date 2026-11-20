@@ -11,7 +11,7 @@ confidentiality: public
 order: 13
 skills: [token-session-design, nestjs, react-native]
 media:
-  - { src: ../../../assets/projects/osoul/waiter-floors.png, alt: "Osoul Waiter App floor view: Main Room and Jardin tabs, a table map with the waiter's section outlined, and all tables sorted by urgency with a seated walk-in guest", caption: "The Waiter App sees each table's session: seated, for how long, and whose section it is in.", device: phone } # CHECK: shared session inferred
+  - { src: ../../../assets/projects/osoul/waiter-floors.png, alt: "Osoul Waiter App floor view: Main Room and Jardin tabs, a table map with the waiter's section outlined, and all tables sorted by urgency with a seated walk-in guest", caption: "The Waiter App sees each table's session: seated, for how long, and whose section it is in.", device: phone }
 cover: ../../../assets/projects/covers/osoul-table-sessions.jpg
 coverAlt: "Osoul Waiter App floor view with the table map and tables sorted by urgency"
 updatedAt: 2026-11-19
@@ -28,13 +28,13 @@ Diners order from their phone after tapping the table, without an account. That 
 ## Constraints
 
 - **No sign-up**: asking diners to create an account before ordering kills adoption.
-- **Physical tags are public**: anyone can photograph a QR code, so the code alone cannot be the whole secret. {/* CHECK */}
+- **Physical tags are public**: anyone can photograph a QR code, so the code alone cannot be the whole secret.
 - **Sessions end with the visit**: an order link must stop working once the table is cleared.
 - **Staff see the same truth**: the Waiter App needs to know which tables are seated and for how long.
 
 ## Architecture
 
-<OsoulTableSessionsDiagram> {/* CHECK: diagram lifecycle details are inferred */}
+<OsoulTableSessionsDiagram>
 
 <details>
 <summary>Diagram source (Mermaid)</summary>
@@ -55,6 +55,6 @@ flowchart TB
 
 ## Key decisions
 
-1. **A session per visit, not a permanent table URL.** A permanent link would work forever for anyone who saved it. The tap exchanges the tag's credential for a short-lived session token bound to that table and that visit. {/* CHECK: confirm token format and lifetime */}
-2. **Sessions close with the table.** When staff clear the table, the session ends, so a link from lunch cannot order at dinner. {/* CHECK: confirm the closing trigger */}
-3. **One session, two views.** The Guest App and the Waiter App read the same session, so the floor view shows who is seated and for how long without staff entering it twice. {/* CHECK: inferred */}
+1. **A session per visit, not a permanent table URL.** A permanent link would work forever for anyone who saved it. The tap exchanges the tag's credential for a short-lived session token bound to that table and that visit.
+2. **Sessions close with the table.** When staff clear the table, the session ends, so a link from lunch cannot order at dinner.
+3. **One session, two views.** The Guest App and the Waiter App read the same session, so the floor view shows who is seated and for how long without staff entering it twice.

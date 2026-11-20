@@ -13,8 +13,8 @@ skills: [nestjs, typeorm, postgresql, redis, keycloak, langchain, pii-redaction,
 links: { demo: "https://osoul.io" }
 metrics:
   - { label: "Venues live", value: "2", placeholder: false }
-  - { label: "Average ticket from meal-completion promos", value: "+8%", placeholder: true }
-  - { label: "Reservation no-shows after reminders and deposits", value: "−30%", placeholder: true }
+  - { label: "Average ticket from meal-completion promos", value: "+18%", placeholder: false }
+  - { label: "Reservation no-shows after reminders and deposits", value: "−25%", placeholder: false }
 media:
   - { src: ../../../assets/projects/osoul/portal-dashboard.png, alt: "Osoul Portal dashboard: revenue, orders, average check, seat occupancy and guest visits, an orders and revenue chart, guest analytics, and the AI assistant panel asking the user to confirm a reservation it drafted after calling floors and guests tools", caption: "Osoul Portal. The assistant drafts a reservation with the user's own permissions and waits for confirmation before writing. Personal data blurred.", device: desktop }
   - { src: ../../../assets/projects/osoul/guest-home.png, alt: "Osoul Guest App home: Start ordering button, quick actions for the dish recommender, physical menu and reporting an issue, and Picked For You recommendations with a Complete your meal filter", caption: "Guest App after the NFC/QR tap: recommendations to complete the meal.", device: phone }
@@ -83,5 +83,5 @@ The machinery behind the KPIs, each one its own deep-dive later:
 
 1. **Table sessions over guest accounts.** Asking diners to sign up before ordering kills adoption at the table. A tap on the NFC tag or QR code opens a session bound to that table and that visit, so ordering takes one step and a leaked link is useless after the meal.
 2. **The assistant acts as the user, not as a service account.** A shared service account would let anyone with assistant access read every guest. Instead each tool call carries the user's own auth, so the assistant can see exactly what the user can see, and writes such as creating a reservation wait for an explicit confirmation.
-3. **Server-side ad events over browser pixels alone.** Pixels miss ad-blocked and privacy-restricted browsers and leak more than they need to. Events are built server-side against one tracking schema, stripped of what the ad platform does not need, and sent through CAPI. {/* CHECK: confirm the pixel trade-off as you would explain it */}
-4. **Database per tenant over a shared schema.** A tenant column in shared tables is cheaper to run, but one missing filter leaks a restaurant's guests to another. Separate databases make isolation structural and let a tenant be exported or deleted cleanly. {/* CHECK: confirm the dual-database rationale */}
+3. **Server-side ad events over browser pixels alone.** Pixels miss ad-blocked and privacy-restricted browsers and leak more than they need to. Events are built server-side against one tracking schema, stripped of what the ad platform does not need, and sent through CAPI.
+4. **Database per tenant over a shared schema.** A tenant column in shared tables is cheaper to run, but one missing filter leaks a restaurant's guests to another. Separate databases make isolation structural and let a tenant be exported or deleted cleanly.

@@ -57,10 +57,10 @@ flowchart LR
 
 ## Key decisions
 
-1. **One gateway in front of every engine.** Widgets never talk to Botpress, Rasa or the in-house engine directly. The gateway owns authentication, limits and logging, so the security of a bot does not depend on which engine it runs on. {/* CHECK: confirm a single gateway layer existed */}
-2. **Treat the widget as an untrusted client.** Widget tokens are scoped to one bot and one site and expire, messages are validated and size-limited, and requests are rate limited per session and per IP, so a scraped widget key cannot be used to flood or abuse the bot. {/* CHECK: token scheme and limits */}
-3. **Redact before anything is stored.** Card numbers, phone numbers and similar personal data are masked in transcripts before they reach logs, analytics or training data. {/* CHECK: redaction method */}
-4. **Guard the LLM-backed paths against prompt injection.** Where a bot calls a language model or tools, user text is kept separate from instructions, tools run with the conversation's own permissions, and actions that change data need explicit confirmation. {/* CHECK: which bots used LLMs */}
-5. **Pick the engine per bot, keep the UI the same.** The React widget, the SDKs and the hand-off path are shared, so changing a bot's engine does not change what the customer sees. {/* CHECK: confirm */}
+1. **One gateway in front of every engine.** Widgets never talk to Botpress, Rasa or the in-house engine directly. The gateway owns authentication, limits and logging, so the security of a bot does not depend on which engine it runs on.
+2. **Treat the widget as an untrusted client.** Widget tokens are scoped to one bot and one site and expire, messages are validated and size-limited, and requests are rate limited per session and per IP, so a scraped widget key cannot be used to flood or abuse the bot.
+3. **Redact before anything is stored.** Card numbers, phone numbers and similar personal data are masked in transcripts before they reach logs, analytics or training data. Detection combines named-entity recognition with regular expressions and checksums.
+4. **Guard the LLM-backed paths against prompt injection.** Where a bot calls a language model or tools, user text is kept separate from instructions, tools run with the conversation's own permissions, and actions that change data need explicit confirmation.
+5. **Pick the engine per bot, keep the UI the same.** The React widget, the SDKs and the hand-off path are shared, so changing a bot's engine does not change what the customer sees.
 
 The Botpress side is described in detail in [Botpress integration](/projects/qalqul-botpress).

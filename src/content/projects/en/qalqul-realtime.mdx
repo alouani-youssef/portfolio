@@ -22,7 +22,7 @@ import LayerDiagram from '../../../components/diagrams/LayerDiagram.astro';
 
 ## Problem
 
-Qalqul's services kept sessions and connections in memory, which tied each user to one process: scaling meant bigger servers, and a restart dropped live conversations. As clients grew, the contact centre also needed to dispatch work (conversations, calls, tickets) to the right agent in real time, and the infrastructure had to keep up. {/* CHECK: starting point inferred */}
+Qalqul's services kept sessions and connections in memory, which tied each user to one process: scaling meant bigger servers, and a restart dropped live conversations. As clients grew, the contact centre also needed to dispatch work (conversations, calls, tickets) to the right agent in real time, and the infrastructure had to keep up.
 
 ## Constraints
 
@@ -43,7 +43,6 @@ Qalqul's services kept sessions and connections in memory, which tied each user 
     { caption: 'Dispatching', nodes: [{ label: 'Task dispatcher', sub: 'skills · availability', accent: true }, { label: 'Agents' }] },
   ]}
 />
-{/* CHECK: Redis, RabbitMQ and Nginx usage inferred; confirm */}
 
 <Gallery items={props.media} />
 

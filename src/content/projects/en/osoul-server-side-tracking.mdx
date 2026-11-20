@@ -30,7 +30,7 @@ Restaurants spend on ads to fill tables, but ad platforms only learn from conver
 
 - **Server-side first**: events must reach ad platforms from Osoul's servers, not depend on the browser.
 - **Trusted events only**: anyone can call a public endpoint, so events must be signed by known clients.
-- **Privacy**: personal data is hashed before it leaves the platform, and only for tenants who enabled it. {/* CHECK: confirm consent and hashing rules */}
+- **Privacy**: personal data is hashed before it leaves the platform, only for tenants who enabled it, and only with the guest's consent to ad signals.
 - **One schema**: Guest App, Portal and reservation events share one tracking event schema.
 
 ## Architecture
@@ -44,7 +44,6 @@ Restaurants spend on ads to fill tables, but ad platforms only learn from conver
     { caption: 'Sync', nodes: [{ label: 'CAPI sync', sub: 'server-side conversions', accent: true }, { label: 'Ad platforms', sub: 'audience optimisation' }] },
   ]}
 />
-{/* CHECK: ad platforms and sync cadence */}
 
 <Gallery items={props.media} />
 

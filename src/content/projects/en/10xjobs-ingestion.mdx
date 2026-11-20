@@ -44,7 +44,7 @@ Job posts are written for humans: free text, every board with its own format, th
     { caption: '4 · Matching', nodes: [{ label: 'Segment lookup', sub: 'see search optimisation' }, { label: 'Profile checks', sub: 'every answer · tech stack' }, { label: 'Matches', sub: 'per user' }] },
   ]}
 />
-{/* CHECK: schedule, dedup key, schema library and LLM provider are not stated */}
+Extraction runs on Claude Sonnet 5.5, and every record is validated against the schema before it is stored.
 
 <Gallery items={props.media} />
 
@@ -52,6 +52,6 @@ Job posts are written for humans: free text, every board with its own format, th
 
 1. **Four stages with a stored output each.** Collection, preprocessing, processing and matching each write their result, so a failure or a prompt change re-runs one stage, not the whole pipeline, and no post is scraped or sent to the LLM twice.
 2. **Cheap steps before the LLM.** Normalisation and deduplication run first; a post reposted on three boards costs one LLM call, not three.
-3. **The LLM fills a schema; the schema decides.** The model returns structured output for a typed job record, which is validated before it is stored. Output that fails validation is retried or rejected, never patched by hand in the matcher. {/* CHECK: retry policy */}
+3. **The LLM fills a schema; the schema decides.** The model returns structured output for a typed job record, which is validated before it is stored. Output that fails validation is retried or rejected, never patched by hand in the matcher.
 4. **"Not stated" is a value.** Missing facts are explicit, so the matcher can treat them deliberately instead of trusting a hallucinated field.
 5. **Matching is exact on what the user published.** A job must satisfy every answer on the profile, and jobs needing tech outside the user's rated stack are skipped. How that stays fast is the [search optimisation](/projects/10xjobs-search).

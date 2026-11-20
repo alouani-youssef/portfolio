@@ -25,7 +25,7 @@ Sowtek's contact centres run their calls on Asterisk. The PBX emits a constant s
 
 ## Constraints
 
-- **PBX events are noisy**: one call is dozens of events across channels and bridges, sometimes out of order. {/* CHECK */}
+- **PBX events are noisy**: one call is dozens of events across channels and bridges, sometimes out of order.
 - **Real time**: agents and supervisors see calls, queues and agent states live.
 - **Saudi dialect**: sentiment needs reliable transcripts first, from the [Saudi-dialect speech-to-text](/projects/saudi-stt) model.
 - **On-premise options**: government clients run the stack inside their own networks.
@@ -41,7 +41,6 @@ Sowtek's contact centres run their calls on Asterisk. The PBX emits a constant s
     { caption: 'Product', nodes: [{ label: 'Agent workspace', sub: 'live calls' }, { label: 'Supervisor dashboards' }, { label: 'Customer profile' }] },
   ]}
 />
-{/* CHECK: AMI/ARI choice and sentiment model are not stated */}
 
 <Gallery items={props.media} />
 

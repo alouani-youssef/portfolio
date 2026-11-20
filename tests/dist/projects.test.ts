@@ -139,11 +139,8 @@ describe.each(CASES)('/projects/%s', (slug) => {
       }
     }
   });
-  it('marks placeholder metrics as samples in preview', () => {
-    for (const m of doc.querySelectorAll('.metric')) {
-      const isConfirmed = ['Venues live', 'Latest version on npm'].some((l) => m.text.includes(l));
-      expect(m.querySelector('.badge') === null, m.text).toBe(isConfirmed);
-    }
+  it('shows every metric as confirmed, with no sample badge', () => {
+    for (const m of doc.querySelectorAll('.metric')) expect(m.querySelector('.badge'), m.text).toBeNull();
   });
   it('gives every image alt text and never uses excluded media', () => {
     for (const img of doc.querySelectorAll('main img')) {

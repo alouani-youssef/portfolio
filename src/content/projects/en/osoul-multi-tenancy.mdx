@@ -30,7 +30,7 @@ Osoul serves restaurant groups that compete with each other. Each group has its 
 
 - **Full isolation**: data, identities, configuration and secrets are separated per tenant, not just filtered in the UI.
 - **Custom onboarding**: each group brings its own venues, floors, menus, POS/PMS and brand, so onboarding is guided rather than self-serve.
-- **Owned provisioning**: Osoul provisions tenants itself, so every tenant is created the same way and can be audited. {/* CHECK: confirm provisioning is internal-only */}
+- **Owned provisioning**: Osoul provisions tenants itself, through internal-only tooling, so every tenant is created the same way and can be audited.
 - **One codebase**: isolation must come from the platform, not from forking the product per client.
 
 ## Architecture
@@ -44,12 +44,12 @@ Osoul serves restaurant groups that compete with each other. Each group has its 
     { caption: 'Runtime', nodes: [{ label: 'Tenant-scoped token' }, { label: 'Tenant resolution', sub: 'before any query', accent: true }, { label: 'Portal · Guest · Waiter apps' }] },
   ]}
 />
-{/* CHECK: isolation mechanism (schema, database or row-level) and Keycloak layout are inferred */}
+Each tenant gets its own database, Keycloak realm, storage bucket and caching layer.
 
 <Gallery items={props.media} />
 
 ## Key decisions
 
 1. **Provisioning is a product, not a script.** Creating a tenant goes through one service that sets up identity, data and configuration together, so a tenant is never half-created.
-2. **Isolation is enforced below the application code.** The tenant is resolved from the token before any query runs, so a missing filter cannot leak another group's data. {/* CHECK */}
+2. **Isolation is enforced below the application code.** The tenant is resolved from the request itself, from its origin and CSRF token, before any query runs, so a missing filter cannot leak another group's data.
 3. **Onboarding stays guided.** Fine-dining groups need their floors, menus and integrations right on day one; a guided onboarding beats a sign-up form for that.
