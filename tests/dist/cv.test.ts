@@ -17,8 +17,9 @@ describe('/cv', () => {
     }
     expect(doc.querySelectorAll('.cv-role')).toHaveLength(5);
   });
-  it('has education, grouped skills and contact details', () => {
-    expect(text).toContain("Bachelor's degree in Computer Science, Hassan First University, FST Settat, 2017–2021");
+  it('has grouped skills and contact details, and no education', () => {
+    expect(text).not.toContain('Education');
+    expect(text).not.toContain('Hassan First University');
     expect(text).not.toContain('Ingénieur');
     expect(doc.querySelectorAll('.cv-skills dt').map((d) => d.text.trim())).toEqual(SKILL_CATEGORIES.map((c) => c.label));
     expect(text).toContain('hello@youssefalouani.com');

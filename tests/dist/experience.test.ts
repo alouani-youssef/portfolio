@@ -47,8 +47,8 @@ describe('experience', () => {
     expect(text('/experience')).toContain('Four roles and a side project over five years');
   });
 
-  it('timeline shows the education line', () => {
-    expect(text('/experience')).toContain("Bachelor's degree in Computer Science, Hassan First University, FST Settat, 2017–2021");
+  it('has no education line', () => {
+    expect(text('/experience')).not.toContain('Hassan First University');
   });
 
   for (const [slug, company] of ROLES) {

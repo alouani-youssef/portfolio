@@ -14,7 +14,6 @@ export const apiProfile = z.object({
   links: z.record(z.string(), z.url()),
   expertise: z.array(z.object({ title: z.string(), body: z.string() })),
   clients: z.array(z.object({ group: z.string(), label: z.string(), clients: z.array(z.string()) })),
-  education: z.object({ degree: z.string(), school: z.string(), start: z.number(), end: z.number() }),
 });
 
 export const apiExperience = z.array(z.object({

@@ -30,8 +30,8 @@ describe('buildResume', () => {
     const withOss = buildResume(profile, roles, [], [], OSS) as any;
     expect(withOss.projects).toEqual([{ name: 'AI Stones', description: 'CLI.', url: 'https://github.com/alouani-youssef/stones', keywords: ['JavaScript'] }]);
   });
-  it('includes education, skills, languages and references', () => {
-    expect(r.education[0].institution).toBe('Hassan First University, FST Settat');
+  it('includes skills, languages and references, and no education', () => {
+    expect(r.education).toBeUndefined();
     expect(r.skills[0]).toEqual({ name: 'language', keywords: ['Go'] });
     expect(r.languages.map((l: any) => l.language)).toEqual(['English', 'French', 'Arabic']);
     expect(r.references[0]).toEqual({ name: 'A', reference: 'Q' });

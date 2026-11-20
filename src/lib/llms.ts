@@ -19,7 +19,7 @@ export function buildLlmsTxt({ profile, site, roles, projects, posts, oss = [] }
     '',
     '## Profile',
     `- [Home](${site}/index.md): headline, expertise, featured work, clients`,
-    `- [About](${site}/about.md): long bio, education, languages, skills, recommendations, FAQ`,
+    `- [About](${site}/about.md): long bio, languages, skills, recommendations, FAQ`,
     `- [Experience](${site}/experience.md): ${roles.map((r) => r.company).join(', ')}`,
     ...roles.map((r) => `- [${r.company}](${site}/experience/${r.slug}.md)`),
     `- [Now](${site}/now.md): current focus`,

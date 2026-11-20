@@ -8,7 +8,6 @@ import { SKILL_CATEGORIES } from '../lib/skill-icons';
 const roles = await getRoles();
 const skills = await getCollection('skills');
 
-const e = profile.education;
 const oss = await getOss();
 ---
 <BaseLayout title="CV" description="Printable CV of Youssef Alouani, AI Systems Engineer." path="/cv">
@@ -64,9 +63,7 @@ const oss = await getOss();
       </section>
 
       <section class="mt-6 break-inside-avoid">
-        <h2 class="eyebrow">Education</h2>
-        <p class="mt-2 text-sm">{e.degree}, {e.school}, {e.start}–{e.end}</p>
-        <h2 class="eyebrow mt-4">Languages</h2>
+        <h2 class="eyebrow">Languages</h2>
         <p class="mt-2 text-sm">{profile.languages.map((l) => l.name).join(', ')}</p>
       </section>
     </article>

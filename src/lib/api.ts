@@ -31,7 +31,6 @@ export async function buildApi(name: ApiName): Promise<unknown> {
         links: profile.links,
         expertise: profile.expertise.map(({ title, body }) => ({ title, body })),
         clients: groupClients(clients).map((g) => ({ group: g.group, label: g.label, clients: g.clients.map((c) => c.name) })),
-        education: profile.education,
       };
     }
     case 'experience': {

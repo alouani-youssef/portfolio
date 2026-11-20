@@ -8,7 +8,6 @@ import { profile } from '../data/profile';
 import { profilePageJsonLd, faqPageJsonLd } from '../lib/jsonld';
 import headshot from '../assets/media/headshot.png';
 const recs = (await getCollection('recommendations')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const e = profile.education;
 ---
 <BaseLayout title="About" description={profile.shortBio.slice(0, 158) + '…'} path="/about" jsonLd={[profilePageJsonLd(profile, Astro.site!.origin), faqPageJsonLd(profile.faq)]}>
   <div class="container-page py-12 sm:py-16">
@@ -20,15 +19,9 @@ const e = profile.education;
       </div>
     </div>
 
-    <section class="mt-16 grid gap-8 sm:grid-cols-2" aria-label="Education and languages">
-      <div>
-        <h2 class="eyebrow">Education</h2>
-        <p class="mt-2">{e.degree}, {e.school}, {e.start}–{e.end}</p>
-      </div>
-      <div>
-        <h2 class="eyebrow">Languages</h2>
-        <p class="mt-2">{profile.languages.map((l) => l.name).join(', ')}</p>
-      </div>
+    <section class="mt-16" aria-labelledby="languages-h">
+      <h2 id="languages-h" class="eyebrow">Languages</h2>
+      <p class="mt-2">{profile.languages.map((l) => l.name).join(', ')}</p>
     </section>
 
     <section id="skills" class="mt-16" aria-labelledby="skills-h">

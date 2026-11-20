@@ -15,7 +15,6 @@ export function personJsonLd(profile: Profile, site: string): object {
     knowsLanguage: profile.languages.map((l) => l.code),
     address: { '@type': 'PostalAddress', addressLocality: profile.location.city, addressCountry: profile.location.country },
     worksFor: { '@type': 'Organization', name: 'Osoul', url: profile.links.osoul },
-    alumniOf: { '@type': 'CollegeOrUniversity', name: profile.education.school },
     knowsAbout: profile.knowsAbout,
     sameAs: profile.sameAs,
   };

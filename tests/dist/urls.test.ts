@@ -37,8 +37,8 @@ describe('machine dates match the displayed periods', () => {
   it('resume.json links the current Medium account', () => {
     expect(resume.basics.profiles.find((p: any) => p.network === 'Medium').url).toBe('https://medium.com/@alouaniyoussef');
   });
-  it('resume.json carries the bachelor degree', () => {
-    expect(resume.education[0]).toMatchObject({ studyType: "Bachelor's degree", area: 'Computer Science', startDate: '2017', endDate: '2021' });
+  it('resume.json has no education section', () => {
+    expect(resume.education).toBeUndefined();
   });
   it('employment periods never overlap', () => {
     const jobs = api.filter((e) => e.id !== '10xjobs').sort((a, b) => a.start.localeCompare(b.start));

@@ -40,13 +40,6 @@ export function buildResume(
       summary: r.summary,
       highlights: r.highlights,
     })),
-    education: [{
-      institution: profile.education.school,
-      area: 'Computer Science',
-      studyType: profile.education.degree.replace(/ in .*$/, ''),
-      startDate: String(profile.education.start),
-      endDate: String(profile.education.end),
-    }],
     skills: categories.map((c) => ({ name: c, keywords: skills.filter((s) => s.category === c).map((s) => s.name) })),
     languages: profile.languages.map((l) => ({ language: l.name })),
     references: recommendations.map((r) => ({ name: r.author, reference: r.quote })),

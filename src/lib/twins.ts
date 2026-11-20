@@ -48,7 +48,6 @@ export async function buildTwins(): Promise<Twin[]> {
 
   twins.push(page('/about', 'About', [
     profile.longBio.join('\n\n'),
-    `## Education\n\n${profile.education.degree}, ${profile.education.school}, ${profile.education.start}–${profile.education.end}`,
     `## Languages\n\n${profile.languages.map((l) => l.name).join(', ')}`,
     `## Skills\n\n${list([...new Set(skills.map((s) => s.data.category))].map((cat) => `${cat}: ${skills.filter((s) => s.data.category === cat).map((s) => `${s.data.name} (${s.data.level})`).join(', ')}`))}`,
     `## Recommendations\n\n${recs.map((r) => `> ${r.data.quote}\n\n${r.data.author}, ${r.data.title} (${r.data.relationship}, ${date(r.data.date)}). ${r.data.url}`).join('\n\n')}`,
@@ -57,7 +56,6 @@ export async function buildTwins(): Promise<Twin[]> {
 
   twins.push(page('/experience', 'Experience', [
     list(roles.map((r) => `${r.data.period}: [${r.data.company}](${SITE}${twinHref(`/experience/${entrySlug(r.id)}`)}), ${r.data.role}. ${r.data.summary}`)),
-    `## Education\n\n${profile.education.degree}, ${profile.education.school}, ${profile.education.start}–${profile.education.end}`,
   ]));
 
   for (const r of roles) {
@@ -124,7 +122,6 @@ export async function buildTwins(): Promise<Twin[]> {
     profile.headline,
     profile.shortBio,
     `## Experience\n\n${roles.map((r) => `### ${r.data.company}, ${r.data.role} (${r.data.period})\n\n${r.data.summary}\n\n${list(r.data.highlights)}`).join('\n\n')}`,
-    `## Education\n\n${profile.education.degree}, ${profile.education.school}, ${profile.education.start}–${profile.education.end}`,
     `## Contact\n\n${profile.email}`,
   ]));
 

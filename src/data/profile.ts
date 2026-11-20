@@ -21,7 +21,6 @@ export const profileSchema = z.object({
     schedule: z.url(),
   }),
   sameAs: z.array(z.url()),
-  education: z.object({ degree: z.string(), school: z.string(), start: z.number(), end: z.number() }),
   /** `project` is the slug of the case study that best shows the area, featured on the home page. */
   expertise: z
     .array(z.object({ id: z.enum(FOCUS_IDS), title: z.string(), body: z.string(), skills: z.array(z.string()), project: z.string() }))
@@ -65,12 +64,6 @@ export const profile: Profile = {
     'https://alouani-youssef.medium.com',
     'https://medium.com/@alouaniyoussef',
   ],
-  education: {
-    degree: "Bachelor's degree in Computer Science",
-    school: 'Hassan First University, FST Settat',
-    start: 2017,
-    end: 2021,
-  },
   expertise: [
     {
       id: 'agentic',
