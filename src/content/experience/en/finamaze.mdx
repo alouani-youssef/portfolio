@@ -10,10 +10,10 @@ location: Remote
 summary: Migrated a robo-advisor from B2C to a multi-tenant B2B platform, with reconciliation and KYC with document and visual verification, for Saudi National Bank.
 highlights:
   - B2C to multi-tenant B2B migration, with the infrastructure adapted
-  - Reconciliation
   - KYC with document and visual verification
-  - AI for robo-advisory
-  - React/Next.js front ends
+  - Reconciliation with the bank
+  - Backend for an AI robo-advisor
+  - React and Next.js front ends
 outcome: Shipped to production for Saudi National Bank (SNB).
 # CHECK: proposed line, Youssef to confirm
 differently: I would have put the reconciliation rules in a versioned, testable rules table from day one instead of in service code.
@@ -23,11 +23,16 @@ media:
   - { src: ../../../assets/experience/finamaze/mobile-apps.png, alt: "Five FinaMaze app-store screens: AI-tailored portfolios, account balance, Smartfolios positions, investment analysis and the invest flow", caption: "FinaMaze mobile app: AI-tailored portfolios for each risk profile." }
 updatedAt: 2026-11-19
 ---
-
 ## Context
 
-Finamaze runs a robo-advisor that builds AI-tailored portfolios for each investor's risk profile. Onboarding regulated investors needs reliable identity checks, and moving money needs reconciliation that never drifts.
+Finamaze runs a robo-advisor that builds AI-tailored portfolios for each investor's risk profile. It began as a consumer app and moved to selling the platform to financial institutions, where onboarding regulated investors needs reliable identity checks and moving money needs reconciliation that never drifts.
 
 ## My part
 
-I worked on the backend through Finamaze's move from B2C to a multi-tenant B2B platform for financial institutions, which meant adapting the infrastructure as well as the code. I also built reconciliation, and KYC with document and visual verification, alongside the AI behind the robo-advisor. I also worked on the React and Next.js front ends.
+I was a backend engineer through Finamaze's move from a B2C app to a multi-tenant B2B platform for financial institutions.
+
+- **Migration**: each institution became a tenant with its own investors, data and configuration, and the infrastructure was adapted to keep tenants apart.
+- **KYC**: document and visual verification in investor onboarding.
+- **Reconciliation**: keeping the platform's ledger in step with the bank.
+- **Robo-advisor**: backend work alongside the AI that builds portfolios for each risk profile.
+- **Front ends**: React and Next.js.

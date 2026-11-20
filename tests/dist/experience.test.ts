@@ -101,3 +101,29 @@ describe('experience', () => {
     }
   });
 });
+
+describe('experience content', () => {
+  const body = (slug: string) => readHtml(`/experience/${slug}`).querySelector('main')!.text;
+  it('Qalqul covers public chatbots, their security and the real-time platform', () => {
+    const t = body('qalqul');
+    for (const s of ['chatbots', 'publicly exposed', 'stateless', 'real time']) expect(t, s).toContain(s);
+  });
+  it('Finamaze leads with the B2B migration and does not repeat itself', () => {
+    const t = body('finamaze');
+    expect(t).toContain('multi-tenant B2B');
+    expect(t.match(/I also/g) ?? []).toHaveLength(0);
+  });
+  it('AXS covers the contact-centre backend as well as the AI work', () => {
+    const t = body('axelerated');
+    for (const s of ['omnichannel', 'Asterisk', 'FlowBuilder', 'Whisper', 'MCP']) expect(t, s).toContain(s);
+  });
+  it('Osoul states the venue count instead of implying whole groups', () => {
+    expect(body('osoul')).toContain('two venues');
+  });
+  it('10xJobs reads as a side project without promised numbers', () => {
+    const t = body('10xjobs');
+    expect(t).toContain('side project');
+    expect(t).not.toContain('I founded');
+    expect(t).not.toContain('will be published');
+  });
+});

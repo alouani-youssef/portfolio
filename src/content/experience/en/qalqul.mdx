@@ -7,13 +7,13 @@ end: 2023-07-31
 period: Dec 2021 – Jul 2023
 precision: month
 location: Casablanca, Morocco
-summary: "Conversational AI and contact-centre software: NLP/NLU engines, Botpress v12 core, no-code workflows, SDKs and chat widgets."
+summary: "Conversational AI for contact centres: NLP/NLU engines, public chatbots and Botpress v12 core, and the real-time platform, SDKs and chat widgets around them."
 highlights:
-  - NLP/NLU engines on language servers and Duckling
-  - Botpress v12 core
-  - No-code workflows and n8n
-  - Browser SDKs in TypeScript and Kotlin SDKs
-  - React chat widgets and portals
+  - NLP/NLU engines on language servers and Duckling, tuned per client
+  - Public chatbots and Botpress v12 core, secured for anonymous traffic
+  - Stateless, real-time platform with WebSockets and task dispatching
+  - Browser SDKs in TypeScript, Kotlin SDKs and React chat widgets
+  - No-code workflows and n8n integrations
 outcome: Shipped to banks, insurers, healthcare and retail clients in Morocco and Saudi Arabia.
 # CHECK: proposed line, Youssef to confirm
 differently: I would have invested earlier in a shared test corpus for the NLU engines, so model changes could be compared across clients.
@@ -24,15 +24,15 @@ media:
   - { src: ../../../assets/experience/qalqul/contact-profile.png, alt: "Qalqul contact profile with demographic and geographic data and histories for calls, SMS, email, discussions, leads and tickets", caption: "Unified contact profile across channels." }
 updatedAt: 2026-11-19
 ---
-
 ## Context
 
-Qalqul Engine builds conversational AI and contact-centre software for banks, insurers, healthcare and retail in Morocco and Saudi Arabia. Clients needed bots that understood their customers, and integrations that fit into their own apps.
+Qalqul Engine builds conversational AI and contact-centre software for banks, insurers, healthcare and retail in Morocco and Saudi Arabia. Clients needed bots that understood their customers, embedded in their own websites and apps, and a contact centre that could hand those conversations to agents in real time.
 
 ## My part
 
-I worked on the conversational core and on everything clients embedded.
+I worked on the conversational core and on everything clients embedded in their own products.
 
-- Built NLP/NLU engines on language servers and Duckling, and worked on Botpress v12 core.
-- Built no-code workflow systems and n8n integrations.
-- Shipped portals, browser SDKs in TypeScript, Kotlin SDKs for Android, and React chat widgets over WebSockets.
+- **Understanding**: NLP/NLU engines on language servers and Duckling, with intents and entities tuned for each client.
+- **Chatbots**: public chatbots for client websites and apps, and work on Botpress v12 core. Chatbots are publicly exposed, so their security mattered as much as their features: who can open a session, how much traffic one client can send, and what personal data is kept.
+- **Real-time platform**: services moved to stateless processes, with conversations in real time over WebSockets and work dispatched to the right agent.
+- **Integrations**: portals, browser SDKs in TypeScript, Kotlin SDKs for Android, React chat widgets, no-code workflows and n8n.
